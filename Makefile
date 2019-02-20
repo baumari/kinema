@@ -4,7 +4,7 @@ CXX = `root-config --cxx`
 ROOTLIBS = 'root-config --libs'
 CFLAGS = `root-config --cflags` \
 	-O3 -W -Wall -Wextra -Wno-long-long \
-	-fno-common -I$(INCDIR) -I$(ROOTLIBS)
+	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC
 
 LDFLAGS = `root-config --glibs` -lGeom -lm
 
@@ -20,7 +20,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^
-	$(CXX) -shared -fPIC $(OBJS) $(LDFLAGS) -o $(LIB)
+	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 
 #.cxx.o:
 #	$(CXX) -c $(CFLAGS) $<
