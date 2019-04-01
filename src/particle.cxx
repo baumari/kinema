@@ -1,13 +1,17 @@
 #include <string>
-#include <FVector>
+#include <particle.hh>
 
-class particle
+particle::particle()
 {
-private:
-  std::string m_name;
-  double m_mass;
-  double m_kinene;
-  FVector p;
-public:
-};
+  m_name="";
+  m_mass=0;
+  m_kine=0;
+}
 
+particle::particle(char* name, double kine)
+{
+  m_name="";
+  m_mass=0;
+  m_kine=0;
+  
+}
