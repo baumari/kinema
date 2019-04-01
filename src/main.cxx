@@ -15,11 +15,14 @@ int main(int argc, char **argv){
       usage();
       return -1;
     }
-  }
+    for(int i=optind;i<argc;i++){
+      
+    }
+  
 }
 
 void usage(){
-  printf("Usage: ./kinema [-g]\n");
-  printf("-g: Graph will be displayed.\n");
+  printf("Usage: ./kinema [-g] p1 p2 p3 p4 Ebeam Ex\n");
+  printf("   -g: Graph will be displayed.\n");
   return;
 }
