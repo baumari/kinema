@@ -7,12 +7,14 @@ class particle
 {
 private:
   std::string m_name;
-  double m_mass;
-  double m_kine;
-  FVector p;
+  FVector m_p;
+  double getmass(std::string m_name);  
 public:
   particle();
-  particle(char*, double);
+  ~particle();
+  particle(char* name, double KE);
+  double getbeta();
+  double getgamma();
 };
 
 #endif

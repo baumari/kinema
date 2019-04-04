@@ -1,15 +1,19 @@
 #include <iostream>
 #include <unistd.h>
 #include <particle.hh>
+#include <myerrno.hh>
 
 void usage();
 
+int merrno;
+
 int main(int argc, char **argv){
+  merrno=0;
   int opt;
   int f_graph=0;
   double rece=0;
   //  int f_recoil=0;
-  while((opt = getopt(argc, argv, "gr:")) != -1){
+  while((opt = getopt(argc, argv, "hgr:")) != -1){
     switch(opt){
     case 'g':
       f_graph = 1;
@@ -18,6 +22,9 @@ int main(int argc, char **argv){
       //      f_recoil=1;
       rece=atof(optarg);
       break;
+    case 'h':
+      usage();
+      return -1;
     default:
       usage();
       return -1;
@@ -31,6 +38,8 @@ int main(int argc, char **argv){
   particle p2(argv[optind+1], 0);
   particle p3(argv[optind+2], rece);
   particle p4(argv[optind+3], atof(argv[optind+4])-atof(argv[optind+5]));
+  if(merrno==MEPART) return -1;
+
   return 0;  
 }
 
