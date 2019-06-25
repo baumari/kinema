@@ -1,13 +1,6 @@
 #include <FVector.hh>
 #include <cmath>
 
-FVector::FVector()
-{
-  for(int i=0;i<5;i++){
-    m_p[i]=0;
-  }
-}
-
 FVector::~FVector(){}
 
 double FVector::mass()
@@ -60,4 +53,9 @@ void FVector::update()
   double gamma=m_p[0]/m_p[4]; // update by energy
   double beta=sqrt(1-1/gamma/gamma);
   m_p[3]=m_p[4]*beta*gamma;
+}
+
+void FVector::Init(){
+  for(int i=0;i<sizeof(m_p)/sizeof(double);i++)
+    m_p[i]=0;
 }

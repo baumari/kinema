@@ -6,7 +6,7 @@ class FVector
 private:
   double m_p[5]; // The fifth component is mass.
 public:
-  FVector();
+  FVector() : m_p() {};
   ~FVector();
   double e();
   double px();
@@ -17,6 +17,7 @@ public:
   void setmass(double);
   void inite(double mass, double kine);
   void update();
+  void Init();
 };
 
 double operator*(FVector, FVector);

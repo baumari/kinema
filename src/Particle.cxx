@@ -1,8 +1,9 @@
 #include <string>
-#include <particle.hh>
+#include <Particle.hh>
 #include <myerrno.hh>
 #include <cmath>
 #include <algorithm>
+#include <Util.hh>
 
 /************* table of particle **************/
 /*** add information below if you necessary ***/
@@ -14,9 +15,9 @@ typedef struct {
   const double massex;
   const int z;  
   const int a;
-} pdata;
+} _ParticleData;
 
-pdata pd[]={
+const _ParticleData ParticleData[]={
   {"h",7.28897,1,1},        
   {"p",7.28897,1,1},
   {"proton",7.28897,1,1},
@@ -36,47 +37,57 @@ pdata pd[]={
   {"n",8.0713,0,1}
 };
 
-Particle::Particle()
+Particle::Momentum::Momentum(double energy,
+			     double px, double py, double pz)
 {
-  m_name="";
+  m_p[ENERGY]=energy;
+  Norm(1,px,py,pz);
+  m_p[PX]=px;
+  m_p[PY]=py;
+  m_p[PZ]=pz;  
 }
-Particle::~Particle(){}
 
-Particle::Particle(std::string name, double kine)
+Particle::Momentum::Momentum(double energy)
 {
-  double mass;
-  std::transform(name.begin(), name.end(), name.begin(), tolower);
-  m_name=name;
-  mass=GetMass(m_name);
-  m_p.inite(mass, kine);
-  m_p.update();
+  m_p[ENERGY]=energy;
+  m_p[PX]=0;
+  m_p[PY]=0;
+  m_p[PZ]=1;
 }
 
 double Particle::GetMass(std::string m_name)
 {
-  double mass=-1;
+  double mass=0;
   int f_find=0;
-  for(unsigned int i=0;i<sizeof(pd)/sizeof(pdata);i++){
-    if(pd[i].name==m_name){
-      mass=pd[i].massex+(double)pd[i].a*AMU;
+  for(unsigned int i=0;i<sizeof(ParticleData)/sizeof(_ParticleData);i++){
+    if(ParticleData[i].name==m_name){
+      mass=ParticleData[i].massex+(double)ParticleData[i].a*AMU;
       f_find++;
       break;
     }
   }
   if(!f_find){
     fprintf(stderr, "particle data not found.. %s\n",m_name.c_str());
-    fprintf(stderr, "you should add particle info (particle.cxx) at first!!!\n");
-    merrno=MEPART_NOTFOUND;
+    fprintf(stderr, "you should add particle info (Particle.cxx) at first!!!\n");
+    m_errno=PARTICLE_NOT_FOUND;
   }
   return mass;
 }
 
-double Particle::GetBeta()
+//double Particle::GetBeta()
+//{
+//  return sqrt(1-(m_p.mass()/m_p.e())*(m_p.mass()/m_p.e()));
+//}
+//
+//double Particle::GetGamma()
+//{
+//  return m_p.e()/m_p.mass();
+//}
+//
+bool Particle::Fail()
 {
-  return sqrt(1-(m_p.mass()/m_p.e())*(m_p.mass()/m_p.e()));
-}
-
-double Particle::GetGamma()
-{
-  return m_p.e()/m_p.mass();
+  if(m_errno==0) return true;
+  else{
+    return false;
+  }
 }

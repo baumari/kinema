@@ -1,11 +1,8 @@
 #include <iostream>
 #include <unistd.h>
-#include <particle.hh>
-#include <myerrno.hh>
-
-void usage();
-
-_ERR ERR = {}; // extern defined
+#include <Particle.hh>
+#include <cstdlib>
+#include <Util.hh>
 
 int main(int argc, char **argv){
   int opt;
@@ -22,15 +19,15 @@ int main(int argc, char **argv){
       RecoilEx=atof(optarg);
       break;
     case 'h':
-      usage();
+      Usage();
       return -1;
     default:
-      usage();
+      Usage();
       return -1;
     }
   }
   if((argc-optind)!=6){
-    usage();
+    Usage();
     return -1;
   }
   Particle p1(argv[optind], atof(argv[optind+4]));
@@ -38,16 +35,11 @@ int main(int argc, char **argv){
   Particle p3(argv[optind+2], RecoilEx);
   Particle p4(argv[optind+3],
 	      atof(argv[optind+4])-atof(argv[optind+5]));
-  CheckERR();
 
-  return 0;  
+  if(p1.Fail() || p2.Fail() || p3.Fail() || p4.Fail()){
+    std::exit(EXIT_FAILURE);
+  }
+
+  std::exit(EXIT_SUCCESS);  
 }
 
-void usage(){
-  printf("Usage: ./kinema [-g] [-r val] p1 p2 p3 p4 Ebeam Ex\n");
-  printf("   -g: Graph will be displayed.\n");
-  printf("   -r: Recoil kinetic energy.\n");
-  printf("Unit of energy is [MeV].\n\n");
-  printf("Output: E3 E4 theta3 theta4 \n");
-  return;
-}
