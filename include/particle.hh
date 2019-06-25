@@ -3,18 +3,19 @@
 
 #include <FVector.hh>
 
-class particle
+class Particle
 {
 private:
   std::string m_name;
   FVector m_p;
-  double getmass(std::string m_name);  
+  double GetMass(std::string m_name);  
 public:
-  particle();
-  ~particle();
-  particle(char* name, double KE);
-  double getbeta();
-  double getgamma();
+  Particle();
+  ~Particle();
+  Particle(std::string name, double KE);
+  double GetBeta();
+  double GetGamma();
+  void SetParticle();
 };
 
 #endif

@@ -1,8 +1,10 @@
 #ifndef _MYERRNO_HH
 #define _MYERRNO_HH
 
-#define MEPART 1
+typedef struct {
+  int PART_NOTFOUND;
+} _ERR;
 
-extern int merrno;
+extern _ERR ERR;
 
 #endif

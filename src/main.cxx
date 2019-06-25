@@ -5,13 +5,12 @@
 
 void usage();
 
-int merrno;
+_ERR ERR = {}; // extern defined
 
 int main(int argc, char **argv){
-  merrno=0;
   int opt;
   int f_graph=0;
-  double rece=0;
+  double RecoilEx=0;
   //  int f_recoil=0;
   while((opt = getopt(argc, argv, "hgr:")) != -1){
     switch(opt){
@@ -20,7 +19,7 @@ int main(int argc, char **argv){
       break;
     case 'r':
       //      f_recoil=1;
-      rece=atof(optarg);
+      RecoilEx=atof(optarg);
       break;
     case 'h':
       usage();
@@ -34,11 +33,12 @@ int main(int argc, char **argv){
     usage();
     return -1;
   }
-  particle p1(argv[optind], atof(argv[optind+4]));
-  particle p2(argv[optind+1], 0);
-  particle p3(argv[optind+2], rece);
-  particle p4(argv[optind+3], atof(argv[optind+4])-atof(argv[optind+5]));
-  if(merrno==MEPART) return -1;
+  Particle p1(argv[optind], atof(argv[optind+4]));
+  Particle p2(argv[optind+1], 0);
+  Particle p3(argv[optind+2], RecoilEx);
+  Particle p4(argv[optind+3],
+	      atof(argv[optind+4])-atof(argv[optind+5]));
+  CheckERR();
 
   return 0;  
 }
@@ -47,6 +47,7 @@ void usage(){
   printf("Usage: ./kinema [-g] [-r val] p1 p2 p3 p4 Ebeam Ex\n");
   printf("   -g: Graph will be displayed.\n");
   printf("   -r: Recoil kinetic energy.\n");
-  printf("Unit of energy is [MeV].\n");
+  printf("Unit of energy is [MeV].\n\n");
+  printf("Output: E3 E4 theta3 theta4 \n");
   return;
 }

@@ -29,6 +29,6 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
 clean:
-	rm -f *.o *~ $(TARGET) $(LIB)
+	rm -f ./src/*.o *~ $(TARGET) $(LIB)
 #	echo $(OBJS)
 

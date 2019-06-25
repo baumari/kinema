@@ -57,7 +57,7 @@ void FVector::inite(double mass, double kine)
 
 void FVector::update()
 {
-  double gamma=m_p[0]/m_p[4];
+  double gamma=m_p[0]/m_p[4]; // update by energy
   double beta=sqrt(1-1/gamma/gamma);
   m_p[3]=m_p[4]*beta*gamma;
 }
