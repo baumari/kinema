@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <cstdio>
 #include <Util.hh>
 
 void Norm(double norm,

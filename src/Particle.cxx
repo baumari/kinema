@@ -4,6 +4,8 @@
 #include <cmath>
 #include <algorithm>
 #include <Util.hh>
+#include <cfloat>
+#include <cstdio>
 
 /************* table of particle **************/
 /*** add information below if you necessary ***/
@@ -69,25 +71,63 @@ double Particle::GetMass(std::string m_name)
   if(!f_find){
     fprintf(stderr, "particle data not found.. %s\n",m_name.c_str());
     fprintf(stderr, "you should add particle info (Particle.cxx) at first!!!\n");
-    m_errno=PARTICLE_NOT_FOUND;
+    m_errno=PARTICLE_DATA_NOT_FOUND;
   }
   return mass;
 }
 
-//double Particle::GetBeta()
-//{
-//  return sqrt(1-(m_p.mass()/m_p.e())*(m_p.mass()/m_p.e()));
-//}
-//
-//double Particle::GetGamma()
-//{
-//  return m_p.e()/m_p.mass();
-//}
-//
+double Particle::GetBeta()
+{
+  return sqrt(1-(m_mass/m_Momentum.GetE())*
+	      (m_mass/m_Momentum.GetE()));
+}
+
+double Particle::GetGamma()
+{
+  if(m_mass < DBL_EPSILON){
+    fprintf(stderr, "Division by Zero in Momentum::GetGamma!!\n");
+    m_errno = ZERO_DIVISION;
+    return EXIT_FAILURE;
+  }
+  return m_Momentum.GetE()/m_mass;
+}
+
 bool Particle::Fail()
 {
   if(m_errno==0) return true;
   else{
     return false;
   }
+}
+
+void Particle::SetMomentum(double px, double py, double pz)
+{
+  m_Momentum.SetPx(px);
+  m_Momentum.SetPy(py);
+  m_Momentum.SetPz(pz);
+  m_Momentum.SetE(sqrt(px*px+py*py+pz*pz+m_mass*m_mass));
+}
+
+void Particle::SetEnergy(double kin_energy)
+{
+  if(kin_energy < 0){
+    fprintf(stderr,
+	    "Eenrgy must be larger than 0 in Momentum::SetEnergy!!\n");
+    m_errno = INVALID_ARGUMENT;    
+  }
+  m_Momentum.SetE(kin_energy+m_mass);
+  double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
+  double px, py, pz;
+  px=m_Momentum.GetPx(); py=m_Momentum.GetPy(); pz=m_Momentum.GetPz();
+  Norm(norm, px, py, pz);
+  m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
+}
+
+void Particle::
+SetEnergyDirection(double kin_energy, double px, double py, double pz)
+{
+  m_Momentum.SetE(kin_energy+m_mass);
+  double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
+  Norm(norm, px, py, pz);
+  m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
 }
