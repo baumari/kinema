@@ -1,23 +1,24 @@
-#ifndef _PARTICLE_HH
-#define _PARTICLE_HH
+#ifndef _KPARTICLE_HH
+#define _KPARTICLE_HH
 
-class Particle
+// LAB frame only!!
+class KParticle
 {
 private:
   class Momentum
   {
-  private:
+  private: // error 
     enum Momentum_Component{
       ENERGY,
       PX,
       PY,
       PZ,
 
-      SIZE,
+      MOMENTUM_COMPONENT_SIZE,
     };
 
   private:
-    double m_p[SIZE];
+    double m_p[MOMENTUM_COMPONENT_SIZE];
 
   public:
     Momentum() : m_p() {}
@@ -45,33 +46,36 @@ private:
     PARTICLE_DATA_NOT_FOUND=1,
     ZERO_DIVISION,
     INVALID_ARGUMENT,
+
+    ERR_CODE_SIZE,
   };
+  //  char *m_Error[ERR_CODE_SIZE];
 
 private:
   double GetMass(std::string m_name);  
 
 public:
-  Particle() :
+  KParticle() :
     m_name(""),
     m_mass(),
     m_errno(),
     m_Momentum() {}
-  Particle(std::string name, double kin_energy,
+  KParticle(std::string name, double kin_energy,
 	   double px, double py, double pz) :
     m_name(name),
     m_mass(GetMass(name)),
     m_errno(),
     m_Momentum(m_mass+kin_energy, px, py, pz) {}
-  Particle(std::string name, double kin_energy) :
+  KParticle(std::string name, double kin_energy) :
     m_name(name),
     m_mass(GetMass(name)),
     m_errno(),
     m_Momentum(m_mass+kin_energy) {}
 
-  ~Particle() {}
+  ~KParticle() {}
 
 public:
-  bool Fail();  
+  bool IsFail();  
 
   double GetBeta();
   double GetGamma();

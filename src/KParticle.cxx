@@ -1,9 +1,8 @@
 #include <string>
-#include <Particle.hh>
-#include <myerrno.hh>
+#include <KParticle.hh>
 #include <cmath>
 #include <algorithm>
-#include <Util.hh>
+#include <KUtil.hh>
 #include <cfloat>
 #include <cstdio>
 
@@ -39,17 +38,17 @@ const _ParticleData ParticleData[]={
   {"n",8.0713,0,1}
 };
 
-Particle::Momentum::Momentum(double energy,
+KParticle::Momentum::Momentum(double energy,
 			     double px, double py, double pz)
 {
   m_p[ENERGY]=energy;
-  Norm(1,px,py,pz);
+  KUtil::Normalize(1,px,py,pz);
   m_p[PX]=px;
   m_p[PY]=py;
   m_p[PZ]=pz;  
 }
 
-Particle::Momentum::Momentum(double energy)
+KParticle::Momentum::Momentum(double energy)
 {
   m_p[ENERGY]=energy;
   m_p[PX]=0;
@@ -57,7 +56,7 @@ Particle::Momentum::Momentum(double energy)
   m_p[PZ]=1;
 }
 
-double Particle::GetMass(std::string m_name)
+double KParticle::GetMass(std::string m_name)
 {
   double mass=0;
   int f_find=0;
@@ -70,37 +69,38 @@ double Particle::GetMass(std::string m_name)
   }
   if(!f_find){
     fprintf(stderr, "particle data not found.. %s\n",m_name.c_str());
-    fprintf(stderr, "you should add particle info (Particle.cxx) at first!!!\n");
+    fprintf(stderr, "you should add particle info (KParticle.cxx) at first!!!\n");
     m_errno=PARTICLE_DATA_NOT_FOUND;
   }
   return mass;
 }
 
-double Particle::GetBeta()
+double KParticle::GetBeta()
 {
   return sqrt(1-(m_mass/m_Momentum.GetE())*
 	      (m_mass/m_Momentum.GetE()));
 }
 
-double Particle::GetGamma()
+double KParticle::GetGamma()
 {
   if(m_mass < DBL_EPSILON){
-    fprintf(stderr, "Division by Zero in Momentum::GetGamma!!\n");
+    fprintf(stderr, "Division by Zero in KParticle::GetGamma!!\n");
     m_errno = ZERO_DIVISION;
     return EXIT_FAILURE;
   }
   return m_Momentum.GetE()/m_mass;
 }
 
-bool Particle::Fail()
+bool KParticle::IsFail()
 {
-  if(m_errno==0) return true;
+  if(m_errno==0) return false;
   else{
-    return false;
+    fprintf(stderr, "Error in KParticle. Error_Code: %d\n", m_errno);
+    return true;
   }
 }
 
-void Particle::SetMomentum(double px, double py, double pz)
+void KParticle::SetMomentum(double px, double py, double pz)
 {
   m_Momentum.SetPx(px);
   m_Momentum.SetPy(py);
@@ -108,7 +108,7 @@ void Particle::SetMomentum(double px, double py, double pz)
   m_Momentum.SetE(sqrt(px*px+py*py+pz*pz+m_mass*m_mass));
 }
 
-void Particle::SetEnergy(double kin_energy)
+void KParticle::SetEnergy(double kin_energy)
 {
   if(kin_energy < 0){
     fprintf(stderr,
@@ -119,15 +119,15 @@ void Particle::SetEnergy(double kin_energy)
   double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
   double px, py, pz;
   px=m_Momentum.GetPx(); py=m_Momentum.GetPy(); pz=m_Momentum.GetPz();
-  Norm(norm, px, py, pz);
+  KUtil::Normalize(norm, px, py, pz);
   m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
 }
 
-void Particle::
+void KParticle::
 SetEnergyDirection(double kin_energy, double px, double py, double pz)
 {
   m_Momentum.SetE(kin_energy+m_mass);
   double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
-  Norm(norm, px, py, pz);
+  KUtil::Normalize(norm, px, py, pz);
   m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
 }

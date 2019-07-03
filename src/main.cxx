@@ -1,8 +1,16 @@
 #include <iostream>
 #include <unistd.h>
-#include <Particle.hh>
+#include <KParticle.hh>
 #include <cstdlib>
-#include <Util.hh>
+#include <KCollision.hh>
+
+void Usage(){
+  printf("Usage: ./kinema [-g] [-r val] p1 p2 p3 p4 Ebeam Ex\n");
+  printf("   -g: Graph will be displayed.\n");
+  printf("   -r: Recoil kinetic energy.\n");
+  printf("Unit of energy is [MeV].\n\n");
+  printf("Output: E3 E4 theta3 theta4 \n");
+}
 
 int main(int argc, char **argv){
   int opt;
@@ -30,15 +38,18 @@ int main(int argc, char **argv){
     Usage();
     return -1;
   }
-  Particle p1(argv[optind], atof(argv[optind+4]));
-  Particle p2(argv[optind+1], 0);
-  Particle p3(argv[optind+2], RecoilEx);
-  Particle p4(argv[optind+3],
+
+  KParticle p1(argv[optind], atof(argv[optind+4]));
+  KParticle p2(argv[optind+1], 0);
+  KParticle p3(argv[optind+2], RecoilEx);
+  KParticle p4(argv[optind+3],
 	      atof(argv[optind+4])-atof(argv[optind+5]));
 
-  if(p1.Fail() || p2.Fail() || p3.Fail() || p4.Fail()){
-    std::exit(EXIT_FAILURE);
-  }
+  KCollision col;
+  col.SetInitParticle(p1, p2);
+  
+
+  
 
   std::exit(EXIT_SUCCESS);  
 }
