@@ -47,9 +47,7 @@ int main(int argc, char **argv){
 
   KCollision col;
   col.SetInitParticle(p1, p2);
-  
-
-  
+  std::cout << &p1 << " " << col.GetAddr1() << std::endl;
 
   std::exit(EXIT_SUCCESS);  
 }

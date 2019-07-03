@@ -1,7 +1,9 @@
 #ifndef _KPARTICLE_HH
 #define _KPARTICLE_HH
 
-// LAB frame only!!
+#include <string>
+
+// all variables are defined on LAB frame!!
 class KParticle
 {
 private:
