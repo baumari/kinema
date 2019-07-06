@@ -44,14 +44,6 @@ private:
   double m_mass;
   int m_errno;
   Momentum m_Momentum;  
-  enum Error_Code { 
-    PARTICLE_DATA_NOT_FOUND=1,
-    ZERO_DIVISION,
-    INVALID_ARGUMENT,
-
-    ERR_CODE_SIZE,
-  };
-  //  char *m_Error[ERR_CODE_SIZE];
 
 private:
   double GetMass(std::string m_name);  

@@ -45,10 +45,10 @@ int main(int argc, char **argv){
   KParticle p4(argv[optind+3],
 	      atof(argv[optind+4])-atof(argv[optind+5]));
 
-  KCollision col;
-  col.SetInitParticle(p1, p2);
-  std::cout << &p1 << " " << col.GetAddr1() << std::endl;
+  KCollision col(p1, p2, p3, p4);
+  col.Scatt();
 
+  
   std::exit(EXIT_SUCCESS);  
 }
 

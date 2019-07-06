@@ -1,12 +1,18 @@
 INCDIR = $(CURDIR)/include
 LIBDIR = $(CURDIR)/lib
-CXX = `root-config --cxx`
-ROOTLIBS = 'root-config --libs'
-CFLAGS = `root-config --cflags` \
+#CXX = `root-config --cxx`
+CXX = clang++
+ifeq ($(CXX),root-config --cxx)
+	ROOTLIBS = 'root-config --libs'
+	CFLAGS = `root-config --cflags` \
 	-O3 -W -Wall -Wextra -Wno-long-long \
 	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC
-
-LDFLAGS = `root-config --glibs` -lGeom -lm
+	LDFLAGS = `root-config --glibs` -lm
+else
+	CFLAGS = -O3 -W -Wall -Wextra -Wno-long-long \
+	-fno-common -I$(INCDIR) -fPIC
+	LDFLAGS = -lm	
+endif
 
 TARGET = ./bin/kinema 
 LIB = ./lib/mykinema.so

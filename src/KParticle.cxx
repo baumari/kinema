@@ -5,6 +5,7 @@
 #include <KUtil.hh>
 #include <cfloat>
 #include <cstdio>
+#include <KError.hh>
 
 /************* table of particle **************/
 /*** add information below if you necessary ***/
@@ -70,7 +71,7 @@ double KParticle::GetMass(std::string m_name)
   if(!f_find){
     fprintf(stderr, "particle data not found.. %s\n",m_name.c_str());
     fprintf(stderr, "you should add particle info (KParticle.cxx) at first!!!\n");
-    m_errno=PARTICLE_DATA_NOT_FOUND;
+    m_errno=KError::PARTICLE_DATA_NOT_FOUND;
   }
   return mass;
 }
@@ -85,7 +86,7 @@ double KParticle::GetGamma()
 {
   if(m_mass < DBL_EPSILON){
     fprintf(stderr, "Division by Zero in KParticle::GetGamma!!\n");
-    m_errno = ZERO_DIVISION;
+    m_errno = KError::ZERO_DIVISION;
     return EXIT_FAILURE;
   }
   return m_Momentum.GetE()/m_mass;
@@ -113,7 +114,8 @@ void KParticle::SetEnergy(double kin_energy)
   if(kin_energy < 0){
     fprintf(stderr,
 	    "Eenrgy must be larger than 0 in Momentum::SetEnergy!!\n");
-    m_errno = INVALID_ARGUMENT;    
+    m_errno = KError::INVALID_ARGUMENT;
+    return ;
   }
   m_Momentum.SetE(kin_energy+m_mass);
   double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
