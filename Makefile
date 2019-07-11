@@ -1,7 +1,12 @@
 INCDIR = $(CURDIR)/include
 LIBDIR = $(CURDIR)/lib
 SRCDIR = $(CURDIR)/src
+OBJDIR = $(CURDIR)/src/obj
 BINDIR = $(CURDIR)/bin
+TARGET = $(BINDIR)/kinema 
+LIB = $(LIBDIR)/libkinema.so
+#LIB = 
+
 #CXX = `root-config --cxx`
 CXX = clang++
 ifeq ($(CXX),root-config --cxx)
@@ -16,20 +21,19 @@ else
 	LDFLAGS = -lm	
 endif
 
-TARGET = $(BINDIR)/kinema 
-LIB = $(LIBDIR)/mykinema.so
-
 SOURCES = $(wildcard $(SRCDIR)/*.cxx)
-OBJS = $(addprefix $(SRCDIR)/, $(notdir $(SOURCES:.cxx=.o)))
-DEPS = $(addprefix $(SRCDIR)/, $(notdir $(SOURCES:.cxx=.d)))
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.cxx=.o)))
+DEPS = $(OBJS:.o=.d)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LIB)
 	$(CXX) $(LDFLAGS) -o $@ $^
-	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 
-$(SRCDIR)/%.o : $(SRCDIR)/%.cxx
-	@[ -d $(SRCDIR) ]
+$(OBJDIR)/%.o: $(SRCDIR)/%.cxx
+	-mkdir -p $(OBJDIR)
 	$(CXX) $(CFLAGS) -o $@ -c $<
+
+$(LIB):
+	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $@
 
 all: clean $(TARGET)
 
@@ -37,6 +41,6 @@ clean:
 	-rm -f $(OBJS) $(DEPS) $(TARGET) $(LIB)
 
 ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
--include $(DEP)
+-include $(DEPS)
 endif
 
