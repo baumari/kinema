@@ -1,51 +1,65 @@
-#include <iostream>
-#include <unistd.h>
-#include <KParticle.hh>
+#include <cstdio>
 #include <cstdlib>
+#include <iostream>
+#include <fstream>
+
+#include <KParticle.hh>
 #include <KCollision.hh>
+//#include <KOptions.hh>
 
 void Usage(){
-  printf("Usage: ./kinema [-g] [-r val] p1 p2 p3 p4 Ebeam Ex\n");
-  printf("   -g: Graph will be displayed.\n");
-  printf("   -r: Recoil kinetic energy.\n");
-  printf("Unit of energy is [MeV].\n\n");
-  printf("Output: E3 E4 theta3 theta4 \n");
+  printf("Usage: ./kinema p1 p2 p3 p4 Ebeam Ex [options]\n");
+  printf("Unit of energy is [MeV].\n");
+  printf("Output: E3 E4 theta3 theta4 \n\n");  
+  printf("Options..\n");
+  printf("-r, --recoil : Recoil kinetic energy (double [=0])\n");
+  printf("    --out    : Output file (string [=out.dat])\n");
+  printf("-h, --help   : Show help.\n");
 }
 
-int main(int argc, char **argv){
-  int opt;
-  int f_graph=0;
+int main(int argc, char* argv[]){
+
+  double RecEne=0;
+
+//  KOptions Opt;
+//  Opt.Add("help","h");
+//  Opt.Add("recoil","r",0);
+//  Opt.Add("out","","out.dat");
+//  if(!Opt.Check(argc, argv)){
+//    Usage();
+//    std::exit(EXIT_FAILURE);
+//  }
+//  if(Opt.Exist("help")){
+//    Usage();
+//    std::exit(EXIT_SUCCESS);
+//  }
+//  if(Opt.Exist("recoil")){
+//    RecEne=Opt.Get("recoil");
+//  }
+//  if(Opt.Exist("out")){
+//    os.Open((Opt.Get("out")));
+//  }else os=std::cout;
+//
+//  if(argc < 6){
+//    Usage();
+//    std::exit(EXIT_FAILURE);
+//  }
+  
   double RecoilEx=0;
   //  int f_recoil=0;
-  while((opt = getopt(argc, argv, "hgr:")) != -1){
-    switch(opt){
-    case 'g':
-      f_graph = 1;
-      break;
-    case 'r':
-      //      f_recoil=1;
-      RecoilEx=atof(optarg);
-      break;
-    case 'h':
-      Usage();
-      return -1;
-    default:
-      Usage();
-      return -1;
-    }
-  }
-  if((argc-optind)!=6){
-    Usage();
-    return -1;
-  }
 
-  KParticle p1(argv[optind], atof(argv[optind+4]));
-  KParticle p2(argv[optind+1], 0);
-  KParticle p3(argv[optind+2], RecoilEx);
-  KParticle p4(argv[optind+3],
-	      atof(argv[optind+4])-atof(argv[optind+5]));
+//  KParticle p1(argv[optind], atof(argv[optind+4]));
+//  KParticle p2(argv[optind+1], 0);
+//  KParticle p3(argv[optind+2], RecoilEx);
+//  KParticle p4(argv[optind+3],
+//	       atof(argv[optind+4])-atof(argv[optind+5]));
+  
+  KParticle p1;
+  KParticle p2;
+  KParticle p3;  
+  KParticle p4;
 
-  KCollision col(p1, p2, p3, p4);
+  KCollision col(p1, p2, p3, p4);  
   col.Scatt();
 
   

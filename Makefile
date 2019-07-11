@@ -1,40 +1,42 @@
 INCDIR = $(CURDIR)/include
 LIBDIR = $(CURDIR)/lib
+SRCDIR = $(CURDIR)/src
+BINDIR = $(CURDIR)/bin
 #CXX = `root-config --cxx`
 CXX = clang++
 ifeq ($(CXX),root-config --cxx)
 	ROOTLIBS = 'root-config --libs'
 	CFLAGS = `root-config --cflags` \
 	-O3 -W -Wall -Wextra -Wno-long-long \
-	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC
+	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP
 	LDFLAGS = `root-config --glibs` -lm
 else
 	CFLAGS = -O3 -W -Wall -Wextra -Wno-long-long \
-	-fno-common -I$(INCDIR) -fPIC
+	-fno-common -I$(INCDIR) -fPIC -MMD -MP
 	LDFLAGS = -lm	
 endif
 
-TARGET = ./bin/kinema 
-LIB = ./lib/mykinema.so
-SOURCES = $(wildcard ./src/*.cxx)
-OBJS = $(addprefix ./src/, $(notdir $(SOURCES:.cxx=.o)))
+TARGET = $(BINDIR)/kinema 
+LIB = $(LIBDIR)/mykinema.so
 
-#.SUFFIXES: .cxx .o
-
-all: $(TARGET)
-	rm -f ./src/*.o
+SOURCES = $(wildcard $(SRCDIR)/*.cxx)
+OBJS = $(addprefix $(SRCDIR)/, $(notdir $(SOURCES:.cxx=.o)))
+DEPS = $(addprefix $(SRCDIR)/, $(notdir $(SOURCES:.cxx=.d)))
 
 $(TARGET): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^
 	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 
-#.cxx.o:
-#	$(CXX) -c $(CFLAGS) $<
-
-./src/%.o : ./src/%.cxx
+$(SRCDIR)/%.o : $(SRCDIR)/%.cxx
+	@[ -d $(SRCDIR) ]
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
+all: clean $(TARGET)
+
 clean:
-	rm -f ./src/*.o *~ $(TARGET) $(LIB)
-#	echo $(OBJS)
+	-rm -f $(OBJS) $(DEPS) $(TARGET) $(LIB)
+
+ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
+-include $(DEP)
+endif
 

@@ -16,5 +16,6 @@ namespace KUtil {
   {
     double fac=norm/sqrt(x*x+y*y);
     x*=fac; y*=fac;  
-  }  
+  }
+
 }
