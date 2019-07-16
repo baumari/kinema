@@ -7,20 +7,30 @@
 
 class KOptions{
 private:
-  std::vector<std::string> m_SOptListWithoutArg; //short options
-  std::vector<std::string> m_LOptListWithoutArg; //long options 
-//  std::map<std::string, KOptArg> m_SOptListWithArg;
-//  std::map<std::string, KOptArg> m_LOptListWithArg;    
-
+  enum OptType {
+    LONG,
+    SHORT,
+    
+    OPT_TYPE_SIZE,
+  };
+  std::vector<std::string>  m_OptListWithoutArg[OPT_TYPE_SIZE];
+  std::map<std::string, std::string> m_OptListWithArg[OPT_TYPE_SIZE];
+  
 public:
   KOptions() {}
   ~KOptions() {}
 
 public:
-//Add("short opt","long opt",optarg default val,optarg constraint)  
-//  void Add(std::string LongOpt, std::string ShortOpt);
-//  template <typename T>
-//  void Add(std::string LongOpt, std::string ShortOpt, T OptArg);
+  void Add(std::string LongOpt, std::string ShortOpt);
+  void Add(std::string LongOpt, std::string ShortOpt, int OptVal);
+  void Add(std::string LongOpt, std::string ShortOpt, double OptVal);
+  void Add(std::string LongOpt, std::string ShortOpt,
+	   std::string OptVal);
+
+  int GetI(std::string OptName);
+  double GetD(std::string OptName);
+  float GetF(std::string OptName);  
+  std::string GetS(std::string OptName);    
 };
 
 

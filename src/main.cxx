@@ -5,7 +5,7 @@
 
 #include <KParticle.hh>
 #include <KCollision.hh>
-//#include <KOptions.hh>
+#include <KOptions.hh>
 
 void Usage(){
   printf("Usage: ./kinema p1 p2 p3 p4 Ebeam Ex [options]\n");
@@ -21,10 +21,12 @@ int main(int argc, char* argv[]){
 
   double RecEne=0;
 
-//  KOptions Opt;
-//  Opt.Add("help","h");
-//  Opt.Add("recoil","r",0);
-//  Opt.Add("out","","out.dat");
+  KOptions Opt;
+  Opt.Add("help","h");
+  Opt.Add("recoil","r",0);
+  Opt.Add("out","","out.dat");
+
+  //  std::cout << Opt.GetS("ou") << std::endl;
 //  if(!Opt.Check(argc, argv)){
 //    Usage();
 //    std::exit(EXIT_FAILURE);
