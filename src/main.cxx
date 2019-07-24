@@ -26,11 +26,10 @@ int main(int argc, char* argv[]){
   Opt.Add("recoil","r",0);
   Opt.Add("out","","out.dat");
 
-  //  std::cout << Opt.GetS("ou") << std::endl;
-//  if(!Opt.Check(argc, argv)){
-//    Usage();
-//    std::exit(EXIT_FAILURE);
-//  }
+  if(!Opt.Check(argc, argv)){
+    Usage();
+    std::exit(EXIT_FAILURE);
+  }
 //  if(Opt.Exist("help")){
 //    Usage();
 //    std::exit(EXIT_SUCCESS);
