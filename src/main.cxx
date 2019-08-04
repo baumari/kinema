@@ -19,8 +19,6 @@ void Usage(){
 
 int main(int argc, char* argv[]){
 
-  double RecEne=0;
-
   KOptions Opt;
   Opt.Add("help","h");
   Opt.Add("recoil","r",0);
@@ -46,7 +44,6 @@ int main(int argc, char* argv[]){
 //    std::exit(EXIT_FAILURE);
 //  }
   
-  double RecoilEx=0;
   //  int f_recoil=0;
 
 //  KParticle p1(argv[optind], atof(argv[optind+4]));
@@ -55,15 +52,13 @@ int main(int argc, char* argv[]){
 //  KParticle p4(argv[optind+3],
 //	       atof(argv[optind+4])-atof(argv[optind+5]));
   
-  KParticle p1;
-  KParticle p2;
-  KParticle p3;  
-  KParticle p4;
-
-  KCollision col(p1, p2, p3, p4);  
-  col.Scatt();
-
-  
+//  KParticle p1;
+//  KParticle p2;
+//  KParticle p3;  
+//  KParticle p4;
+//
+//  KCollision col(p1, p2, p3, p4);  
+//  col.Scatt();  
   std::exit(EXIT_SUCCESS);  
 }
 

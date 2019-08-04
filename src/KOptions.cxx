@@ -1,5 +1,4 @@
 #include <KOptions.hh>
-#include <utility>
 #include <stdexcept>
 #include <cstdio>
 #include <algorithm>
@@ -9,38 +8,47 @@
 static const int BUFF_L = 1024;
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt){
-  m_OptListWithoutArg[LONG].insert(std::make_pair(LongOpt, false));
-  m_OptListWithoutArg[SHORT].insert(std::make_pair(ShortOpt, false));  
+  _OptWOArg m_OptWOArg;
+  m_OptWOArg.m_Long = LongOpt;
+  m_OptWOArg.m_Short = ShortOpt;
+  m_OptWOArg.m_flag = false;
+  m_OptListWithoutArg.push_back(m_OptWOArg);
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   int OptVal){
+  _OptWArg m_OptWArg;  
   std::stringstream ss;
   ss << OptVal;
-  m_OptPair[LONG].pair(ss.str(), false);
-  m_OptPair[SHORT].pair(ss.str(), false);    
-  m_OptListWithArg[LONG].insert(std::make_pair(LongOpt, m_OptPair[LONG]));
-  m_OptListWithArg[SHORT].insert(std::make_pair(ShortOpt, m_OptPair[SHORT]));  
+  m_OptWArg.m_Long = LongOpt;
+  m_OptWArg.m_Short = ShortOpt;
+  m_OptWArg.m_val = ss.str();
+  m_OptWArg.m_flag = false;
+  m_OptListWithArg.push_back(m_OptWArg);  
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   double OptVal){
+  _OptWArg m_OptWArg;  
   std::stringstream ss;
   ss << OptVal;
-  m_OptPair[LONG].pair(ss.str(), false);
-  m_OptPair[SHORT].pair(ss.str(), false);    
-  m_OptListWithArg[LONG].insert(std::make_pair(LongOpt, m_OptPair[LONG]));
-  m_OptListWithArg[SHORT].insert(std::make_pair(ShortOpt, m_OptPair[SHORT]));  
+  m_OptWArg.m_Long = LongOpt;
+  m_OptWArg.m_Short = ShortOpt;
+  m_OptWArg.m_val = ss.str();
+  m_OptWArg.m_flag = false;
+  m_OptListWithArg.push_back(m_OptWArg);  
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   std::string OptVal){
+  _OptWArg m_OptWArg;  
   std::stringstream ss;
   ss << OptVal;
-  m_OptPair[LONG].pair(ss.str(), false);
-  m_OptPair[SHORT].pair(ss.str(), false);    
-  m_OptListWithArg[LONG].insert(std::make_pair(LongOpt, m_OptPair[LONG]));
-  m_OptListWithArg[SHORT].insert(std::make_pair(ShortOpt, m_OptPair[SHORT]));  
+  m_OptWArg.m_Long = LongOpt;
+  m_OptWArg.m_Short = ShortOpt;
+  m_OptWArg.m_val = ss.str();
+  m_OptWArg.m_flag = false;
+  m_OptListWithArg.push_back(m_OptWArg);  
 }
 
 //int KOptions::GetI(std::string OptName){
@@ -116,21 +124,82 @@ bool KOptions::IsOpt(char *arg){
 }
 
 // loop for enum is better to use..
+//bool KOptions::Check(int argc, char* argv[]){ 
+//  std::string opt;
+//  for(int iarg=1; iarg<argc; iarg++){
+//    if(IsLongOpt(argv[iarg])){
+//      opt = argv[iarg];
+//      opt = opt.substr(2);
+//      if(Find(m_OptListWithoutArg, opt)
+//	 != m_OptListWithoutArg.end()){
+//	m_OptListWithoutArg = true;
+//      }else if(m_OptListWithArg[LONG].find(opt)
+//	       != m_OptListWithArg[LONG].end()){
+//	m_OptListWithArg[LONG][opt].m_flag = true;
+//	if(iarg+1 < argc){
+//	  if(!IsOpt(argv[iarg+1])){
+//	    m_OptListWithArg[LONG][opt].m_val = argv[iarg+1];
+//	  }else{
+//	    fprintf(stderr, "%s should be an argument for %s!\n\n",
+//		    argv[iarg+1], argv[iarg]);
+//	    return false;
+//	  }
+//	}else{
+//	  fprintf(stderr, "No argument for %s!\n\n", argv[iarg]);
+//	  return false;
+//	}
+//      }else{
+//	fprintf(stderr, "No such option (%s)!!\n\n", argv[iarg]);
+//	return false;
+//      }
+//    }else if(IsShortOpt(argv[iarg])){
+//      opt = argv[iarg];
+//      opt = opt.substr(1);
+//      if(m_OptListWithoutArg[SHORT].find(opt)
+//	 != m_OptListWithoutArg[SHORT].end()){
+//	m_OptListWithoutArg[SHORT][opt] = true;
+//      }else if(m_OptListWithArg[SHORT].find(opt)
+//	       != m_OptListWithArg[SHORT].end()){
+//	m_OptListWithArg[SHORT][opt].m_flag = true;
+//	if(iarg+1 < argc){
+//	  if(!IsOpt(argv[iarg+1])){
+//	    m_OptListWithArg[SHORT][opt].m_val = argv[iarg+1];
+//	  }else{
+//	    fprintf(stderr, "%s should be an argument for %s!\n\n",
+//		    argv[iarg+1], argv[iarg]);
+//	    return false;	    
+//	  }
+//	}else{
+//	  fprintf(stderr, "No argument for %s!\n\n", argv[iarg]);
+//	  return false;
+//	}
+//      }else{
+//	fprintf(stderr, "No such option (%s)!!\n\n", argv[iarg]);
+//	return false;	
+//      }
+//    }
+//  }
+//  return true;
+//}
+
+// loop for enum is better to use..
 bool KOptions::Check(int argc, char* argv[]){ 
   std::string opt;
   for(int iarg=1; iarg<argc; iarg++){
     if(IsLongOpt(argv[iarg])){
       opt = argv[iarg];
       opt = opt.substr(2);
-      if(m_OptListWithoutArg[LONG].find(opt)
-	 != m_OptListWithoutArg[LONG].end()){
-	m_OptListWithoutArg[LONG][opt] = true;
-      }else if(m_OptListWithArg[LONG].find(opt)
-	       != m_OptListWithArg[LONG].end()){
-	m_OptListWithArg[LONG][opt].m_flag = true;
+    }else if(IsShortOpt(argv[iarg])){
+      opt = argv[iarg];
+      opt = opt.substr(1);      
+    }
+    if(opt.size() != 0){
+      std::vector<_OptWOArg>::iterator it = Find(m_OptListWithoutArg, opt);
+      if(it != m_OptListWithoutArg.end()){
+	*it.m_flag = true;
 	if(iarg+1 < argc){
 	  if(!IsOpt(argv[iarg+1])){
-	    m_OptListWithArg[LONG][opt].m_val = argv[iarg+1];
+	    *it.m_val = argv[iarg+1];
 	  }else{
 	    fprintf(stderr, "%s should be an argument for %s!\n\n",
 		    argv[iarg+1], argv[iarg]);
@@ -144,44 +213,68 @@ bool KOptions::Check(int argc, char* argv[]){
 	fprintf(stderr, "No such option (%s)!!\n\n", argv[iarg]);
 	return false;
       }
-    }else if(IsShortOpt(argv[iarg])){
-      opt = argv[iarg];
-      opt = opt.substr(1);
-      if(m_OptListWithoutArg[SHORT].find(opt)
-	 != m_OptListWithoutArg[SHORT].end()){
-	m_OptListWithoutArg[SHORT][opt] = true;
-      }else if(m_OptListWithArg[SHORT].find(opt)
-	       != m_OptListWithArg[SHORT].end()){
-	m_OptListWithArg[SHORT][opt].m_flag = true;
-	if(iarg+1 < argc){
-	  if(!IsOpt(argv[iarg+1])){
-	    m_OptListWithArg[SHORT][opt].m_val = argv[iarg+1];
-	  }else{
-	    fprintf(stderr, "%s should be an argument for %s!\n\n",
-		    argv[iarg+1], argv[iarg]);
-	    return false;	    
-	  }
-	}else{
-	  fprintf(stderr, "No argument for %s!\n\n", argv[iarg]);
-	  return false;
-	}
-      }else{
-	fprintf(stderr, "No such option (%s)!!\n\n", argv[iarg]);
-	return false;	
-      }
     }
   }
   return true;
 }
 
 
+//// Exist must be called after KOptions::Check()
 //bool KOptions::Exist(std::string OptName){
-//  for(int i=0;i<OPT_TYPE_SIZE;i++){
-//    if(std::find(m_OptListWithoutArg[i].begin(),
-//		 m_OptListWithoutArg[i].end(),
-//		 OptName) != m_OptListWithoutArg[i].end()) return true;
-//    if((m_OptListWithArg[i].find(OptName)) != m_OptListWithArg[i].end()) return true;
+//  bool val;
+//  if(OptName.size() == 0){
+//    fprintf(stderr, "KOptions::Exist(std::string) must have non empty string!!\n");
+//    fprintf(stderr, "Abort!\n");
+//    std::exit(EXIT_FAILURE);    
+//  }else if(OptName.size() == 1){
+//    if(m_OptListWithoutArg[SHORT].find(OptName)
+//       != m_OptListWithoutArg[SHORT].end()){
+//      val = m_OptListWithoutArg[SHORT][OptName];
+//    }else if(m_OptListWithArg[SHORT].find(OptName)
+//	     != m_OptListWithArg[SHORT].end()){
+//      val = m_OptListWithArg[SHORT][OptName].m_flag;
+//    }else{
+//      fprintf(stderr, "KOptions::Exist() must be called after KOptions::Check()!!\n");
+//      fprintf(stderr, "Abort!\n");
+//      std::exit(EXIT_FAILURE);      
+//    }
+//  }else{
+//    if(m_OptListWithoutArg[LONG].find(OptName)
+//       != m_OptListWithoutArg[LONG].end()){
+//      val = m_OptListWithoutArg[LONG][OptName];
+//    }else if(m_OptListWithArg[LONG].find(OptName)
+//	     != m_OptListWithArg[LONG].end()){
+//      val = m_OptListWithArg[LONG][OptName].m_flag;
+//    }else{
+//      fprintf(stderr, "KOptions::Exist() must be called after KOptions::Check()!!\n");
+//      fprintf(stderr, "Abort!\n");
+//      std::exit(EXIT_FAILURE);      
+//    }
 //  }
-//  return false;
+//  return val;
 //}
 
+std::vector<_OptWOArg>::iterator Find(const std::vector<_OptWOArg> &v,
+				      const std::string &OptName){
+  std::vector<_OptWOArg>::iterator it;
+  std::vector<_OptWOArg>::iterator it_end = v.end();  
+  for(it = v.begin(); it != it_end; ++it){
+    if(*it.find(OptName)) return it;
+  }
+  return it_end;
+}
+
+std::vector<_OptWArg>::iterator Find(const std::vector<_OptWArg> &v,
+				      const std::string &OptName){
+  std::vector<_OptWArg>::iterator it;
+  std::vector<_OptWArg>::iterator it_end = v.end();  
+  for(it = v.begin(); it != it_end; ++it){
+    if(*it.find(OptName)) return it;
+  }
+  return it_end;
+}
+
+bool KOptions::_OptBase::find(const std::string &OptName){
+  if(m_Short != OptName && m_Long != OptName) return false;
+  else return true;
+}

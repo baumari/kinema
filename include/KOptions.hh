@@ -2,25 +2,42 @@
 #define _KOPIONS_HH
 
 #include <string>
-#include <map>
+#include <vector>
 
 class KOptions{
 private:
-  enum OptType {
+  enum _OptType {
     LONG,
     SHORT,
     
     OPT_TYPE_SIZE,
   };
-  typedef struct {
-    std::string m_val;
+  class _OptBase{
+  public:
+    std::string m_Short;
+    std::string m_Long;
     bool m_flag;
-    inline void pair(std::string val, bool flag){m_val=val;m_flag=flag;}
-  } _OptPair;
+    bool find(const std::string&);
 
-  _OptPair m_OptPair[OPT_TYPE_SIZE];
-  std::map<std::string, bool> m_OptListWithoutArg[OPT_TYPE_SIZE];
-  std::map<std::string, _OptPair> m_OptListWithArg[OPT_TYPE_SIZE];
+    _OptBase(){}
+    ~_OptBase(){}
+    _OptBase(const _OptBase& x) :
+      m_Short(x.m_Short),
+      m_Long(x.m_Long),
+      m_flag(x.m_flag){}
+  };
+  class _OptWOArg : public _OptBase{};
+  class _OptWArg : public _OptBase{
+  public:
+    std::string m_val;
+    _OptWArg(const _OptWArg& x) :
+      m_Short(x.m_Short),
+      m_Long(x.m_Long),
+      m_flag(x.m_flag),
+      m_val(x.m_val){}
+  };
+  std::vector<_OptWOArg> m_OptListWithoutArg;
+  std::vector<_OptWArg> m_OptListWithArg;
 
 private:
   bool IsLongOpt(char *arg);
@@ -44,7 +61,12 @@ public:
 //  template <typename T>
 //  T Get(std::string OptName);
   bool Check(int argc, char* argv[]);
-  //  bool Exist(std::string OptName);
+  std::vector<_OptWOArg>::iterator Find(const std::vector<_OptWOArg>&,
+					const std::string &OptName);
+  std::vector<_OptWArg>::iterator Find(const std::vector<_OptWArg>&,
+				       const std::string &OptName);  
+//  bool Exist(std::string OptName);
+  
 };
 
 #endif
