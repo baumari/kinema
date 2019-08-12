@@ -27,12 +27,12 @@ ifeq ($(CXX),root-config --cxx)
 	CXXFLAGS = `root-config --cflags` \
 	-O3 -W -Wall -Wextra -Wno-long-long \
 	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP
-#	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP -std=c++11
+#-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP -std=c++11
 	LDFLAGS = `root-config --glibs` -lm
 else
 	CXXFLAGS = -O3 -W -Wall -Wextra -Wno-long-long \
-	-fno-common -I$(INCDIR) -fPIC -MMD -MP
-#	-fno-common -I$(INCDIR) -fPIC -MMD -MP -std=c++11
+	-fno-common -I$(INCDIR) -fPIC -MMD -MP	
+#-fno-common -I$(INCDIR) -fPIC -MMD -MP -std=c++11
 	LDFLAGS = -lm	
 endif
 

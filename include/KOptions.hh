@@ -17,33 +17,34 @@ private:
     std::string m_Short;
     std::string m_Long;
     bool m_flag;
-    bool find(const std::string&);
+    bool Find(const std::string&);
 
     _OptBase(){}
     ~_OptBase(){}
-    _OptBase(const _OptBase& x) :
-      m_Short(x.m_Short),
-      m_Long(x.m_Long),
-      m_flag(x.m_flag){}
   };
   class _OptWOArg : public _OptBase{};
   class _OptWArg : public _OptBase{
   public:
     std::string m_val;
-    _OptWArg(const _OptWArg& x) :
-      m_Short(x.m_Short),
-      m_Long(x.m_Long),
-      m_flag(x.m_flag),
-      m_val(x.m_val){}
   };
+
+private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
 
 private:
-  bool IsLongOpt(char *arg);
-  bool IsShortOpt(char *arg);
-  bool IsOpt(char *arg);    
-
+  bool IsLongOpt(char *argv);
+  bool IsShortOpt(char *argv);
+  bool IsOpt(char *argv);
+  bool IsLong(const std::string& OptName);
+  bool IsShort(const std::string& OptName);
+  void CheckOptInput(const std::string& LongOpt,
+		     const std::string& ShortOpt);
+  std::vector<_OptWOArg>::iterator Find(std::vector<_OptWOArg>&,
+					const std::string &);
+  std::vector<_OptWArg>::iterator Find(std::vector<_OptWArg>&,
+					const std::string &);
+  
 public:
   KOptions() {} 
   ~KOptions() {}
@@ -61,12 +62,7 @@ public:
 //  template <typename T>
 //  T Get(std::string OptName);
   bool Check(int argc, char* argv[]);
-  std::vector<_OptWOArg>::iterator Find(const std::vector<_OptWOArg>&,
-					const std::string &OptName);
-  std::vector<_OptWArg>::iterator Find(const std::vector<_OptWArg>&,
-				       const std::string &OptName);  
-//  bool Exist(std::string OptName);
-  
+  bool Exist(const std::string &OptName);
 };
 
 #endif

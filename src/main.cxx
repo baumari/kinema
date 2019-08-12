@@ -28,10 +28,10 @@ int main(int argc, char* argv[]){
     Usage();
     std::exit(EXIT_FAILURE);
   }
-//  if(Opt.Exist("help")){
-//    Usage();
-//    std::exit(EXIT_SUCCESS);
-//  }
+  if(Opt.Exist("h")){
+    Usage();
+    std::exit(EXIT_SUCCESS);
+  }
 //  if(Opt.Exist("recoil")){
 //    RecEne=Opt.Get("recoil");
 //  }
