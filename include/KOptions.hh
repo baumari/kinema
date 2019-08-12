@@ -25,7 +25,8 @@ private:
   class _OptWOArg : public _OptBase{};
   class _OptWArg : public _OptBase{
   public:
-    std::string m_val;
+    // all option arguments are stored with type of std::string    
+    std::string m_val; 
   };
 
 private:
@@ -43,7 +44,7 @@ private:
   std::vector<_OptWOArg>::iterator Find(std::vector<_OptWOArg>&,
 					const std::string &);
   std::vector<_OptWArg>::iterator Find(std::vector<_OptWArg>&,
-					const std::string &);
+				       const std::string &);
   
 public:
   KOptions() {} 
@@ -54,13 +55,7 @@ public:
   void Add(std::string LongOpt, std::string ShortOpt, int OptVal);
   void Add(std::string LongOpt, std::string ShortOpt, double OptVal);
   void Add(std::string LongOpt, std::string ShortOpt, std::string OptVal);
-
-//  int GetI(std::string OptName);
-//  double GetD(std::string OptName);
-//  float GetF(std::string OptName);  
-//  std::string GetS(std::string OptName);
-//  template <typename T>
-//  T Get(std::string OptName);
+  std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);
 };

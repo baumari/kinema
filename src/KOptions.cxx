@@ -5,6 +5,8 @@
 #include <sstream>
 #include <cstring>
 
+static const int BUFF_L = 256;
+
 void KOptions::Add(std::string LongOpt, std::string ShortOpt){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWOArg m_OptWOArg;
@@ -111,13 +113,27 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 //
 
 bool KOptions::IsLongOpt(char *arg){
-  if(arg[0] == '-' && arg[1] == '-') return true;
-  else return false;
+  if(arg[0] == '-' && arg[1] == '-'){
+    if(strlen(arg)-2 > 1) return true;
+    else{
+      char tmp[BUFF_L];
+      strncpy(tmp, &arg[2], strlen(arg)-2);
+      fprintf(stderr, "%s may not be long option..\n", tmp);
+      std::exit(EXIT_FAILURE);        
+    }
+  }else return false;
 }
 
 bool KOptions::IsShortOpt(char *arg){
-  if(arg[0] == '-' && arg[1] != '-') return true;
-  else return false;
+  if(arg[0] == '-' && arg[1] != '-'){
+    if(strlen(arg)-1 == 1) return true;
+    else{
+      char tmp[BUFF_L];
+      strncpy(tmp, &arg[1], strlen(arg)-1);
+      fprintf(stderr, "%s may not be short option..\n", tmp);
+      std::exit(EXIT_FAILURE);              
+    }
+  }else return false;
 }
 
 bool KOptions::IsOpt(char *arg){
@@ -128,6 +144,7 @@ bool KOptions::IsOpt(char *arg){
 bool KOptions::Check(int argc, char* argv[]){ 
   std::string opt;
   for(int iarg=1; iarg<argc; iarg++){
+    if(!IsOpt(argv[iarg])) continue;
     if(IsLongOpt(argv[iarg])){
       opt = argv[iarg];
       opt = opt.substr(2);      
@@ -223,4 +240,17 @@ void KOptions::CheckOptInput(const std::string& LongOpt,
 	    LongOpt.c_str(), ShortOpt.c_str());
     std::exit(EXIT_FAILURE);    
   }
+}
+
+std::string KOptions::Get(std::string OptName){
+  if(OptName.size() == 0){
+    fprintf(stderr, "Argument for KOptions::Get(std::string) should not be null-string!!\n");
+    std::exit(EXIT_FAILURE);
+  }else if(Find(m_OptListWithArg, OptName) != m_OptListWithArg.end()){
+    std::vector<_OptWArg>::iterator it = Find(m_OptListWithArg, OptName);
+    return it->m_val;
+  }else{
+    fprintf(stderr, "No such option (%s)!!\n", OptName.c_str());
+    std::exit(EXIT_FAILURE);	
+  }  
 }
