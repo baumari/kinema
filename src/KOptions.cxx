@@ -55,63 +55,6 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 
-//int KOptions::GetI(std::string OptName){
-//  int val=-1;
-//  try{
-//    val=std::stoi(m_OptListWithArg[LONG].at(OptName));
-//  }catch (std::out_of_range& oor){
-//    try{
-//      val=std::stoi(m_OptListWithArg[SHORT].at(OptName));
-//    } catch (std::out_of_range& oor){
-//      fprintf(stderr, "Out of Range: OptList\n");
-//    }    
-//  }
-//  return val;
-//}
-//
-//double KOptions::GetD(std::string OptName){
-//  double val=-1;
-//  try{
-//    val=std::stod(m_OptListWithArg[LONG].at(OptName));
-//  }catch (std::out_of_range& oor){
-//    try{
-//      val=std::stod(m_OptListWithArg[SHORT].at(OptName));
-//    } catch (std::out_of_range& oor){
-//      fprintf(stderr, "Out of Range: OptList\n");
-//    }    
-//  }
-//  return val;
-//}
-//
-//float KOptions::GetF(std::string OptName){
-//  float val=-1;
-//  try{
-//    val=std::stof(m_OptListWithArg[LONG].at(OptName));
-//  }catch (std::out_of_range& oor){
-//    try{
-//      val=std::stof(m_OptListWithArg[SHORT].at(OptName));
-//    } catch (std::out_of_range& oor){
-//      fprintf(stderr, "Out of Range: OptList\n");
-//    }    
-//  }
-//  return val;
-//}
-//
-//std::string KOptions::GetS(std::string OptName){
-//  std::string val("Hey!! Error!!");
-//  try{
-//    val=m_OptListWithArg[LONG].at(OptName);
-//  }catch (std::out_of_range& oor){
-//    try{
-//      val=m_OptListWithArg[SHORT].at(OptName);
-//    } catch (std::out_of_range& oor){
-//      fprintf(stderr, "Out of Range: OptList\n");
-//    }    
-//  }
-//  return val;
-//}
-//
-
 bool KOptions::IsLongOpt(char *arg){
   if(arg[0] == '-' && arg[1] == '-'){
     if(strlen(arg)-2 > 1) return true;
@@ -147,18 +90,24 @@ bool KOptions::Check(int argc, char* argv[]){
     if(!IsOpt(argv[iarg])) continue;
     if(IsLongOpt(argv[iarg])){
       opt = argv[iarg];
-      opt = opt.substr(2);      
+      opt = opt.substr(2);
+      if(iarg <= LeadArg) LeadArg++;
     }else if(IsShortOpt(argv[iarg])){
       opt = argv[iarg];
-      opt = opt.substr(1);      
+      opt = opt.substr(1);
+      LeadArg++;      
     }
-    if(opt.size() != 0){
+    if(opt.size() == 0){
+      fprintf(stderr, "null-option is improbable!!\n");
+      return false;
+    }else{
       if(Find(m_OptListWithArg, opt) != m_OptListWithArg.end()){
 	std::vector<_OptWArg>::iterator it = Find(m_OptListWithArg, opt);	
 	it->m_flag = true;
 	if(iarg+1 < argc){
 	  if(!IsOpt(argv[iarg+1])){
 	    it->m_val = argv[iarg+1];
+	   if(iarg <= LeadArg) LeadArg++;
 	  }else{
 	    fprintf(stderr, "%s should be an argument for %s!\n\n",
 		    argv[iarg+1], argv[iarg]);

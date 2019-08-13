@@ -45,9 +45,12 @@ private:
 					const std::string &);
   std::vector<_OptWArg>::iterator Find(std::vector<_OptWArg>&,
 				       const std::string &);
-  
+
 public:
-  KOptions() {} 
+  int LeadArg; 
+
+public:
+  KOptions() : LeadArg(1) {} 
   ~KOptions() {}
 
 public:
