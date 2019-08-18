@@ -18,42 +18,42 @@ void Usage(){
 }
 
 int main(int argc, char* argv[]){
+  KOptions opt;
+  opt.Add("h", "help");
+  opt.Add("r", "recoil", 0);
+  opt.Add("", "out", "");
+  opt.Add("g", "graph");  
 
-  KOptions Opt;
-  Opt.Add("help","h");
-  Opt.Add("recoil","r",0);
-  Opt.Add("out","","");
-
-  if(!Opt.Check(argc, argv)){
+  if(!opt.Check(argc, argv)){
+    fprintf(stderr, "Invalid Usage.\n");
     std::exit(EXIT_FAILURE);
   }
-  if(Opt.Exist("h")){
-    Usage();
-    std::exit(EXIT_SUCCESS);
+  if(opt.Exist("g")){
+    printf("Graphical mode using TGraph\n");
+    printf("Now developing...\n");
+    std::exit(EXIT_SUCCESS);    
   }
-  if(argc < 6){
+  if(opt.Exist("h")){
     Usage();
-    std::exit(EXIT_FAILURE);
+    std::exit(EXIT_SUCCESS);    
   }
-
-  FILE *fp;  
-  if(Opt.Exist("out")){
-    fp = fopen(Opt.Get("out").c_str(), "w");
-    if(fp == NULL){
-      fprintf(stderr, "File %s cannot be opened..\n", Opt.Get("out").c_str());
+  FILE *OutPutFile = stdout;
+  if(opt.Exist("out")){
+    OutPutFile = fopen(opt.Get("out").c_str(), "w");
+    if(OutPutFile == NULL){
+      fprintf(stderr, "Fail to open %s\n", opt.Get("out").c_str());
       std::exit(EXIT_FAILURE);
     }
-  }else fp = stdout;
-
-  KParticle p1(argv[Opt.LeadArg], atof(argv[Opt.LeadArg+4]));  
-  KParticle p2(argv[Opt.LeadArg+1], 0);
-  KParticle p3(argv[Opt.LeadArg+2], atof(Opt.Get("recoil").c_str()));
-  KParticle p4(argv[Opt.LeadArg+3], atof(argv[Opt.LeadArg+4])-atof(argv[Opt.LeadArg+5]));
+  }
   
-  KCollision col(p1, p2, p3, p4);  
-//  col.Scatt();
+  KParticle p1(argv[opt.Lead()], atof(argv[opt.Lead()+4]));
+  KParticle p2(argv[opt.Lead()+1], 0);
+  KParticle p3(argv[opt.Lead()+2],
+	       atof(argv[opt.Lead()+4])-atof(argv[opt.Lead()+5])-atof(opt.Get("r").c_str()));
+  KParticle p4(argv[opt.Lead()+3], atof(opt.Get("r").c_str()));
 
-  fclose(fp);
-  std::exit(EXIT_SUCCESS);  
+  KCollision col(p1, p2, p3, p4);
+  col.Scatt();
+
 }
 

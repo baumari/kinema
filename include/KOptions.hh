@@ -32,6 +32,7 @@ private:
 private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
+  int LeadArg; 
 
 private:
   bool IsLongOpt(char *argv);
@@ -47,9 +48,6 @@ private:
 				       const std::string &);
 
 public:
-  int LeadArg; 
-
-public:
   KOptions() : LeadArg(1) {} 
   ~KOptions() {}
 
@@ -61,6 +59,7 @@ public:
   std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);
+  inline int Lead() {return LeadArg;}
 };
 
 #endif

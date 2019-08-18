@@ -1,11 +1,11 @@
-/Users/kento/work/physics/kinema/src/obj/KParticle.o: \
-  /Users/kento/work/physics/kinema/src/KParticle.cxx \
-  /Users/kento/work/physics/kinema/include/KParticle.hh \
-  /Users/kento/work/physics/kinema/include/KUtil.hh \
-  /Users/kento/work/physics/kinema/include/KError.hh
+/home/kento/simulations/kinema/src/obj/KParticle.o: \
+  /home/kento/simulations/kinema/src/KParticle.cxx \
+  /home/kento/simulations/kinema/include/KParticle.hh \
+  /home/kento/simulations/kinema/include/KUtil.hh \
+  /home/kento/simulations/kinema/include/KError.hh
 
-/Users/kento/work/physics/kinema/include/KParticle.hh:
+/home/kento/simulations/kinema/include/KParticle.hh:
 
-/Users/kento/work/physics/kinema/include/KUtil.hh:
+/home/kento/simulations/kinema/include/KUtil.hh:
 
-/Users/kento/work/physics/kinema/include/KError.hh:
+/home/kento/simulations/kinema/include/KError.hh:
