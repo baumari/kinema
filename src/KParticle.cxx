@@ -7,56 +7,6 @@
 #include <cstdio>
 #include <KError.hh>
 
-/************* table of particle **************/
-/*** add information below if you necessary ***/
-
-const double AMU = 931.478;
-
-typedef struct {
-  const std::string name;
-  const double massex;
-  const int z;  
-  const int a;
-} _ParticleData;
-
-const _ParticleData ParticleData[]={
-  {"h",7.28897,1,1},        
-  {"p",7.28897,1,1},
-  {"proton",7.28897,1,1},
-  {"hydrogen",7.28897,1,1},
-  {"4he",2.42492,2,4},
-  {"a",2.42492,2,4},
-  {"alpha",2.42492,2,4},
-  {"helium",2.42492,2,4},
-  {"6li",14.08688,3,6},
-  {"8be",4.94167,4,8},
-  {"t",14.94981,1,3},
-  {"d",13.13572,1,2},
-  {"12c",0,6,12},
-  {"24mg",-13.93357,12,24},
-  {"20ne",-7.04193,10,20},
-  {"3he",14.93121,2,3},
-  {"n",8.0713,0,1}
-};
-
-KParticle::Momentum::Momentum(double energy,
-			     double px, double py, double pz)
-{
-  m_p[ENERGY]=energy;
-  KUtil::Normalize(1,px,py,pz);
-  m_p[PX]=px;
-  m_p[PY]=py;
-  m_p[PZ]=pz;  
-}
-
-KParticle::Momentum::Momentum(double energy)
-{
-  m_p[ENERGY]=energy;
-  m_p[PX]=0;
-  m_p[PY]=0;
-  m_p[PZ]=1;
-}
-
 double KParticle::GetMass(std::string m_name)
 {
   double mass=0;
@@ -76,23 +26,35 @@ double KParticle::GetMass(std::string m_name)
   return mass;
 }
 
-double KParticle::GetBeta()
+KParticle::KParticle(std::string name, double kin_energy,
+	   double dir_x, double dir_y, double dir_z)
 {
-  return sqrt(1-(m_mass/m_Momentum.GetE())*
-	      (m_mass/m_Momentum.GetE()));
+  m_name = name;
+  m_mass = GetMass(name);
+  double energy = kin_energy+m_mass;
+  KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
+		   dir_x, dir_y, dir_z);
+  m_p.Set(energy, dir_x, dir_y, dir_z);
 }
 
-double KParticle::GetGamma()
+KParticle::KParticle(std::string name, double kin_energy, K3Vector p)
 {
-  if(m_mass < DBL_EPSILON){
-    fprintf(stderr, "Division by Zero in KParticle::GetGamma!!\n");
-    m_errno = KError::ZERO_DIVISION;
-    return EXIT_FAILURE;
-  }
-  return m_Momentum.GetE()/m_mass;
+  m_name = name;
+  m_mass = GetMass(name);
+  double energy = kin_energy+m_mass;
+  KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
+  m_p.Set(energy, p);
 }
 
-bool KParticle::IsFail()
+KParticle::KParticle(std::string name, double kin_energy)
+{
+  m_name = name;
+  m_mass = GetMass(name);
+  double energy = kin_energy + m_mass;
+  m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
+}
+
+bool KParticle::IsErr()
 {
   if(m_errno==0) return false;
   else{
@@ -101,35 +63,78 @@ bool KParticle::IsFail()
   }
 }
 
+double KParticle::Beta()
+{
+  return sqrt(1-pow(1./Gamma(),2));
+}
+
+double KParticle::Gamma()
+{
+  if(m_mass < DBL_EPSILON){
+    fprintf(stderr, "Division by Zero in KParticle::Gamma!!\n");
+    m_errno = KError::ZERO_DIVISION;
+    return EXIT_FAILURE;
+  }
+  return m_p.E()/m_mass;
+}
+
+void KParticle::SetDirection(double px, double py, double pz)
+{
+  KUtil::Normalize(m_p.P().Norm(), px, py, pz);
+  m_p.P().Set(px, py, pz);
+}
+
+void KParticle::SetDirection(const K3Vector& p)
+{
+  double px, py, pz;
+  px = p.X(); py = p.Y(); pz = p.Z();
+  KUtil::Normalize(m_p.P().Norm(), px, py, pz);
+  m_p.P().Set(px, py, pz); 
+}
+
 void KParticle::SetMomentum(double px, double py, double pz)
 {
-  m_Momentum.SetPx(px);
-  m_Momentum.SetPy(py);
-  m_Momentum.SetPz(pz);
-  m_Momentum.SetE(sqrt(px*px+py*py+pz*pz+m_mass*m_mass));
+  m_p.Set(sqrt(pow(m_mass,2)+pow(px,2)+pow(py,2)+pow(pz,2)),
+	  px, py, pz);
+}
+
+void KParticle::SetMomentum(const K3Vector& p)
+{
+  m_p.Set(sqrt(pow(m_mass,2)+pow(p.Norm(),2)),
+	  p);
 }
 
 void KParticle::SetEnergy(double kin_energy)
 {
   if(kin_energy < 0){
     fprintf(stderr,
-	    "Eenrgy must be larger than 0 in Momentum::SetEnergy!!\n");
+	    "Eenrgy must be larger than 0 in KParticle::SetEnergy!!\n");
     m_errno = KError::INVALID_ARGUMENT;
     return ;
   }
-  m_Momentum.SetE(kin_energy+m_mass);
-  double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
+  double energy = m_mass + kin_energy;
   double px, py, pz;
-  px=m_Momentum.GetPx(); py=m_Momentum.GetPy(); pz=m_Momentum.GetPz();
-  KUtil::Normalize(norm, px, py, pz);
-  m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
+  px = m_p.Px(); py = m_p.Py(); pz = m_p.Pz();
+  KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)),
+		   px, py, pz);
+  m_p.Set(energy, px, py, pz);
 }
 
 void KParticle::
 SetEnergyDirection(double kin_energy, double px, double py, double pz)
 {
-  m_Momentum.SetE(kin_energy+m_mass);
-  double norm=sqrt((kin_energy+m_mass)*(kin_energy+m_mass)-m_mass*m_mass);
-  KUtil::Normalize(norm, px, py, pz);
-  m_Momentum.SetPx(px); m_Momentum.SetPy(py); m_Momentum.SetPz(pz);
+  double energy = m_mass + kin_energy;
+  KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)),
+		   px, py, pz);
+  m_p.Set(energy, px, py, pz);
 }
+
+KParticle& KParticle::operator=(const KParticle& rhs)
+{
+  m_name = rhs.Name();
+  m_mass = rhs.Mass();
+  m_errno = rhs.ErrorNum();
+  m_p = rhs.P();
+  return *this;
+}
+

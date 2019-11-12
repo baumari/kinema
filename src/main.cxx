@@ -6,6 +6,8 @@
 #include <KParticle.hh>
 #include <KCollision.hh>
 #include <KOptions.hh>
+#include <K3Vector.hh>
+#include <KUtil.hh>
 
 void Usage(){
   printf("Usage: ./kinema ([options]) p1 p2 p3 p4 Ebeam Ex [options]\n");
@@ -18,20 +20,15 @@ void Usage(){
 }
 
 int main(int argc, char* argv[]){
-  KOptions opt;
-  opt.Add("h", "help");
-  opt.Add("r", "recoil", 0);
-  opt.Add("", "out", "");
-  opt.Add("g", "graph");  
 
+  KOptions opt;
+  opt.Add("help", "h");
+  opt.Add("recoil", "r", 0);
+  opt.Add("out", "o", "out.dat");
+  
   if(!opt.Check(argc, argv)){
     fprintf(stderr, "Invalid Usage.\n");
     std::exit(EXIT_FAILURE);
-  }
-  if(opt.Exist("g")){
-    printf("Graphical mode using TGraph\n");
-    printf("Now developing...\n");
-    std::exit(EXIT_SUCCESS);    
   }
   if(opt.Exist("h")){
     Usage();
@@ -45,15 +42,25 @@ int main(int argc, char* argv[]){
       std::exit(EXIT_FAILURE);
     }
   }
+  if(argc < 7){
+    fprintf(stderr, "More operands are needed!!.\n");
+    Usage();
+    std::exit(EXIT_FAILURE);    
+  }
   
   KParticle p1(argv[opt.Lead()], atof(argv[opt.Lead()+4]));
   KParticle p2(argv[opt.Lead()+1], 0);
   KParticle p3(argv[opt.Lead()+2],
-	       atof(argv[opt.Lead()+4])-atof(argv[opt.Lead()+5])-atof(opt.Get("r").c_str()));
+	       atof(argv[opt.Lead()+4])-atof(argv[opt.Lead()+5])-atof(opt.Get("r").c_str()));  
   KParticle p4(argv[opt.Lead()+3], atof(opt.Get("r").c_str()));
-
+  p1.P().Show();p2.P().Show();
   KCollision col(p1, p2, p3, p4);
-  col.Scatt();
+  p1.P().Show();p2.P().Show();
 
+  fclose(OutPutFile);
+
+  
+  
+  std::exit(EXIT_SUCCESS);
 }
 
