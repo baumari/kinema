@@ -51,7 +51,7 @@ private:
   K4Momentum m_p;
 
 private:
-  double GetMass(std::string m_name);
+  double GetMass(std::string m_name); // stop mass
 
 public:
   KParticle() {}
@@ -69,11 +69,11 @@ public:
   double Gamma(); //please check from which frame you see
 
   inline double E() const {return m_p.E();}
-  inline double Px() const {return m_p.Px();}
-  inline double Py() const {return m_p.Py();}
-  inline double Pz() const {return m_p.Pz();}
+  inline double X() const {return m_p.X();}
+  inline double Y() const {return m_p.Y();}
+  inline double Z() const {return m_p.Z();}
   inline K4Momentum P() const {return m_p;}
-  inline double Mass() const {return m_mass;}
+  inline double Mass() const {return m_mass;} // stop mass
   inline std::string Name() const {return m_name;}
   /* Function SetDirection can define only direction of particle. */
   /* The amaount of momentum is defined by energy */
@@ -88,6 +88,9 @@ public:
 			  double px, double py, double pz);
   inline int ErrorNum() const {return m_errno;}  
   KParticle& operator=(const KParticle& rhs);
+  void BoostX(double gamma);
+  void BoostY(double gamma);
+  void BoostZ(double gamma);  
 };
 
 #endif

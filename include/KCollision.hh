@@ -2,6 +2,9 @@
 #define _KCOLLISION_HH
 
 #include <KParticle.hh>
+#include <K4Momentum.hh>
+
+// x-y plane only
 
 class KCollision{
 private:
@@ -49,7 +52,9 @@ public:
 public:
   void SetParticle(KParticle& p1, KParticle& p2,
 		   KParticle& p3, KParticle& p4);
-  inline void SetScattAng(double angle){ClearAng();m_ScattAng=angle;}
+  void SetInitParticle(KParticle& p1, KParticle& p2);
+  void SetFinParticle(KParticle& p3, KParticle& p4);  
+  void SetScattAng(double angle){ClearAng();m_ScattAng=angle;}
   void SetScattAng(double minang, double maxang, double delta);
   inline void SetRecAng(double angle){ClearAng();m_RecAng=angle;}
   void SetRecAng(double minang, double maxang, double delta);
@@ -58,11 +63,16 @@ public:
   inline double MandelstamS() {return m_Mandelstam[S];}
   inline double MandelstamT() {return m_Mandelstam[T];}
   inline double MandelstamU() {return m_Mandelstam[U];}
+  K4Momentum GetMomentumLab(int NofP);
+  K4Momentum GetMomentumCM(int NofP);  
   
 private:
   void ClearAng();
   void SetLorentzFac();
-  void SetMandelstam();
+  void SetMandelstam(); // S, T, U
+  void SetMandelstamS();
+  void SetMandelstamT();
+  void SetMandelstamU();  
 };
 
 #endif

@@ -16,13 +16,13 @@ public:
 
 public:
   inline double E() const {return m_E;}
-  inline double Px() const {return m_P.X();}
-  inline double Py() const {return m_P.Y();}
-  inline double Pz() const {return m_P.Z();}
+  inline double X() const {return m_P.X();}
+  inline double Y() const {return m_P.Y();}
+  inline double Z() const {return m_P.Z();}
   inline K3Vector P() const {return m_P;}
   void Set(double energy, double px, double py, double pz);
   void Set(double energy, K3Vector p);  
-  double Invaliant() const;
+  double Invaliant() const; // squared value
   K4Momentum& operator=(const K4Momentum& p);
   K4Momentum operator+(const K4Momentum& p) const;
   K4Momentum operator-(const K4Momentum& p) const;

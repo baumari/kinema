@@ -8,6 +8,7 @@
 #include <KOptions.hh>
 #include <K3Vector.hh>
 #include <KUtil.hh>
+#include <K4Momentum.hh>
 
 void Usage(){
   printf("Usage: ./kinema ([options]) p1 p2 p3 p4 Ebeam Ex [options]\n");
@@ -20,7 +21,7 @@ void Usage(){
 }
 
 int main(int argc, char* argv[]){
-
+  
   KOptions opt;
   opt.Add("help", "h");
   opt.Add("recoil", "r", 0);
@@ -53,10 +54,7 @@ int main(int argc, char* argv[]){
   KParticle p3(argv[opt.Lead()+2],
 	       atof(argv[opt.Lead()+4])-atof(argv[opt.Lead()+5])-atof(opt.Get("r").c_str()));  
   KParticle p4(argv[opt.Lead()+3], atof(opt.Get("r").c_str()));
-  p1.P().Show();p2.P().Show();
   KCollision col(p1, p2, p3, p4);
-  p1.P().Show();p2.P().Show();
-
   fclose(OutPutFile);
 
   

@@ -100,8 +100,7 @@ void KParticle::SetMomentum(double px, double py, double pz)
 
 void KParticle::SetMomentum(const K3Vector& p)
 {
-  m_p.Set(sqrt(pow(m_mass,2)+pow(p.Norm(),2)),
-	  p);
+  m_p.Set(sqrt(pow(m_mass,2)+pow(p.Norm(),2)), p);
 }
 
 void KParticle::SetEnergy(double kin_energy)
@@ -114,7 +113,7 @@ void KParticle::SetEnergy(double kin_energy)
   }
   double energy = m_mass + kin_energy;
   double px, py, pz;
-  px = m_p.Px(); py = m_p.Py(); pz = m_p.Pz();
+  px = m_p.X(); py = m_p.Y(); pz = m_p.Z();
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)),
 		   px, py, pz);
   m_p.Set(energy, px, py, pz);
@@ -138,3 +137,23 @@ KParticle& KParticle::operator=(const KParticle& rhs)
   return *this;
 }
 
+void KParticle::BoostX(double gamma)
+{
+  double beta = KUtil::GammaToBeta(gamma);
+  SetEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.X(),
+		     -beta*gamma*m_p.E()+gamma*m_p.X(), m_p.Y(), m_p.Z());
+}
+
+void KParticle::BoostY(double gamma)
+{
+  double beta = KUtil::GammaToBeta(gamma);
+  SetEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.Y(), m_p.X(),
+		     -beta*gamma*m_p.E()+gamma*m_p.Y(), m_p.Z());
+}
+
+void KParticle::BoostZ(double gamma)
+{
+  double beta = KUtil::GammaToBeta(gamma);
+  SetEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.Z(), m_p.X(), m_p.Y(),
+		     -beta*gamma*m_p.E()+gamma*m_p.Z());  
+}
