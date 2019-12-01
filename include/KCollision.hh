@@ -54,7 +54,7 @@ public:
 		   KParticle& p3, KParticle& p4);
   void SetInitParticle(KParticle& p1, KParticle& p2);
   void SetFinParticle(KParticle& p3, KParticle& p4);  
-  void SetScattAng(double angle){ClearAng();m_ScattAng=angle;}
+  void SetScattAng(double angle);
   void SetScattAng(double minang, double maxang, double delta);
   inline void SetRecAng(double angle){ClearAng();m_RecAng=angle;}
   void SetRecAng(double minang, double maxang, double delta);

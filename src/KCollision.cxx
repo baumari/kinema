@@ -65,11 +65,6 @@ void KCollision::ClearAng()
 
 void KCollision::Scatt()
 {
-  p3->P().P().Norm();     
-  do{
-
-    m_ScattAng += m_AngRange[DELTA];
-  }while(m_ScattAng <= m_AngRange[MAX]);
 }
 
 void KCollision::SetMandelstam()

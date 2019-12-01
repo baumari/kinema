@@ -1,6 +1,7 @@
 #include <K3Vector.hh>
 #include <cmath>
 #include <iostream>
+#include <cstdio>
 
 K3Vector::K3Vector(double x, double y, double z)
 {

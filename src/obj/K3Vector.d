@@ -1,5 +1,5 @@
-/Users/kento/work/physics/kinema/src/obj/K3Vector.o: \
-  /Users/kento/work/physics/kinema/src/K3Vector.cxx \
-  /Users/kento/work/physics/kinema/include/K3Vector.hh
+/home/kento/simulations/kinema/src/obj/K3Vector.o: \
+  /home/kento/simulations/kinema/src/K3Vector.cxx \
+  /home/kento/simulations/kinema/include/K3Vector.hh
 
-/Users/kento/work/physics/kinema/include/K3Vector.hh:
+/home/kento/simulations/kinema/include/K3Vector.hh:

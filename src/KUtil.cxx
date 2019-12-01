@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdio>
 #include <KUtil.hh>
+#include <cstdlib>
 
 namespace KUtil {
   void Normalize(double norm,
