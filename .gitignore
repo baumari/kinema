@@ -1,4 +1,3 @@
-*.d
-*.so
-*.o
+src/obj
+lib/
 bin/
