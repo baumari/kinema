@@ -4,20 +4,23 @@
 #include <algorithm>
 #include <sstream>
 #include <cstring>
+#include <iostream>
 
 static const int BUFF_L = 256;
 
-void KOptions::Add(std::string LongOpt, std::string ShortOpt){
+void KOptions::Add(std::string LongOpt, std::string ShortOpt,
+		   std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWOArg m_OptWOArg;
   m_OptWOArg.m_Long = LongOpt;
   m_OptWOArg.m_Short = ShortOpt;
   m_OptWOArg.m_flag = false;
+  m_OptWOArg.m_Description = Description;
   m_OptListWithoutArg.push_back(m_OptWOArg);
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   int OptVal){
+		   int OptVal, std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -26,11 +29,12 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   double OptVal){
+		   double OptVal, std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -39,11 +43,12 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   std::string OptVal){
+		   std::string OptVal, std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -52,6 +57,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 
@@ -202,4 +208,16 @@ std::string KOptions::Get(std::string OptName){
     fprintf(stderr, "No such option (%s)!!\n", OptName.c_str());
     std::exit(EXIT_FAILURE);	
   }  
+}
+
+void KOptions::Description(){
+  if(m_OptListWithoutArg.size() == 0 &&
+     m_OptListWithArg.size() == 0){
+    fprintf(stderr, "KOption::Description: No option registered!!!\n");
+    std::exit(EXIT_FAILURE);
+  }
+  std::cout << "Options..\n" << std::endl;  
+  std::vector<_OptWOArg>::iterator itWOArg;
+  std::vector<_OptWOArg>::iterator itWOArg_end
+    = m_OptListWithoutArg.end();
 }

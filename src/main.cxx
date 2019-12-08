@@ -23,9 +23,9 @@ void Usage(){
 int main(int argc, char* argv[]){
   
   KOptions opt;
-  opt.Add("help", "h");
-  opt.Add("recoil", "r", 0);
-  opt.Add("out", "o", "out.dat");
+  opt.Add("help", "h", "Show help.");
+  opt.Add("recoil", "r", 0, "Recoil kinetic energy (double [=0])");
+  opt.Add("out", "o", "out.dat", "Output file (string [=out.dat])");
   
   if(!opt.Check(argc, argv)){
     fprintf(stderr, "Invalid Usage.\n");
@@ -33,6 +33,7 @@ int main(int argc, char* argv[]){
   }
   if(opt.Exist("h")){
     Usage();
+    opt.Description();
     std::exit(EXIT_SUCCESS);    
   }
   FILE *OutPutFile = stdout;

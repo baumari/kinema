@@ -16,6 +16,7 @@ private:
   public:
     std::string m_Short;
     std::string m_Long;
+    std::string m_Description;
     bool m_flag;
     bool Find(const std::string&);
 
@@ -32,7 +33,7 @@ private:
 private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
-  int LeadArg; 
+  int LeadArg; // index of the first argument except for optarg
 
 private:
   bool IsLongOpt(char *argv);
@@ -52,14 +53,20 @@ public:
   ~KOptions() {}
 
 public:
-  void Add(std::string LongOpt, std::string ShortOpt);
-  void Add(std::string LongOpt, std::string ShortOpt, int OptVal);
-  void Add(std::string LongOpt, std::string ShortOpt, double OptVal);
-  void Add(std::string LongOpt, std::string ShortOpt, std::string OptVal);
+  void Add(std::string LongOpt, std::string ShortOpt,
+	   std::string Description);
+  // OptVal is set as a default value
+  void Add(std::string LongOpt, std::string ShortOpt, int OptVal,
+	   std::string Description);
+  void Add(std::string LongOpt, std::string ShortOpt, double OptVal,
+	   std::string Description);
+  void Add(std::string LongOpt, std::string ShortOpt,
+	   std::string OptVal, std::string Description);
   std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);
   inline int Lead() {return LeadArg;}
+  void Description();
 };
 
 #endif
