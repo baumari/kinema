@@ -210,14 +210,53 @@ std::string KOptions::Get(std::string OptName){
   }  
 }
 
+std::size_t KOptions::GetMaxOptLength(std::vector<_OptWOArg>& m_OptListWithoutArg){
+  std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
+  std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
+  std::size_t MaxLength = 0;
+  std::size_t Eval;
+  for(; it != it_end; ++it){
+    Eval = it->m_Long.size();
+    MaxLength = (MaxLength < Eval) ? Eval : MaxLength;
+  }
+  return MaxLength;
+}
+
+std::size_t KOptions::GetMaxOptLength(std::vector<_OptWArg>& m_OptListWithArg){
+  std::vector<_OptWArg>::iterator it = m_OptListWithArg.begin();
+  std::vector<_OptWArg>::iterator it_end = m_OptListWithArg.end();
+  std::size_t MaxLength = 0;
+  std::size_t Eval;
+  for(; it != it_end; ++it){
+    Eval = it->m_Long.size();
+    MaxLength = (MaxLength < Eval) ? Eval : MaxLength;
+  }
+  return MaxLength;
+}
+
+// Print descriptions for registered options
+// Format -- Options..
+//        -- -h, --helpout: Show Help
+//        --     --hoge   : fugafuga
+//        -- -p           : piyo
 void KOptions::Description(){
   if(m_OptListWithoutArg.size() == 0 &&
      m_OptListWithArg.size() == 0){
     fprintf(stderr, "KOption::Description: No option registered!!!\n");
     std::exit(EXIT_FAILURE);
   }
-  std::cout << "Options..\n" << std::endl;  
-  std::vector<_OptWOArg>::iterator itWOArg;
-  std::vector<_OptWOArg>::iterator itWOArg_end
-    = m_OptListWithoutArg.end();
+  /* get maximum option length */
+  std::size_t MaxOptLengthWOArg = GetMaxOptLength(m_OptListWithoutArg);
+  std::size_t MaxOptLengthWArg = GetMaxOptLength(m_OptListWithArg);
+  std::size_t MaxOptLength
+    = (MaxOptLengthWArg > MaxOptLengthWOArg) ? MaxOptLengthWArg : MaxOptLengthWOArg;
+
+  /* print loutine */
+  std::cout << "Options..\n" << std::endl;
+  std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
+  std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
+  for(; it != it_end; ++it){
+//    std::cout << (it->m_Short.size() > 0) ? "-" + it->m_Short + ", " : "    "
+//	      << 
+  }
 }

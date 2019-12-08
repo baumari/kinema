@@ -47,6 +47,8 @@ private:
 					const std::string &);
   std::vector<_OptWArg>::iterator Find(std::vector<_OptWArg>&,
 				       const std::string &);
+  std::size_t GetMaxOptLength(std::vector<_OptWOArg>&);
+  std::size_t GetMaxOptLength(std::vector<_OptWArg>&);
 
 public:
   KOptions() : LeadArg(1) {} 
