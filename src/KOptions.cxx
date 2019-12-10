@@ -250,13 +250,22 @@ void KOptions::Description(){
   std::size_t MaxOptLengthWArg = GetMaxOptLength(m_OptListWithArg);
   std::size_t MaxOptLength
     = (MaxOptLengthWArg > MaxOptLengthWOArg) ? MaxOptLengthWArg : MaxOptLengthWOArg;
+  std::string Blank;
 
   /* print loutine */
   std::cout << "Options..\n" << std::endl;
   std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
   std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
   for(; it != it_end; ++it){
-//    std::cout << (it->m_Short.size() > 0) ? "-" + it->m_Short + ", " : "    "
-//	      << 
+    // print short option
+    if(it->m_Short.size() == 0) std::cout << "    ";
+    else std::cout <<  "-" << it->m_Short << ", ";
+    // print long option
+    Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
+    if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
+    else std::cout << "--" << it->m_Long << Blank << ": ";
+    // print description
+    std::cout << it->m_Description << std::endl;
   }
+  return ;
 }
