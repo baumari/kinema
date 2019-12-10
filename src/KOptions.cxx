@@ -253,7 +253,7 @@ void KOptions::Description(){
   std::string Blank;
 
   /* print loutine */
-  std::cout << "Options..\n" << std::endl;
+  std::cout << "Options.." << std::endl;
   std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
   std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
   for(; it != it_end; ++it){
