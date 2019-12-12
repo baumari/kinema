@@ -4,29 +4,33 @@
 #include <cstdio>
 #include <cstdlib>
 #include <KUtil.hh>
+#include <iostream>
 
 K4Momentum::K4Momentum(double energy, double px, double py, double pz)
 {
   m_E = energy;
-  m_P.Set(px, py, pz);  
+  m_P.Set(px, py, pz);
+  CheckOffShell();
 }
 
 void K4Momentum::Set(const double energy,
 		     const double px, const double py, const double pz)
 {
   m_E = energy;
-  m_P.Set(px, py, pz);    
+  m_P.Set(px, py, pz);
+  CheckOffShell();
 }
 
 void K4Momentum::Set(const double energy, const K3Vector p)
 {
   m_E = energy;
   m_P = p;
+  CheckOffShell();
 }
 
 double K4Momentum::Invaliant() const
 {
-  return (pow(m_E,2)-pow(m_P.Norm(),2));
+  return (sqrt(pow(m_E,2)-pow(m_P.Norm(),2)));
 }
 
 K4Momentum& K4Momentum::operator=(const K4Momentum& p)
@@ -64,8 +68,8 @@ K4Momentum K4Momentum::operator-() const
 
 void K4Momentum::Show() const 
 {
-  fprintf(stdout, "P1: %lf, P2: %lf, P3:%lf, P4:%lf\n",
-	  m_E, m_P.X(), m_P.Y(), m_P.Z());
+  printf("(%lf %lf %lf %lf)\n",
+	 m_E, m_P.X(), m_P.Y(), m_P.Z());
 }
 
 void K4Momentum::BoostX(double gamma)
@@ -87,4 +91,12 @@ void K4Momentum::BoostZ(double gamma)
   double beta = KUtil::GammaToBeta(gamma);
   Set(m_E*gamma-beta*gamma*m_P.Z(), m_P.X(), m_P.Y(),
       -beta*gamma*m_E+gamma*m_P.Z());  
+}
+
+void K4Momentum::CheckOffShell()
+{
+  if(pow(m_E,2) - pow(m_P.Norm(), 2) < 0){
+    std::cout << "This momentum is off-shell condition!!!: ";
+    Show();
+  }  
 }

@@ -22,7 +22,7 @@ public:
   inline K3Vector P() const {return m_P;}
   void Set(double energy, double px, double py, double pz);
   void Set(double energy, K3Vector p);  
-  double Invaliant() const; // squared value
+  double Invaliant() const; 
   K4Momentum& operator=(const K4Momentum& p);
   K4Momentum operator+(const K4Momentum& p) const;
   K4Momentum operator-(const K4Momentum& p) const;
@@ -32,7 +32,10 @@ public:
   void Show() const;
   void BoostX(double gamma);
   void BoostY(double gamma);
-  void BoostZ(double gamma);  
+  void BoostZ(double gamma);
+
+private:
+  void CheckOffShell();
 };
 
 #endif
