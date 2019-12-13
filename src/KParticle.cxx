@@ -63,21 +63,6 @@ bool KParticle::IsErr()
   }
 }
 
-double KParticle::Beta()
-{
-  return sqrt(1-pow(1./Gamma(),2));
-}
-
-double KParticle::Gamma()
-{
-  if(m_mass < DBL_EPSILON){
-    fprintf(stderr, "Division by Zero in KParticle::Gamma!!\n");
-    m_errno = KError::ZERO_DIVISION;
-    return EXIT_FAILURE;
-  }
-  return m_p.E()/m_mass;
-}
-
 void KParticle::SetDirection(double px, double py, double pz)
 {
   KUtil::Normalize(m_p.P().Norm(), px, py, pz);

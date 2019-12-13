@@ -13,6 +13,13 @@ void K3Vector::Set(double x, double y, double z)
   m_r[_X] = x; m_r[_Y] = y; m_r[_Z] = z;
 }
 
+void K3Vector::Set(const K3Vector& rhs)
+{
+  m_r[_X] = rhs.X();
+  m_r[_Y] = rhs.Y();
+  m_r[_Z] = rhs.Z();
+}
+
 K3Vector& K3Vector::operator=(const K3Vector& r)
 {
   m_r[_X] = r.X();
@@ -42,6 +49,20 @@ K3Vector K3Vector::operator-(const K3Vector& r) const
 double K3Vector::operator*(const K3Vector& r) const
 {
   return m_r[_X]*r.X()+m_r[_Y]*r.Y()+m_r[_Z]*r.Z();
+}
+
+K3Vector K3Vector::operator*(const double& rhs)
+{
+  K3Vector tmp;
+  tmp.Set(m_r[_X]*rhs, m_r[_Y]*rhs, m_r[_Z]*rhs);
+  return tmp;
+}
+
+K3Vector K3Vector::operator/(const double& rhs)
+{
+  K3Vector tmp;
+  tmp.Set(m_r[_X]/rhs, m_r[_Y]/rhs, m_r[_Z]/rhs);
+  return tmp;
 }
 
 K3Vector K3Vector::operator-() const

@@ -64,10 +64,6 @@ public:
 
 public:
   bool IsErr();  
-
-  double Beta(); //please check from which frame you see
-  double Gamma(); //please check from which frame you see
-
   inline double E() const {return m_p.E();}
   inline double X() const {return m_p.X();}
   inline double Y() const {return m_p.Y();}

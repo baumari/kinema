@@ -22,11 +22,14 @@ public:
   inline void SetY(double y) {m_r[_Y] = y;}
   inline void SetZ(double z) {m_r[_Z] = z;}    
   void Set(double x, double y, double z);
+  void Set(const K3Vector&);
   double Norm() const;
   K3Vector& operator=(const K3Vector& r);
   K3Vector operator+(const K3Vector& r) const;
   K3Vector operator-(const K3Vector& r) const;
   double operator*(const K3Vector& r) const;
+  K3Vector operator*(const double& rhs);
+  K3Vector operator/(const double& rhs);  
   inline K3Vector operator+() const {return *this;}
   K3Vector operator-() const;
   void RotateX(double theta); // rad.
