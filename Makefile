@@ -49,6 +49,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.$(SUFFIX)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 $(LIB):
+	rm -f $(LIB)
 	-mkdir -p $(LIBDIR)
 	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 

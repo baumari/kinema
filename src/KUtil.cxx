@@ -33,6 +33,16 @@ namespace KUtil {
     return 1./sqrt(1-pow(beta,2));
   }
 
+  double BetaToGamma(const K3Vector& beta)
+  {
+    if(beta.Norm() >= 1){
+      fprintf(stderr, "Error: Called by BetaToGamma()..\n");
+      fprintf(stderr, "Beta must be less than 1!!\n");
+      return EXIT_FAILURE;      
+    }
+    return 1./sqrt(1-pow(beta.Norm(),2));
+  }
+
   double GammaToBeta(double gamma)
   {
     if(gamma <= 0){

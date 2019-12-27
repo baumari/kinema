@@ -69,12 +69,21 @@ public:
   inline double Y() const {return m_p.Y();}
   inline double Z() const {return m_p.Z();}
   inline K4Momentum P() const {return m_p;}
+  inline double GetE() const {return m_p.E();}
+  inline double GetX() const {return m_p.X();}
+  inline double GetY() const {return m_p.Y();}
+  inline double GetZ() const {return m_p.Z();}
+  inline K4Momentum GetP() const {return m_p;}  
   inline double Mass() const {return m_mass;} // stop mass
+  inline double GetMass() const {return m_mass;} // stop mass  
+  inline double Invaliant() const {return P().Invaliant();}
   inline std::string Name() const {return m_name;}
   /* Function SetDirection can define only direction of particle. */
   /* The amaount of momentum is defined by energy */
   void SetDirection(double px, double py, double pz);
   void SetDirection(const K3Vector& p);
+  void SetDirectionNoScale(double px, double py, double pz);
+  void SetDirectionNoScale(const K3Vector& p);  
   /* Function SetMomentum can define both direction and amount. */
   /* The energy will be recalced. */  
   void SetMomentum(double px, double py, double pz);
@@ -82,11 +91,14 @@ public:
   void SetEnergy(double kin_energy);// direction same as previous is set. 
   void SetEnergyDirection(double kin_energy,
 			  double px, double py, double pz);
+  void Show();
   inline int ErrorNum() const {return m_errno;}  
   KParticle& operator=(const KParticle& rhs);
-  void BoostX(double gamma);
-  void BoostY(double gamma);
-  void BoostZ(double gamma);  
+  KParticle& BoostX(double beta);
+  KParticle& BoostY(double beta);
+  KParticle& BoostZ(double beta);
+  KParticle& Boost(const K3Vector& beta);
+  KParticle& Boost(double beta_x, double beta_y, double beta_z);
 };
 
 #endif

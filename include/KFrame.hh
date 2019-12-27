@@ -11,7 +11,6 @@ private:
 
 private:
   KParticle m_p[SIZE];
-  KParticle m_pCM[SIZE];
   double m_Lorentzfac;
   K3Vector m_Beta; 
 
@@ -22,7 +21,8 @@ public:
 
 public:
   void SetParticle(KParticle &p1, KParticle &p2);
-  KParticle& GetCMParticle(int No); 
+  void CM();
+  KParticle& GetParticle(int No); 
 
 private:
   
