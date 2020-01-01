@@ -40,6 +40,8 @@ SOURCES = $(wildcard $(SRCDIR)/*.$(SUFFIX))
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.cxx=.o)))
 DEPS = $(OBJS:.o=.d)
 
+all: FORCE $(TARGET)
+
 $(TARGET): $(OBJS) $(LIB)
 	-mkdir -p $(BINDIR)
 	$(CXX) $(LDFLAGS) -o $@ $^
@@ -53,8 +55,8 @@ $(LIB):
 	-mkdir -p $(LIBDIR)
 	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 
-all: clean $(TARGET)
-
+FORCE:
+	rm -f $(LIB)
 clean:
 	-rm -f $(OBJS) $(DEPS) $(TARGET) $(LIB)
 	-rm -rf $(BINDIR) $(OBJDIR) $(LIBDIR)

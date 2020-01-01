@@ -23,7 +23,7 @@ void KCollision::SetInitParticle(KParticle& p1, KParticle& p2)
 {
   m_pLab[P1] = &p1; m_pLab[P2] = &p2; m_pCM[P1] = p1; m_pCM[P2] = p2;
   SetLorentzFac();
-  m_pCM[P1].BoostX(m_LorentzFac); m_pCM[P2].BoostX(m_LorentzFac);
+  //  m_pCM[P1].BoostX(m_LorentzFac); m_pCM[P2].BoostX(m_LorentzFac);
   SetMandelstamS();
 }
 
