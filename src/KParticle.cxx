@@ -91,6 +91,12 @@ bool KParticle::IsErr()
   }
 }
 
+void KParticle::SetParticle(std::string name)
+{
+  m_name = name;
+  m_mass = GetMass(m_name);
+}
+
 void KParticle::SetDirection(double dirx, double diry, double dirz)
 {
   KUtil::Normalize(sqrt(pow(E(),2)-pow(Mass(),2)), dirx, diry, dirz);

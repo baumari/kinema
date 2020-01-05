@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <KUtil.hh>
 #include <cstdlib>
+#include <stdarg.h>
 
 namespace KUtil {
   void Normalize(double norm,

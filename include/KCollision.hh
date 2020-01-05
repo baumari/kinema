@@ -4,6 +4,8 @@
 #include <KParticle.hh>
 #include <K4Momentum.hh>
 #include <KFrame.hh>
+#include <cstdio>
+#include <vector>
 
 // x-y plane only
 
@@ -44,7 +46,9 @@ private:
 private:
   KFrame *m_Frame[FRAME_SIZE];
   KParticle *m_pLab[PARTICLE_NUM_SIZE];
-  KParticle *m_pCM[PARTICLE_NUM_SIZE];  
+  KParticle *m_pCM[PARTICLE_NUM_SIZE];
+  FILE* m_ResultBuff;
+  std::vector<double> m_Theta3, m_Theta4, m_Theta3CM, m_E3, m_E4;
 //  double m_ScattAng;
 //  double m_RecAng;
 //  double m_AngRange[ANG_RANGE_SIZE];
@@ -76,7 +80,10 @@ public:
   void SetFinParticle(KParticle& p3, KParticle& p4);
   void SetFinParticle(KParticle* p3, KParticle* p4);  
   void SetFinFrame(KFrame& fin);
-  void SetFinFrame(KFrame* fin);  
+  void SetFinFrame(KFrame* fin);
+  void ResultDump();
+  void ResultDump(FILE *fp);  
+  void ResultDump(const char* FileName);
 //  void SetScattAng(double angle);
 //  void SetScattAng(double minang, double maxang, double delta);
 //  inline void SetRecAng(double angle){ClearAng();m_RecAng=angle;}
@@ -91,6 +98,7 @@ public:
   
 private:
   void Initialize();
+  void ResultDumpCore();
 //  void ClearAng();
 //  void SetLorentzFac();
 //  void SetMandelstam(); // S, T, U

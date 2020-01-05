@@ -136,7 +136,41 @@ void KCollision::SetFinFrame(KFrame *fin)
   m_Frame[_FIN] = fin;
 }
 
+void KCollision::ResultDump()
+{
+  m_ResultBuff = stdout;
+  ResultDumpCore();
+}
 
+void KCollision::ResultDump(FILE *fp)
+{
+  m_ResultBuff = fp;
+  ResultDumpCore();
+}
+
+void KCollision::ResultDump(const char* FileName)
+{
+  m_ResultBuff = fopen(FileName, "w");
+  if(m_ResultBuff == NULL){
+    std::cerr << "Output file for calculated result cannot be opend!!"
+	      << std::endl;
+    std::cerr << "Results will be displayed instead." << std::endl;
+    m_ResultBuff = stdout;
+  }
+  ResultDumpCore();
+  if(m_ResultBuff != stdout) fclose(m_ResultBuff);
+}
+
+void KCollision::ResultDumpCore()
+{
+  fprintf(m_ResultBuff,
+	  "#Theta3    #Theta4        #E3        #E4\n");
+  for(std::size_t iResult = 0; iResult != m_Theta3.size(); ++iResult){
+    fprintf(m_ResultBuff,
+	    "%7.4lf     %7.4lf     %7.4lf     %7.4lf\n",
+	    m_Theta3[iResult], m_Theta4[iResult], m_E3[iResult], m_E4[iResult]);
+  }
+}
 //void KCollision::SetScattAngle(double angle)
 //{
 ////  ClearAng();

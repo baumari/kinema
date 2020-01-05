@@ -14,7 +14,8 @@ namespace KUtil {
   void Normalize(double norm, K3Vector &p);
   double BetaToGamma(double beta);
   double BetaToGamma(const K3Vector& beta);  
-  double GammaToBeta(double gamma);    
+  double GammaToBeta(double gamma);
 }
+
 
 #endif

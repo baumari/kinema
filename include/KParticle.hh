@@ -86,6 +86,7 @@ public:
   /* Function SetDirection can define only direction of particle. */
   /* The amaount of momentum is defined by kinetic energy */
   void SetDirection(double dirx, double diry, double dirz);
+  void SetParticle(std::string name);
   void SetDirection(const K3Vector& dir);
   /* Function SetMomentum can define both direction and amount. */
   /* The energy will be recalced. */  
@@ -102,7 +103,7 @@ public:
   void SetTDirection(double kin_energy,
 			  double dirx, double diry, double dirz);
   void SetEnergyDirection(double energy, K3Vector& dir);
-  void SetTDirection(double kin_energy, K3Vector& dir);    
+  void SetTDirection(double kin_energy, K3Vector& dir);
   void Show();
   inline int ErrorNum() const {return m_errno;}  
   KParticle& operator=(const KParticle& rhs);
