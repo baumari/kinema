@@ -30,9 +30,11 @@ public:
   inline K4Momentum operator+() const {return *this;}
   K4Momentum operator-() const;
   void Show() const;
-  void BoostX(double gamma);
-  void BoostY(double gamma);
-  void BoostZ(double gamma);
+  void Boost(K3Vector beta);
+  void Boost(double x, double y, double z);  
+  void BoostX(double beta);
+  void BoostY(double beta);
+  void BoostZ(double beta);
 
 private:
   void CheckOffShell();

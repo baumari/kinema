@@ -72,25 +72,36 @@ void K4Momentum::Show() const
 	 m_E, m_P.X(), m_P.Y(), m_P.Z());
 }
 
-void K4Momentum::BoostX(double gamma)
+void K4Momentum::Boost(K3Vector beta)
 {
-  double beta = KUtil::GammaToBeta(gamma);
-  Set(m_E*gamma-beta*gamma*m_P.X(),
-      -beta*gamma*m_E+gamma*m_P.X(), m_P.Y(), m_P.Z());
+  double gamma = KUtil::BetaToGamma(beta);
+  double E = gamma*(m_E - beta*m_P);
+  K3Vector P = -beta*gamma*m_E + m_P + beta*(gamma - 1)/(pow(beta.Norm(), 2))*(beta*m_P);
+  Set(E, P);
 }
 
-void K4Momentum::BoostY(double gamma)
+void K4Momentum::Boost(double x, double y, double z)
 {
-  double beta = KUtil::GammaToBeta(gamma);
-  Set(m_E*gamma-beta*gamma*m_P.Y(), m_P.X(),
-      -beta*gamma*m_E+gamma*m_P.Y(), m_P.Z());
+  K3Vector BetaVec(x, y, z);
+  Boost(BetaVec);
 }
 
-void K4Momentum::BoostZ(double gamma)
+void K4Momentum::BoostX(double beta)
 {
-  double beta = KUtil::GammaToBeta(gamma);
-  Set(m_E*gamma-beta*gamma*m_P.Z(), m_P.X(), m_P.Y(),
-      -beta*gamma*m_E+gamma*m_P.Z());  
+  K3Vector BetaVec(beta, 0, 0);
+  Boost(BetaVec);  
+}
+
+void K4Momentum::BoostY(double beta)
+{
+  K3Vector BetaVec(0, beta, 0);
+  Boost(BetaVec);  
+}
+
+void K4Momentum::BoostZ(double beta)
+{
+  K3Vector BetaVec(0, 0, beta);
+  Boost(BetaVec);  
 }
 
 void K4Momentum::CheckOffShell()

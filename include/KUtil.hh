@@ -3,6 +3,7 @@
 
 #include <K3Vector.hh>
 #include <limits>
+#include <cmath>
 
 #define SIZEOF(ARRAY) sizeof(ARRAY)/sizeof((ARRAY)[0])
 namespace KUtil {
@@ -15,6 +16,8 @@ namespace KUtil {
   double BetaToGamma(double beta);
   double BetaToGamma(const K3Vector& beta);  
   double GammaToBeta(double gamma);
+  inline double RadToDeg(double radian){return 180./M_PI*radian;}
+  inline double DegToRad(double degree){return M_PI/180.*degree;}
 }
 
 

@@ -26,6 +26,22 @@ double KParticle::GetMass(std::string m_name)
   return mass;
 }
 
+KParticle::KParticle(std::string name)
+{
+  m_name = name;
+  m_mass = GetMass(name);
+  m_p.Set(m_mass, 0, 0, 0);
+  m_errno = 0;
+}
+
+KParticle::KParticle(double mass)
+{
+  m_name = "unknown";
+  m_mass = mass;
+  m_p.Set(m_mass, 0, 0, 0);
+  m_errno = 0;  
+}
+
 KParticle::KParticle(std::string name, double kin_energy,
 	   double dir_x, double dir_y, double dir_z)
 {
@@ -35,6 +51,7 @@ KParticle::KParticle(std::string name, double kin_energy,
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
 		   dir_x, dir_y, dir_z);
   m_p.Set(energy, dir_x, dir_y, dir_z);
+  m_errno = 0;  
 }
 
 KParticle::KParticle(double mass, double kin_energy,
@@ -46,6 +63,7 @@ KParticle::KParticle(double mass, double kin_energy,
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
 		   dir_x, dir_y, dir_z);
   m_p.Set(energy, dir_x, dir_y, dir_z);
+  m_errno = 0;  
 }
 
 KParticle::KParticle(std::string name, double kin_energy, K3Vector p)
@@ -55,6 +73,7 @@ KParticle::KParticle(std::string name, double kin_energy, K3Vector p)
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
   m_p.Set(energy, p);
+  m_errno = 0;  
 }
 
 KParticle::KParticle(double mass, double kin_energy, K3Vector p)
@@ -64,6 +83,7 @@ KParticle::KParticle(double mass, double kin_energy, K3Vector p)
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
   m_p.Set(energy, p);
+  m_errno = 0;  
 }
 
 KParticle::KParticle(std::string name, double kin_energy)
@@ -72,6 +92,7 @@ KParticle::KParticle(std::string name, double kin_energy)
   m_mass = GetMass(name);
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
+  m_errno = 0;  
 }
 
 KParticle::KParticle(double mass, double kin_energy)
@@ -80,6 +101,7 @@ KParticle::KParticle(double mass, double kin_energy)
   m_mass = mass;
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
+  m_errno = 0;    
 }
 
 bool KParticle::IsErr()
@@ -251,42 +273,40 @@ KParticle& KParticle::operator=(const KParticle& rhs)
   return *this;
 }
 
-//KParticle& KParticle::BoostX(double beta)
-//{
-//  double gamma = KUtil::BetaToGamma(beta);
-//  SetKinEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.X(),
-//		     -beta*gamma*m_p.E()+gamma*m_p.X(), m_p.Y(), m_p.Z());
-//  return *this;
-//}
-//
-//KParticle& KParticle::BoostY(double beta)
-//{
-//  double gamma = KUtil::BetaToGamma(beta);
-//  SetKinEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.Y(), m_p.X(),
-//		     -beta*gamma*m_p.E()+gamma*m_p.Y(), m_p.Z());
-//  return *this;  
-//}
-//
-//KParticle& KParticle::BoostZ(double beta)
-//{
-//  double gamma = KUtil::BetaToGamma(beta);
-//  SetKinEnergyDirection(m_p.E()*gamma-beta*gamma*m_p.Z(), m_p.X(), m_p.Y(),
-//		     -beta*gamma*m_p.E()+gamma*m_p.Z());
-//  return *this;  
-//}
-//
-//KParticle& KParticle::Boost(const K3Vector& beta)
-//{
-//  double gamma = KUtil::BetaToGamma(beta);
-//  
-//  return *this;
-//}
-//
-//KParticle& KParticle::Boost(double x, double y, double z)
-//{
-//
-//  return *this;
-//}
+void KParticle::BoostX(double beta)
+{
+  K4Momentum P = m_p;
+  P.BoostX(beta);
+  SetMomentumComponent(P.E(), P.P());
+}
+
+void KParticle::BoostY(double beta)
+{
+  K4Momentum P = m_p;
+  P.BoostY(beta);
+  SetMomentumComponent(P.E(), P.P());  
+}
+
+void KParticle::BoostZ(double beta)
+{
+  K4Momentum P = m_p;
+  P.BoostZ(beta);
+  SetMomentumComponent(P.E(), P.P());    
+}
+
+void KParticle::Boost(K3Vector beta)
+{
+  K4Momentum P = m_p;
+  P.Boost(beta);
+  SetMomentumComponent(P.E(), P.P());      
+}
+
+void KParticle::Boost(double x, double y, double z)
+{
+  K4Momentum P = m_p;
+  P.Boost(x, y, z);
+  SetMomentumComponent(P.E(), P.P());        
+}
 
 void KParticle::Show()
 {
@@ -294,12 +314,11 @@ void KParticle::Show()
 	 m_mass, E(), X(), Y(), Z());
 }
 
-K3Vector KParticle::GetBeta()
-{
-  return P().P()/E();
-}
 
-double KParticle::GetGamma()
+void KParticle::Initialize()
 {
-  return E()/Mass();
+  m_name = "";
+  m_mass = 0;
+  m_errno = 0;
+  m_p.Set(0, 0, 0, 0);
 }

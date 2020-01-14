@@ -11,8 +11,7 @@ private:
 
 private:
   KParticle *m_p[SIZE];
-  double m_Lorentzfac;
-  K3Vector m_Beta; 
+  K3Vector m_Beta; // Beta vector used for transformation is stored
 
 public:
   KFrame() {}
@@ -24,8 +23,9 @@ public:
   void SetParticle(KParticle &p1, KParticle &p2);
   void SetParticle(KParticle *p1, KParticle *p2);  
   void CM();
+  inline K3Vector GetBeta(){return m_Beta;}
+  void Boost(K3Vector &beta);
   void Show();
-  KParticle* GetParticle(int No); 
 
 private:
   

@@ -63,7 +63,15 @@ public:
   KParticle(std::string name, double kin_energy, K3Vector p);
   KParticle(std::string name, double kin_energy);
   KParticle(double mass, double kin_energy, K3Vector p);
-  KParticle(double mass, double kin_energy);  
+  KParticle(double mass, double kin_energy);
+  KParticle(double mass);
+  KParticle(std::string name);
+  KParticle(const KParticle& rhs)
+    : m_name(rhs.m_name)
+    , m_mass(rhs.m_mass)
+    , m_errno(rhs.m_errno)
+    , m_p(rhs.m_p)
+  {}
   ~KParticle() {}
 
 public:
@@ -107,13 +115,12 @@ public:
   void Show();
   inline int ErrorNum() const {return m_errno;}  
   KParticle& operator=(const KParticle& rhs);
-//  KParticle& BoostX(double beta);
-//  KParticle& BoostY(double beta);
-//  KParticle& BoostZ(double beta);
-//  KParticle& Boost(const K3Vector& beta);
-//  KParticle& Boost(double beta_x, double beta_y, double beta_z);
-  K3Vector GetBeta(); // Seen from Lab frame
-  double GetGamma(); // Seen from Lab frame  
+  void BoostX(double beta);
+  void BoostY(double beta);
+  void BoostZ(double beta);
+  void Boost(K3Vector beta);
+  void Boost(double beta_x, double beta_y, double beta_z);
+  void Initialize();
 };
 
 #endif
