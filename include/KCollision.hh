@@ -75,9 +75,9 @@ public:
 //  void SetRecAng(double minang, double maxang, double delta);
 //  inline double GetScattAng() {return m_ScattAng;}
   int Scatt(); // return val is number of detecting particles__ 0, 1, 2
-  
+  void Clear(); // forget previous result of calcualtion  
+
 private:
-  void CleanUp(); // forget previous result of calcualtion
   void InitDump();
   void ClearAngle();
   void ResultDumpCore();

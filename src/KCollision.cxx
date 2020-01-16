@@ -147,6 +147,7 @@ int KCollision::Scatt()
   switch(m_CalcFlag){
   case _SCATT:
     NumOfParticles = ScattCore();
+    Clear();      
     break;
   case _SCATT_DUMP:
     NumOfParticles = ScattDumpCore();
@@ -162,7 +163,7 @@ int KCollision::Scatt()
     std::cerr << "Angle information is not given!!" << std::endl;
     break;    
   }
-  CleanUp();  
+
   return NumOfParticles;
 }
 
@@ -349,7 +350,7 @@ int KCollision::GetParticleNum()
   return (int)m_Theta4.size();
 }
 
-void KCollision::CleanUp()
+void KCollision::Clear()
 {
   m_Finp3.Init();
   m_Finp4.clear();
@@ -363,7 +364,7 @@ void KCollision::CleanUp()
 
  void KCollision::InitDump()
  {
-   CleanUp();
+   Clear();
    m_Theta3CM.resize(1);
    m_Theta4CM.resize(1);
    m_Theta4.resize(1);
