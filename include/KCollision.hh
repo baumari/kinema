@@ -18,55 +18,57 @@ private:
     INIT_P_SIZE,
   };
 
-  enum Final_P {
-    _P3,
-    _P4,
-
-    FIN_P_SIZE,
-  };
-
-  enum Ang_Range {
-    _MIN,
-    _MAX,
-    _DELTA,
-		  
-    ANG_RANGE_SIZE,
-  };
-
   enum Calc_Opt {_SCATT = 1, _SCATT_DUMP,  _RECOIL, _RECOIL_DUMP, CALC_OPT_SIZE};
 
 private:
+  /*** Initialize condition for calculation ***/
   KParticle m_Initp[INIT_P_SIZE]; // _P1, _P2
-  KParticle m_Finp3; // _P3
-  std::vector<KParticle> m_Finp4;
+  double m_M3, m_M4;  
   FILE* m_ResultBuff;
-  double m_M3, m_M4;
   std::vector<double> m_Theta3;
+
+  /*** Storage for calculated result ***/
+  KParticle m_Finp3; // _P3
+  std::vector<KParticle> m_Finp4; // P4 (0 or 1 or 2)
   double m_E3CM, m_E4CM;
   double m_Beta3CM, m_Beta4CM;
+  /**** vector structure  ****/
+  /* No.0, No.1, No.2 */
+  /* idx,  idx,  idx  */
+  /* idx,  idx,  idx  */
+  /* idx,  idx,  idx  */
+  /* idx,  idx,  idx  */
+  /* idx,  idx,  idx  */
+  /* idx,  idx,  idx  */
+  /**** vector structure ****/
   std::vector<std::vector<double> > m_Theta3CM, m_Theta4CM, m_Theta4;
   std::vector<std::vector<double> > m_E3, m_E4; // kinematic energy
   std::vector<std::vector<double> > m_Beta3, m_Beta4; 
   std::vector<std::vector<double> > m_LabToCM; // conversion factor for cross section
   
 //  std::vector<double> m_LabToCM; // conversion factor for cross section
-  double m_AngleRange[ANG_RANGE_SIZE];
   int m_CalcFlag;
+  int m_DumpFlag;
 
 public:
   KCollision();  
   KCollision(KParticle p1, KParticle p2,
-	     KParticle* p3, KParticle* p4);
+	     std::string p3, std::string p4);
+  KCollision(KParticle* p1, KParticle* p2, //P1, P2 are converted into object
+	     std::string p3, std::string p4);  
   ~KCollision() {}
 
 public:
   void SetInitParticle(KParticle p1, KParticle p2);
-  void SetFinParticle(KParticle* p3, KParticle* p4);
-  void SetFinMass(KParticle& p3, KParticle& p4); // get final mass
+  void SetInitParticle(KParticle* p1, KParticle* p2);//P1, P2 are converted into object
+  void SetFinParticle(std::string p3, std::string p4);
   void ResultDump();
-  inline void Init() {Initialize();}
-//  void ResultDump(FILE *fp);  
-//  void ResultDump(const char* FileName);
+  void Init();
+  int GetParticleNum();
+  inline KParticle GetP3(){return m_Finp3;}  
+  inline KParticle GetP4(int iParticle){return m_Finp4.at(iParticle);}
+  void ResultDump(FILE *fp);  
+  void ResultDump(const char* FileName);
   void SetScattAngle(double angle); // Lab angle
   void SetScattAngle(double minang, double maxang, double delta); // in CM frame
 //  inline void SetRecAng(double angle){ClearAng();m_RecAng=angle;}
@@ -75,7 +77,9 @@ public:
   int Scatt(); // return val is number of detecting particles__ 0, 1, 2
   
 private:
-  void Initialize();
+  void CleanUp(); // forget previous result of calcualtion
+  void InitDump();
+  void ClearAngle();
   void ResultDumpCore();
   int ScattCore();
   int ScattDumpCore();

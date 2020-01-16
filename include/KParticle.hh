@@ -49,9 +49,7 @@ private:
   double m_mass;
   int m_errno;
   K4Momentum m_p;
-
-private:
-  double GetMass(std::string m_name); // stop mass
+  double GetMass(std::string m_name); // stop mass    
 
 public:
   KParticle() {}
@@ -65,6 +63,7 @@ public:
   KParticle(double mass, double kin_energy, K3Vector p);
   KParticle(double mass, double kin_energy);
   KParticle(double mass);
+  KParticle(double energy, K3Vector p);
   KParticle(std::string name);
   KParticle(const KParticle& rhs)
     : m_name(rhs.m_name)
@@ -97,21 +96,21 @@ public:
   void SetParticle(std::string name);
   void SetDirection(const K3Vector& dir);
   /* Function SetMomentum can define both direction and amount. */
-  /* The energy will be recalced. */  
+  /* The energy will be recalced. */
+  inline void SetMass(std::string name){m_mass = GetMass(name);}
+  inline void SetMass(double mass){m_mass = mass;}  
   void SetMomentum(double px, double py, double pz);
   void SetMomentum(const K3Vector& p);
   void SetMomentumComponent(double energy, double px, double py, double pz);
   void SetMomentumComponent(double energy, const K3Vector& p);  
-  void SetMomentumNoScale(double px, double py, double pz);
-  void SetMomentumNoScale(const K3Vector& p);
   void SetT(double kin_energy);// direction same as previous is set.
   void SetEnergy(double energy);// direction same as previous is set.
   void SetEnergyDirection(double energy,
 			  double dirx, double diry, double dirz);
   void SetTDirection(double kin_energy,
 			  double dirx, double diry, double dirz);
-  void SetEnergyDirection(double energy, K3Vector& dir);
-  void SetTDirection(double kin_energy, K3Vector& dir);
+  void SetEnergyDirection(double energy, K3Vector dir);
+  void SetTDirection(double kin_energy, K3Vector dir);
   void Show();
   inline int ErrorNum() const {return m_errno;}  
   KParticle& operator=(const KParticle& rhs);
@@ -120,7 +119,7 @@ public:
   void BoostZ(double beta);
   void Boost(K3Vector beta);
   void Boost(double beta_x, double beta_y, double beta_z);
-  void Initialize();
+  void Init();
 };
 
 #endif

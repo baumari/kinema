@@ -34,6 +34,14 @@ KParticle::KParticle(std::string name)
   m_errno = 0;
 }
 
+KParticle::KParticle(double energy, K3Vector p)
+{
+  m_name = "unknown";
+  m_mass = sqrt(pow(energy, 2)-pow(p.Norm(), 2));
+  m_p.Set(energy, p);
+  m_errno = 0;
+}
+
 KParticle::KParticle(double mass)
 {
   m_name = "unknown";
@@ -133,17 +141,7 @@ void KParticle::SetDirection(const K3Vector& dir)
   m_p.Set(E(), dirx, diry, dirz);
 }
 
-void KParticle::SetMomentumNoScale(double px, double py, double pz)
-{
-  m_p.Set(E(), px, py, pz);
-}
-
-void KParticle::SetMomentumNoScale(const K3Vector& p)
-{
-  m_p.Set(E(), p);
-}
-
-void KParticle::SetMomentum(double px, double py, double pz)
+void KParticle::SetMomentum(double px, double py, double pz) // energy will be recalced
 {
   m_p.Set(sqrt(pow(m_mass,2)+pow(px,2)+pow(py,2)+pow(pz,2)),
 	  px, py, pz);
@@ -159,9 +157,10 @@ void KParticle::SetMomentumComponent(double energy,
     return ;    
   }
   m_p.Set(energy, px, py, pz);
+  m_mass = m_p.Invaliant();
 }
 
-void KParticle::SetMomentum(const K3Vector& p)
+void KParticle::SetMomentum(const K3Vector& p) // energy will be recalced
 {
   m_p.Set(sqrt(pow(m_mass,2)+pow(p.Norm(),2)), p);
 }
@@ -175,6 +174,7 @@ void KParticle::SetMomentumComponent(double energy, const K3Vector& p)
     return ;    
   }  
   m_p.Set(energy, p);
+  m_mass = m_p.Invaliant();
 }
 
 void KParticle::SetT(double kin_energy)
@@ -224,7 +224,7 @@ SetTDirection(double kin_energy, double dirx, double diry, double dirz)
 }
 
 void KParticle::
-SetTDirection(double kin_energy, K3Vector& dir)
+SetTDirection(double kin_energy, K3Vector dir)
 {
   if(kin_energy < 0){
     fprintf(stderr,
@@ -252,7 +252,7 @@ SetEnergyDirection(double energy, double dirx, double diry, double dirz)
 }
 
 void KParticle::
-SetEnergyDirection(double energy, K3Vector& dir)
+SetEnergyDirection(double energy, K3Vector dir)
 {
   if(energy - Mass() < 0){
     fprintf(stderr,
@@ -315,7 +315,7 @@ void KParticle::Show()
 }
 
 
-void KParticle::Initialize()
+void KParticle::Init()
 {
   m_name = "";
   m_mass = 0;
