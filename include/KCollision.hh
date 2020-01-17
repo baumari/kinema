@@ -43,7 +43,6 @@ private:
   /**** vector structure ****/
   std::vector<std::vector<double> > m_Theta3CM, m_Theta4CM, m_Theta4;
   std::vector<std::vector<double> > m_E3, m_E4; // kinematic energy
-  std::vector<std::vector<double> > m_Beta3, m_Beta4; 
   std::vector<std::vector<double> > m_LabToCM; // conversion factor for cross section
   
 //  std::vector<double> m_LabToCM; // conversion factor for cross section
@@ -85,10 +84,11 @@ private:
   int ScattDumpCore();
   int RecoilCore();
   int RecoilDumpCore();
-  void GetCMAngle(double rho); // (beta_CM/beta3_CM) // for m_Theta3CM, m_Theta4CM
-  void GetRecoilAngle(double rho); // (beta_CM/beta4_CM) // for m_Theta4
+  void GetCMAngle(double, double); // (beta_CM, beta3_CM) // for m_Theta3CM, m_Theta4CM
+  void GetRecoilAngle(double, double); // (beta_CM, beta4_CM) // for m_Theta4
+  void Getfac(double); // (beta_CM) // conversion factor (cm = lab*fac)
   //  void GetRecCMAngle(double rho); // (beta_CM/beta4_CM) 
-  void GetELab(); // for m_E3, m_E4
+  void GetELab(double); //(beta_CM) for m_E3, m_E4
   void StoreResult();
 };
 
