@@ -335,7 +335,7 @@ void KParticle::Init()
 
 void KParticle::SetEx(double ex)
 {
+  m_mass -= m_ex;
   m_ex = ex;
-  m_mass += ex;
-  //  m_energy += ex;
+  m_mass += m_ex;
 }
