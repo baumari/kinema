@@ -55,13 +55,18 @@ public:
   KCollision(KParticle p1, KParticle p2,
 	     std::string p3, std::string p4);
   KCollision(KParticle* p1, KParticle* p2, //P1, P2 are converted into object
-	     std::string p3, std::string p4);  
+	     std::string p3, std::string p4);
+  KCollision(KParticle p1, KParticle p2,
+	     KParticle p3, KParticle p4);
+  KCollision(KParticle *p1, KParticle *p2,
+	     KParticle p3, KParticle p4);
   ~KCollision() {}
 
 public:
   void SetInitParticle(KParticle p1, KParticle p2);
   void SetInitParticle(KParticle* p1, KParticle* p2);//P1, P2 are converted into object
   void SetFinParticle(std::string p3, std::string p4);
+  void SetFinParticle(KParticle p3, KParticle p4);  
   void ResultDump();
   void Init();
   int GetParticleNum();

@@ -24,6 +24,22 @@ KCollision::KCollision(KParticle* p1, KParticle* p2,
   SetFinParticle(p3, p4);
 }
 
+KCollision::KCollision(KParticle p1, KParticle p2,
+		       KParticle p3, KParticle p4)
+{
+  Init();
+  SetInitParticle(p1, p2);
+  SetFinParticle(p3, p4);
+}
+
+KCollision::KCollision(KParticle *p1, KParticle *p2,
+		       KParticle p3, KParticle p4)
+{
+  Init();
+  SetInitParticle(p1, p2);
+  SetFinParticle(p3, p4);
+}
+
 void KCollision::Init()
 {
   // All memeber varables will be flushed.
@@ -56,6 +72,11 @@ void KCollision::SetFinParticle(std::string p3, std::string p4)
 {
   KParticle P3(p3);  KParticle P4(p4); // only for tmp
   m_M3 = P3.Mass(); m_M4 = P4.Mass();
+}
+
+void KCollision::SetFinParticle(KParticle p3, KParticle p4)
+{
+  m_M3 = p3.Mass(); m_M4 = p4.Mass();
 }
 
 void KCollision::ResultDump()
