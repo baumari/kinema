@@ -36,6 +36,7 @@ void KCollision::Init()
   m_E3CM = 0; m_E4CM = 0;
   m_Beta3CM = 0; m_Beta4CM = 0;
   m_E3.clear(); m_E4.clear();
+  m_T3.clear(); m_T4.clear();  
   m_LabToCM.clear();  
   m_CalcFlag = 0;
   m_DumpFlag = 0;
@@ -89,13 +90,13 @@ void KCollision::ResultDumpCore()
     return ;
   }
   fprintf(m_ResultBuff,
-	  "#E3        #Theta3    #Theta3_CM     #E4        #Theta4    #Theta4_CM       #fac(LabtoCM)\n");
+	  "#K3        #Theta3    #Theta3_CM     #K4        #Theta4    #Theta4_CM       #fac(LabtoCM)\n");
   for(std::size_t iResult = 0; iResult != m_Theta3.size(); ++iResult){
     fprintf(m_ResultBuff,
 	    "%8.4lf   %8.4lf   %8.4lf   %8.4lf   %8.4lf   %8.4lf   %8.4lf\n",
-	    m_E3[0][iResult], m_Theta3[iResult], m_Theta3CM[0][iResult],
-	    m_E4[0][iResult], m_Theta4[0][iResult], m_Theta4CM[0][iResult],
-	    m_LabToCM[0][iResult]);
+	    m_T3.at(0).at(iResult), m_Theta3.at(iResult), m_Theta3CM.at(0).at(iResult),
+	    m_T4.at(0).at(iResult), m_Theta4.at(0).at(iResult), m_Theta4CM.at(0).at(iResult),
+	    m_LabToCM.at(0).at(iResult));
   }
 }
 
@@ -170,12 +171,14 @@ int KCollision::Scatt()
 void KCollision::GetELab(double beta_CM)
 {
   double gamma = KUtil::BetaToGamma(beta_CM);
-  m_E3.resize(m_Theta3CM.size()); m_E4.resize(m_Theta4CM.size());  
+  m_E3.resize(m_Theta3CM.size()); m_E4.resize(m_Theta4CM.size());
+  m_T3.resize(m_Theta3CM.size()); m_T4.resize(m_Theta4CM.size());    
   for(std::size_t idxOuter = 0; idxOuter != m_Theta3CM.size(); ++idxOuter){
     for(std::size_t idxInner = 0; idxInner != m_Theta3CM[idxOuter].size(); ++idxInner){
       m_E3[idxOuter].push_back(gamma*m_E3CM*
 			       (1+beta_CM*m_Beta3CM*
-				cos(KUtil::DegToRad(m_Theta3CM[idxOuter][idxInner]))));    
+				cos(KUtil::DegToRad(m_Theta3CM[idxOuter][idxInner]))));
+      m_T3[idxOuter].push_back(m_E3[idxOuter].back()-m_M3);
     }
   }
   for(std::size_t idxOuter = 0; idxOuter != m_Theta4CM.size(); ++idxOuter){
@@ -183,6 +186,7 @@ void KCollision::GetELab(double beta_CM)
       m_E4[idxOuter].push_back(gamma*m_E4CM*
 			       (1+beta_CM*m_Beta4CM*
 				cos(KUtil::DegToRad(m_Theta4CM[idxOuter][idxInner]))));
+      m_T4[idxOuter].push_back(m_E4[idxOuter].back()-m_M4);      
     }
   }
 }
@@ -233,29 +237,45 @@ int KCollision::ScattDumpCore()
     (pow(InitialTotalEnergy_CM, 2.) + pow(m_M3, 2.) - pow(m_M4, 2.))
     /2./InitialTotalEnergy_CM;
   m_E4CM = InitialTotalEnergy_CM - m_E3CM;
+  m_Beta3CM = sqrt(pow(m_E3CM,2.)-pow(m_M3,2.))/m_E3CM;  
   double ThetaLab; // rad
   KParticle Part3, Part4; 
   // preparation for calculation
   K3Vector P3_CM(1., 0., 0.);
   double delta = m_Theta3CM[0][1] - m_Theta3CM[0][0];
-  P3_CM.RotateZ(KUtil::DegToRad(m_Theta3CM[0][0] - delta));  
+  P3_CM.RotateZ(KUtil::DegToRad(m_Theta3CM[0][0] - delta));
+  double gamma = KUtil::BetaToGamma(Beta_CM);
+  double rho = Beta_CM.Norm()/m_Beta3CM;
+  double p3cm, p3;
+  double fac;
+  m_LabToCM.resize(m_Theta3CM.size());  
 // calculation at each scattering angle
   for(std::vector<double>::iterator it = m_Theta3CM[0].begin(); it != m_Theta3CM[0].end(); ++it){
     // particle #3
     P3_CM.RotateZ(KUtil::DegToRad(delta));
     Part3.SetMass(m_M3);
     Part3.SetEnergyDirection(m_E3CM, P3_CM);
+    p3cm = Part3.P().P().Norm();
     Part3.Boost(-Beta_CM); // into lab frame
-    m_E3[0].push_back(Part3.T());
+    p3 = Part3.P().P().Norm();    
+    m_E3[0].push_back(Part3.E());
+    m_T3[0].push_back(Part3.T());    
     ThetaLab = asin(sqrt(pow(m_E3CM, 2) - pow(m_M3, 2))/sqrt(pow(Part3.E(), 2) - pow(m_M3, 2))
 		    * sin(KUtil::DegToRad(*it)));
     m_Theta3.push_back(KUtil::RadToDeg(ThetaLab));
+
+    // convert factor from cs in lab to in cm
+    fac = (p3cm/p3)*(rho*cos(KUtil::DegToRad(*it))+1)
+      /gamma/pow((rho+cos(KUtil::DegToRad(*it))),2)
+      *pow(cos(KUtil::DegToRad(ThetaLab)),2);
+    m_LabToCM[0].push_back(fac);
     // particle #4
     m_Theta4CM[0].push_back(180. - *it);
     Part4.SetMass(m_M4);
     Part4.SetEnergyDirection(m_E4CM, -P3_CM);
     Part4.Boost(-Beta_CM);
-    m_E4[0].push_back(Part4.T());
+    m_E4[0].push_back(Part4.E());
+    m_T4[0].push_back(Part4.T());    
     if(*it < KUtil::EPSILON){
       m_Theta4[0].push_back(90.);
     }else{
@@ -353,14 +373,18 @@ void KCollision::Getfac(double beta_CM)
 {
   double gamma = KUtil::BetaToGamma(beta_CM);
   double rho = beta_CM/m_Beta3CM;
+  double p3cm = sqrt(pow(m_E3CM,2)-pow(m_M3,2));
+  double p3;
   double fac;
   m_LabToCM.resize(m_Theta3CM.size());
   for(std::size_t ip = 0; ip != m_Theta3CM.size(); ++ip){
     for(std::size_t idx = 0; idx != m_Theta3CM[ip].size(); ++idx){
-      fac = pow(cos(KUtil::DegToRad(m_Theta3[idx])), 3.)
-	/cos(KUtil::DegToRad(m_Theta3CM[ip][idx]))
-	*(rho*cos(KUtil::DegToRad(m_Theta3CM[ip][idx]))+1)
-	/gamma/pow(cos(KUtil::DegToRad(m_Theta3CM[ip][idx]))+rho,2.);
+      p3 = sqrt(pow(m_E3[ip][idx],2)-pow(m_M3,2));
+      //      std::cout << p3 << std::endl;
+      fac = (p3cm/p3)*(rho*cos(KUtil::DegToRad(m_Theta3CM[ip][idx]))+1)
+	/gamma/pow((rho+cos(KUtil::DegToRad(m_Theta3CM[ip][idx]))),2)
+	*pow(cos(KUtil::DegToRad(m_Theta3[idx])),2);
+      m_LabToCM[ip].push_back(fac);
     }
   }
   return ;
@@ -379,6 +403,7 @@ void KCollision::Clear()
   m_E3CM = 0; m_E4CM = 0;
   m_Beta3CM = 0; m_Beta4CM = 0;
   m_E3.clear(); m_E4.clear();
+  m_T3.clear(); m_T4.clear();  
   m_LabToCM.clear();
   m_CalcFlag = 0;
 }
@@ -390,4 +415,5 @@ void KCollision::Clear()
    m_Theta4CM.resize(1);
    m_Theta4.resize(1);
    m_E3.resize(1); m_E4.resize(1);
+   m_T3.resize(1); m_T4.resize(1);   
  }

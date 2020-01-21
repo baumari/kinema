@@ -42,7 +42,8 @@ private:
   /* idx,  idx,  idx  */
   /**** vector structure ****/
   std::vector<std::vector<double> > m_Theta3CM, m_Theta4CM, m_Theta4;
-  std::vector<std::vector<double> > m_E3, m_E4; // kinematic energy
+  std::vector<std::vector<double> > m_E3, m_E4; // total energy
+  std::vector<std::vector<double> > m_T3, m_T4; // kinematic energy  
   std::vector<std::vector<double> > m_LabToCM; // conversion factor for cross section
   
 //  std::vector<double> m_LabToCM; // conversion factor for cross section
