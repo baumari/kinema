@@ -30,6 +30,7 @@ KParticle::KParticle(std::string name)
 {
   m_name = name;
   m_mass = GetMass(name);
+  m_ex = 0;
   m_p.Set(m_mass, 0, 0, 0);
   m_errno = 0;
 }
@@ -38,6 +39,7 @@ KParticle::KParticle(double energy, K3Vector p)
 {
   m_name = "unknown";
   m_mass = sqrt(pow(energy, 2)-pow(p.Norm(), 2));
+  m_ex = 0;  
   m_p.Set(energy, p);
   m_errno = 0;
 }
@@ -46,6 +48,7 @@ KParticle::KParticle(double mass)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_ex = 0;  
   m_p.Set(m_mass, 0, 0, 0);
   m_errno = 0;  
 }
@@ -55,6 +58,7 @@ KParticle::KParticle(std::string name, double kin_energy,
 {
   m_name = name;
   m_mass = GetMass(name);
+  m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
 		   dir_x, dir_y, dir_z);
@@ -67,6 +71,7 @@ KParticle::KParticle(double mass, double kin_energy,
 {
   m_name = "unknown";
   m_mass = mass;
+  m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
 		   dir_x, dir_y, dir_z);
@@ -78,6 +83,7 @@ KParticle::KParticle(std::string name, double kin_energy, K3Vector p)
 {
   m_name = name;
   m_mass = GetMass(name);
+  m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
   m_p.Set(energy, p);
@@ -88,6 +94,7 @@ KParticle::KParticle(double mass, double kin_energy, K3Vector p)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
   m_p.Set(energy, p);
@@ -98,6 +105,7 @@ KParticle::KParticle(std::string name, double kin_energy)
 {
   m_name = name;
   m_mass = GetMass(name);
+  m_ex = 0;  
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
   m_errno = 0;  
@@ -107,6 +115,7 @@ KParticle::KParticle(double mass, double kin_energy)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_ex = 0;  
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
   m_errno = 0;    
@@ -319,6 +328,14 @@ void KParticle::Init()
 {
   m_name = "";
   m_mass = 0;
+  m_ex = 0;  
   m_errno = 0;
   m_p.Set(0, 0, 0, 0);
+}
+
+void KParticle::SetEx(double ex)
+{
+  m_ex = ex;
+  m_mass += ex;
+  //  m_energy += ex;
 }

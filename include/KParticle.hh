@@ -47,6 +47,7 @@ class KParticle
 private:
   std::string m_name;
   double m_mass;
+  double m_ex; // excitation energy in MeV
   int m_errno;
   K4Momentum m_p;
   double GetMass(std::string m_name); // stop mass    
@@ -68,6 +69,7 @@ public:
   KParticle(const KParticle& rhs)
     : m_name(rhs.m_name)
     , m_mass(rhs.m_mass)
+    , m_ex(rhs.m_ex)
     , m_errno(rhs.m_errno)
     , m_p(rhs.m_p)
   {}
@@ -88,7 +90,9 @@ public:
   inline double GetZ() const {return m_p.Z();}
   inline K4Momentum GetP() const {return m_p;}  
   inline double Mass() const {return m_mass;} // stop mass
-  inline double GetMass() const {return m_mass;} // stop mass  
+  inline double GetMass() const {return m_mass;} // stop mass
+  inline double GetEx() const {return m_ex;}
+  inline double Ex() const {return m_ex;}
   inline std::string Name() const {return m_name;}
   /* Function SetDirection can define only direction of particle. */
   /* The amaount of momentum is defined by kinetic energy */
@@ -120,6 +124,7 @@ public:
   void Boost(K3Vector beta);
   void Boost(double beta_x, double beta_y, double beta_z);
   void Init();
+  void SetEx(double ex); // mass will be update
 };
 
 #endif
