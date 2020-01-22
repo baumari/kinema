@@ -69,6 +69,15 @@ public:
   void SetFinParticle(KParticle p3, KParticle p4);  
   void ResultDump();
   void Init();
+  inline double GetE3(int iParticle){return m_E3[iParticle].back();}
+  inline double GetE4(int iParticle){return m_E4[iParticle].back();}    
+  inline double GetT3(int iParticle){return m_T3[iParticle].back();}
+  inline double GetT4(int iParticle){return m_T4[iParticle].back();}
+  inline double GetTheta3CM(int iParticle){return m_Theta3CM[iParticle].back();}
+  inline double GetTheta4CM(int iParticle){return m_Theta4CM[iParticle].back();}  
+  inline double GetTheta4(int iParticle){return m_Theta4[iParticle].back();}    
+  inline double GetFac(int iParticle){return m_LabToCM[iParticle].back();}
+  void Show();
   int GetParticleNum();
   inline KParticle GetP3(){return m_Finp3;}  
   inline KParticle GetP4(int iParticle){return m_Finp4.at(iParticle);}
