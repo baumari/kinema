@@ -252,11 +252,10 @@ void KOptions::Description(){
     = (MaxOptLengthWArg > MaxOptLengthWOArg) ? MaxOptLengthWArg : MaxOptLengthWOArg;
   std::string Blank;
 
-  /* print loutine */
+  /* print loutine (without arguments)*/
   std::cout << "Options.." << std::endl;
-  std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
-  std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
-  for(; it != it_end; ++it){
+  for(std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
+      it != m_OptListWithoutArg.end(); ++it){
     // print short option
     if(it->m_Short.size() == 0) std::cout << "    ";
     else std::cout <<  "-" << it->m_Short << ", ";
@@ -267,5 +266,19 @@ void KOptions::Description(){
     // print description
     std::cout << it->m_Description << std::endl;
   }
+  /* print loutine (with arguments)*/  
+  for(std::vector<_OptWArg>::iterator it = m_OptListWithArg.begin();
+      it != m_OptListWithArg.end(); ++it){
+    // print short option
+    if(it->m_Short.size() == 0) std::cout << "    ";
+    else std::cout <<  "-" << it->m_Short << ", ";
+    // print long option
+    Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
+    if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
+    else std::cout << "--" << it->m_Long << Blank << ": ";
+    // print description
+    std::cout << it->m_Description << std::endl;
+  }
+  
   return ;
 }
