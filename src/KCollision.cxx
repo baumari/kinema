@@ -24,6 +24,22 @@ KCollision::KCollision(KParticle* p1, KParticle* p2,
   SetFinParticle(p3, p4);
 }
 
+KCollision::KCollision(KParticle p1, KParticle p2,
+		       KParticle p3, KParticle p4)
+{
+  Init();
+  SetInitParticle(p1, p2);
+  SetFinParticle(p3, p4);
+}
+
+KCollision::KCollision(KParticle *p1, KParticle *p2,
+		       KParticle p3, KParticle p4)
+{
+  Init();
+  SetInitParticle(p1, p2);
+  SetFinParticle(p3, p4);
+}
+
 void KCollision::Init()
 {
   // All memeber varables will be flushed.
@@ -56,6 +72,11 @@ void KCollision::SetFinParticle(std::string p3, std::string p4)
 {
   KParticle P3(p3);  KParticle P4(p4); // only for tmp
   m_M3 = P3.Mass(); m_M4 = P4.Mass();
+}
+
+void KCollision::SetFinParticle(KParticle p3, KParticle p4)
+{
+  m_M3 = p3.Mass(); m_M4 = p4.Mass();
 }
 
 void KCollision::ResultDump()
@@ -147,8 +168,8 @@ int KCollision::Scatt()
   int NumOfParticles = 0;
   switch(m_CalcFlag){
   case _SCATT:
-    NumOfParticles = ScattCore();
     Clear();
+    NumOfParticles = ScattCore();
     break;
   case _SCATT_DUMP:
     NumOfParticles = ScattDumpCore();
@@ -305,19 +326,28 @@ void KCollision::GetCMAngle(double beta_CM, double beta3_CM)
   double rho = beta_CM/beta3_CM;
   double gamma = KUtil::BetaToGamma(beta_CM);
   for(std::vector<double>::iterator it = m_Theta3.begin(); it != m_Theta3.end(); ++it){
+    if(fabs(*it-90.) < KUtil::EPSILON){
+      m_Theta3CM.resize(1); m_Theta4CM.resize(1);
+      m_Theta3CM[0].push_back(KUtil::RadToDeg(acos(-rho)));
+      m_Theta4CM[0].push_back(180.-KUtil::RadToDeg(acos(-rho)));
+      return ;
+    }
     ThetaLab = KUtil::DegToRad(*it);
     FirstTerm = -rho*pow(gamma*tan(ThetaLab), 2.)/(pow(gamma*tan(ThetaLab), 2.)+1);
-    Determinant = pow(gamma*tan(ThetaLab), 2.)*(1-pow(rho,2.))+1;
+    Determinant = pow(gamma*tan(ThetaLab), 2.)*(1-pow(rho,2.))+1.;
     if(Determinant < 0){
-      std::cout << "Invalid kinematical condition." << std::endl;
+      std::cout << "No particles will be detected." << std::endl;
       return ;
     }else if(Determinant < KUtil::EPSILON){
       CosCM[0] = FirstTerm;
       if(fabs(CosCM[0]) > 1){
-	std::cout << "Invalid kinematical condition." << std::endl;
+	std::cout << "No particles will be detected." << std::endl;
 	return ;
       }
-      std::cout << "Only 1 kinematical condition mathced." << std::endl;
+      if(tan(ThetaLab)*(CosCM[0]+rho) < 0){
+	std::cout << "No particles will be detected." << std::endl;
+	return ;
+      }
       m_Theta3CM.resize(1); m_Theta4CM.resize(1);
       m_Theta3CM[0].push_back(KUtil::RadToDeg(acos(CosCM[0])));
       m_Theta4CM[0].push_back(180.-KUtil::RadToDeg(acos(CosCM[0])));    
@@ -327,21 +357,39 @@ void KCollision::GetCMAngle(double beta_CM, double beta3_CM)
     CosCM[0] = FirstTerm + SecondTerm;
     CosCM[1] = FirstTerm - SecondTerm;
     if(fabs(CosCM[0]) > 1 && fabs(CosCM[1]) > 1){
-      std::cout << "Invalid kinematical condition." << std::endl;
+      std::cout << "No particles will be detected." << std::endl;
       return ;    
     }else if(fabs(CosCM[0]) <= 1 && fabs(CosCM[1]) <= 1){
-      m_Theta3CM.resize(2); m_Theta4CM.resize(2);
-      m_Theta3CM[0].push_back(KUtil::RadToDeg(acos(CosCM[0])));
-      m_Theta3CM[1].push_back(KUtil::RadToDeg(acos(CosCM[1])));
-      m_Theta4CM[0].push_back(180. - KUtil::RadToDeg(acos(CosCM[0])));
-      m_Theta4CM[1].push_back(180. - KUtil::RadToDeg(acos(CosCM[1])));        
+      if(tan(ThetaLab)*(CosCM[0]+rho) < 0 && tan(ThetaLab)*(CosCM[1]+rho) < 0){
+	std::cout << "No particles will be detected." << std::endl;
+	return ;    	
+      }else if(tan(ThetaLab)*(CosCM[0]+rho) >= 0 && tan(ThetaLab)*(CosCM[1]+rho) >= 0){
+	std::cout << "Two particles will be detected." << std::endl;
+	m_Theta3CM.resize(2); m_Theta4CM.resize(2);
+	m_Theta3CM[0].push_back(KUtil::RadToDeg(acos(CosCM[0])));
+	m_Theta3CM[1].push_back(KUtil::RadToDeg(acos(CosCM[1])));
+	m_Theta4CM[0].push_back(180. - KUtil::RadToDeg(acos(CosCM[0])));
+	m_Theta4CM[1].push_back(180. - KUtil::RadToDeg(acos(CosCM[1])));
+	return ;
+      }else{
+	m_Theta3CM.resize(1); m_Theta4CM.resize(1);
+	m_Theta3CM[0].push_back(tan(ThetaLab)*(CosCM[0]+rho) >= 0 ?
+				KUtil::RadToDeg(acos(CosCM[0])) :
+				KUtil::RadToDeg(acos(CosCM[1])));
+	m_Theta4CM[0].push_back(180. - m_Theta3CM[0].at(0));
+	return ;
+      }
     }else{
-      std::cout << "Only 1 kinematical condition mathced." << std::endl;
-      m_Theta3CM.resize(1); m_Theta4CM.resize(1);
-      m_Theta3CM[0].push_back(CosCM[0] <= 1 ? KUtil::RadToDeg(acos(CosCM[0])) :
-			   KUtil::RadToDeg(acos(CosCM[1])));
-      m_Theta4CM[0].push_back(180. - m_Theta3CM[0].at(0));
-      return ;
+      double cos = fabs(CosCM[0]) <= 1 ? CosCM[0] : CosCM[1];
+      if(tan(ThetaLab)*(cos+rho) >= 0){
+	m_Theta3CM.resize(1); m_Theta4CM.resize(1);
+	m_Theta3CM[0].push_back(KUtil::RadToDeg(acos(cos)));
+	m_Theta4CM[0].push_back(180. - m_Theta3CM[0].at(0));
+	return ;	
+      }else{
+	std::cout << "No particles will be detected." << std::endl;
+	return ;    		
+      }
     }    
   }  
 }
@@ -397,7 +445,6 @@ int KCollision::GetParticleNum()
 
 void KCollision::Clear()
 {
-  ClearAngle();
   m_Finp3.Init();
   m_Finp4.clear();
   m_E3CM = 0; m_E4CM = 0;
@@ -405,7 +452,8 @@ void KCollision::Clear()
   m_E3.clear(); m_E4.clear();
   m_T3.clear(); m_T4.clear();  
   m_LabToCM.clear();
-  m_CalcFlag = 0;
+  m_Theta3CM.clear();  m_Theta4CM.clear();
+  m_Theta4.clear();
 }
 
  void KCollision::InitDump()
@@ -417,3 +465,13 @@ void KCollision::Clear()
    m_E3.resize(1); m_E4.resize(1);
    m_T3.resize(1); m_T4.resize(1);   
  }
+
+void KCollision::Show()
+{
+  std::cout << "#K3  #Theta3  #Theta3_CM  #K4  #Theta4  #Theta4_CM  #fac(LabtoCM)" << std::endl;
+  for(int iParticle = 0; iParticle != GetParticleNum(); ++iParticle){
+    std::cout << GetT3(iParticle) << " " <<  m_Theta3.back() << " " <<  GetTheta3CM(iParticle)
+	      << " " << GetT4(iParticle) << " " <<  GetTheta4(iParticle) << " " <<  GetTheta4CM(iParticle)
+	      << " " << GetFac(iParticle) << std::endl;
+  }
+}
