@@ -3,6 +3,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <TCanvas.h>
+#include <TGraph.h>
+
 #include <KParticle.hh>
 #include <KCollision.hh>
 #include <KOptions.hh>
@@ -22,20 +25,28 @@ void Usage(){
 
 int main(int argc, char* argv[]){
   
-//  KOptions opt;
-//  opt.Add("help", "h", "Show help.");
-//  opt.Add("recoil", "r", 0, "Recoil kinetic energy (double [=0])");
-//  opt.Add("out", "o", "out.dat", "Output file (string [=out.dat])");
-//  
-//  if(!opt.Check(argc, argv)){
-//    fprintf(stderr, "Invalid Usage.\n");
-//    std::exit(EXIT_FAILURE);
-//  }
-//  if(opt.Exist("h")){
-//    Usage();
-//    opt.Description();
-//    std::exit(EXIT_SUCCESS);    
-//  }
+  KOptions opt;
+  opt.Add("help", "h", "Show help.");
+  opt.Add("recoil", "r", 0, "Recoil kinetic energy (double [=0])");
+  opt.Add("out", "o", "out.dat", "Output file (string [=out.dat])");
+  opt.Add("graph","g","Show graph.");
+   
+  if(!opt.Check(argc, argv)){
+    fprintf(stderr, "Invalid Usage.\n");
+    std::exit(EXIT_FAILURE);
+  }
+  if(opt.Exist("h")){
+    Usage();
+    opt.Description();
+    std::exit(EXIT_SUCCESS);    
+  }
+  if(opt.Exist("graph")){
+    std::cout << "The results are diplayed with TGraph." << std::endl;
+    if(opt.Exist("out")){
+      std::cout << "'out' option will be ignored." << std::endl;
+    }
+    
+  }
 //  FILE *OutPutFile = stdout;
 //  if(opt.Exist("out")){
 //    OutPutFile = fopen(opt.Get("out").c_str(), "w");

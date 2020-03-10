@@ -14,8 +14,8 @@ LIB = $(LIBDIR)/libkinema.so
 SUFFIX = cxx
 
 #CXX = `root-config --cxx`
-#CXX = g++
-CXX = clang++
+CXX = g++
+#CXX = clang++
 
 #CC =
 ######################################################
