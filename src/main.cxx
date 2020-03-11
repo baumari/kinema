@@ -2,9 +2,15 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <istream>
+#include <cstring>
+#include <algorithm>
 
 #include <TCanvas.h>
 #include <TGraph.h>
+#include <TApplication.h>
+#include <TH1F.h>
 
 #include <KParticle.hh>
 #include <KCollision.hh>
@@ -17,11 +23,10 @@ void Usage(){
   printf("Usage: ./kinema ([options]) p1 p2 p3 p4 Ebeam Ex [options]\n");
   printf("Unit of energy is [MeV].\n");
   printf("Output: E3 E4 theta3 theta4 \n\n");  
-  printf("Options..\n");
-  printf("-r, --recoil : Recoil kinetic energy (double [=0])\n");
-  printf("    --out    : Output file (string [=out.dat])\n");
-  printf("-h, --help   : Show help.\n");
 }
+
+// graphical option 
+const char gopt[] = {"e3e4theta3theta4theta3cm"};
 
 int main(int argc, char* argv[]){
   
@@ -29,8 +34,9 @@ int main(int argc, char* argv[]){
   opt.Add("help", "h", "Show help.");
   opt.Add("recoil", "r", 0, "Recoil kinetic energy (double [=0])");
   opt.Add("out", "o", "out.dat", "Output file (string [=out.dat])");
-  opt.Add("graph","g","Show graph.");
-   
+  opt.Add("graph","g","theta3:e3", "Show graph. Choose graph mode. (string [=theta3:e3])");
+  opt.Constraint("graph","theta3, theta4, e3 ,e4 ,theta3cm");
+  
   if(!opt.Check(argc, argv)){
     fprintf(stderr, "Invalid Usage.\n");
     std::exit(EXIT_FAILURE);
@@ -40,37 +46,104 @@ int main(int argc, char* argv[]){
     opt.Description();
     std::exit(EXIT_SUCCESS);    
   }
-  if(opt.Exist("graph")){
-    std::cout << "The results are diplayed with TGraph." << std::endl;
-    if(opt.Exist("out")){
-      std::cout << "'out' option will be ignored." << std::endl;
-    }
-    
-  }
-//  FILE *OutPutFile = stdout;
-//  if(opt.Exist("out")){
-//    OutPutFile = fopen(opt.Get("out").c_str(), "w");
-//    if(OutPutFile == NULL){
-//      fprintf(stderr, "Fail to open %s\n", opt.Get("out").c_str());
-//      std::exit(EXIT_FAILURE);
-//    }
-//  }
-//  if(argc < 7){
-//    fprintf(stderr, "More operands are needed!!.\n");
-//    Usage();
-//    std::exit(EXIT_FAILURE);    
-//  }
-//  
-//  KParticle p1(argv[opt.Lead()], atof(argv[opt.Lead()+4]));
-//  KParticle p2(argv[opt.Lead()+1], 0);
-//  KParticle p3(argv[opt.Lead()+2],
-//	       atof(argv[opt.Lead()+4])-atof(argv[opt.Lead()+5])-atof(opt.Get("r").c_str()));  
-//  KParticle p4(argv[opt.Lead()+3], atof(opt.Get("r").c_str()));
-//  KCollision col(p1, p2, p3, p4);
-//  fclose(OutPutFile);
 
+  FILE *OutPutFile = stdout;
+  if(opt.Exist("out")){
+    OutPutFile = fopen(opt.Get("out").c_str(), "w");
+    if(OutPutFile == NULL){
+      fprintf(stderr, "Fail to open %s\n", opt.Get("out").c_str());
+      std::exit(EXIT_FAILURE);
+    }
+  }
   
-  
+  if(argc < 7){
+    fprintf(stderr, "More operands are needed!!\n");
+    Usage();
+    std::exit(EXIT_FAILURE);    
+  }
+  double Ebeam = atof(argv[opt.Lead() + 4]);
+  double Ex = atof(argv[opt.Lead() + 5]);
+  double Erec = atof(opt.Get("recoil").c_str());
+  KParticle p1(argv[opt.Lead()], Ebeam);
+  KParticle p2(argv[opt.Lead() + 1]);
+  KParticle p3(argv[opt.Lead() + 2], Erec);
+  KParticle p4(argv[opt.Lead() + 3]);
+  p3.SetEx(Ex);
+
+  KCollision col(p1, p2, p3, p4);
+
+  // graphical mode
+  if(opt.Exist("graph")){
+    TApplication app("app", &argc, argv);
+    std::string sGraphMode[2];
+    std::stringstream ssGraphMode(opt.Get("graph"));
+    int icnt = 0;
+    while(std::getline(ssGraphMode, sGraphMode[icnt], ':')) icnt++;
+    if(icnt != 2){
+      std::cerr << "Invalid argument for g option!!" << std::endl;
+      opt.Description();
+      std::exit(EXIT_FAILURE);
+    }else if(strstr(gopt, sGraphMode[0].c_str()) == NULL || strstr(gopt, sGraphMode[1].c_str()) == NULL){
+      std::cerr << "No such option in g!!" << std::endl;
+      opt.Description();
+      std::exit(EXIT_FAILURE);      
+    }
+    col.SetScattAngle(0., 180., 0.1); // in CM frame
+    col.Scatt();
+    std::vector<double> vx, vy;
+    if(sGraphMode[0] == "e3"){
+      vx = col.GetT3Vec(0);
+    }else if(sGraphMode[0] == "e4"){
+      vx = col.GetT4Vec(0);
+    }else if(sGraphMode[0] == "theta3"){
+      vx = col.GetTheta3Vec();
+    }else if(sGraphMode[0] == "theta4"){
+      vx = col.GetTheta4Vec(0);
+    }else if(sGraphMode[0] == "theta3cm"){
+      vx = col.GetTheta3CMVec(0);
+    }else{
+      std::cerr << "Unrecognized variable: " << sGraphMode[0]
+		<< std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+    if(sGraphMode[1] == "e3"){
+      vy = col.GetT3Vec(0);
+    }else if(sGraphMode[1] == "e4"){
+      vy = col.GetT4Vec(0);
+    }else if(sGraphMode[1] == "theta3"){
+      vy = col.GetTheta3Vec();
+    }else if(sGraphMode[1] == "theta4"){
+      vy = col.GetTheta4Vec(0);
+    }else if(sGraphMode[1] == "theta3cm"){
+      vy = col.GetTheta3CMVec(0);
+    }else{
+      std::cerr << "Unrecognized variable: " << sGraphMode[1]
+		<< std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+    TCanvas *c = new TCanvas();
+    TVirtualPad *pad = c->cd();
+    double xmin, xmax, ymin, ymax;
+    xmin = *std::min_element(vx.begin(), vx.end())-0.01*(*std::min_element(vx.begin(), vx.end()));
+    xmax = *std::max_element(vx.begin(), vx.end())+0.01*(*std::max_element(vx.begin(), vx.end()));
+    ymin = *std::min_element(vy.begin(), vy.end())-0.01*(*std::min_element(vy.begin(), vy.end()));
+    ymax = *std::max_element(vy.begin(), vy.end())+0.01*(*std::max_element(vy.begin(), vy.end()));    
+    TH1F *frame = pad->DrawFrame(xmin, ymin, xmax, ymax);
+    frame->GetXaxis()->SetTitle(sGraphMode[0].c_str());
+    frame->GetYaxis()->SetTitle(sGraphMode[1].c_str());    
+    TGraph *g = new TGraph(vx.size(), &vx[0], &vy[0]);    
+    g->SetMarkerStyle(8);
+    g->SetMarkerSize(1);
+    g->Draw("l");
+    c->Update();
+    app.Run();
+  }
+  col.SetScattAngle(0., 180., 0.1); // in CM frame
+  col.Scatt();    
+  col.ResultDump(OutPutFile);
+
+  fclose(OutPutFile);
+
   std::exit(EXIT_SUCCESS);
 }
 

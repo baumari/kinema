@@ -27,7 +27,8 @@ private:
   class _OptWArg : public _OptBase{
   public:
     // all option arguments are stored with type of std::string    
-    std::string m_val; 
+    std::string m_val;
+    std::string m_constraint;
   };
 
 private:
@@ -69,6 +70,8 @@ public:
   bool Exist(const std::string &OptName);
   inline int Lead() {return LeadArg;}
   void Description();
+  // add constraint to arguments on each option
+  void Constraint(std::string OptName, std::string Condition);
 };
 
 #endif

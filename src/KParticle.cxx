@@ -6,6 +6,7 @@
 #include <cfloat>
 #include <cstdio>
 #include <KError.hh>
+#include <iostream>
 
 double KParticle::GetMass(std::string m_name)
 {
@@ -159,9 +160,9 @@ void KParticle::SetMomentum(double px, double py, double pz) // energy will be r
 void KParticle::SetMomentumComponent(double energy,
 				     double px, double py, double pz)
 {
-  if(energy - Mass() < 0){
+  if(energy - Mass() < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
-	    "KParticle::SetEnergyDirection Energy must be larger than Mass!!\n");
+	    "KParticle::SetMomentumComponent Energy must be larger than Mass!!\n");
     m_errno = KError::INVALID_ARGUMENT;
     return ;    
   }
@@ -176,9 +177,9 @@ void KParticle::SetMomentum(const K3Vector& p) // energy will be recalced
 
 void KParticle::SetMomentumComponent(double energy, const K3Vector& p)
 {
-  if(energy - Mass() < 0){
+  if(energy - Mass() < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
-	    "KParticle::SetEnergyDirection Energy must be larger than Mass!!\n");
+	    "KParticle::SetMomentumComponent Energy must be larger than Mass!!\n");
     m_errno = KError::INVALID_ARGUMENT;
     return ;    
   }  
@@ -188,7 +189,7 @@ void KParticle::SetMomentumComponent(double energy, const K3Vector& p)
 
 void KParticle::SetT(double kin_energy)
 {
-  if(kin_energy < 0){
+  if(kin_energy < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "Eenrgy must be larger than 0 in KParticle::SetKinEnergy!!\n");
     m_errno = KError::INVALID_ARGUMENT;
@@ -204,7 +205,7 @@ void KParticle::SetT(double kin_energy)
 
 void KParticle::SetEnergy(double energy)
 {
-  if(energy - Mass() < 0){
+  if(energy - Mass() < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "KParticle::SetEnergy Energy must be larger than Mass!!\n");
     m_errno = KError::INVALID_ARGUMENT;
@@ -220,7 +221,7 @@ void KParticle::SetEnergy(double energy)
 void KParticle::
 SetTDirection(double kin_energy, double dirx, double diry, double dirz)
 {
-  if(kin_energy < 0){
+  if(kin_energy < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "Eenrgy must be larger than 0 in KParticle::SetKinEnergy!!\n");
     m_errno = KError::INVALID_ARGUMENT;
@@ -235,7 +236,7 @@ SetTDirection(double kin_energy, double dirx, double diry, double dirz)
 void KParticle::
 SetTDirection(double kin_energy, K3Vector dir)
 {
-  if(kin_energy < 0){
+  if(kin_energy < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "Eenrgy must be larger than 0 in KParticle::SetKinEnergy!!\n");
     m_errno = KError::INVALID_ARGUMENT;
@@ -249,7 +250,7 @@ SetTDirection(double kin_energy, K3Vector dir)
 void KParticle::
 SetEnergyDirection(double energy, double dirx, double diry, double dirz)
 {
-  if(energy - Mass() < 0){
+  if(energy - Mass() < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "KParticle::SetEnergyDirection Energy must be larger than Mass!!\n");
     m_errno = KError::INVALID_ARGUMENT;
@@ -263,7 +264,7 @@ SetEnergyDirection(double energy, double dirx, double diry, double dirz)
 void KParticle::
 SetEnergyDirection(double energy, K3Vector dir)
 {
-  if(energy - Mass() < 0){
+  if(energy - Mass() < -KUtil::LOOSE_EPSILON){
     fprintf(stderr,
 	    "KParticle::SetEnergyDirection Energy must be larger than Mass!!\n");
     m_errno = KError::INVALID_ARGUMENT;

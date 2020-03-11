@@ -173,6 +173,7 @@ int KCollision::Scatt()
     break;
   case _SCATT_DUMP:
     NumOfParticles = ScattDumpCore();
+    CheckNan();
     m_DumpFlag = 1;
     break;
   case _RECOIL:
@@ -263,6 +264,7 @@ int KCollision::ScattDumpCore()
   KParticle Part3, Part4; 
   // preparation for calculation
   K3Vector P3_CM(1., 0., 0.);
+  K3Vector BeamDir(1., 0., 0.);
   double delta = m_Theta3CM[0][1] - m_Theta3CM[0][0];
   P3_CM.RotateZ(KUtil::DegToRad(m_Theta3CM[0][0] - delta));
   double gamma = KUtil::BetaToGamma(Beta_CM);
@@ -280,9 +282,10 @@ int KCollision::ScattDumpCore()
     Part3.Boost(-Beta_CM); // into lab frame
     p3 = Part3.P().P().Norm();    
     m_E3[0].push_back(Part3.E());
-    m_T3[0].push_back(Part3.T());    
+    m_T3[0].push_back(Part3.T());
     ThetaLab = asin(sqrt(pow(m_E3CM, 2) - pow(m_M3, 2))/sqrt(pow(Part3.E(), 2) - pow(m_M3, 2))
 		    * sin(KUtil::DegToRad(*it)));
+    if((Part3.P().P())*BeamDir < 0) ThetaLab = M_PI -ThetaLab;
     m_Theta3.push_back(KUtil::RadToDeg(ThetaLab));
 
     // convert factor from cs in lab to in cm
@@ -297,13 +300,10 @@ int KCollision::ScattDumpCore()
     Part4.Boost(-Beta_CM);
     m_E4[0].push_back(Part4.E());
     m_T4[0].push_back(Part4.T());    
-    if(*it < KUtil::EPSILON){
-      m_Theta4[0].push_back(90.);
-    }else{
-      ThetaLab = asin(sqrt(pow(m_E4CM, 2) - pow(m_M4, 2))/sqrt(pow(Part4.E(), 2.)-pow(m_M4,2.))
-		      * sin(KUtil::DegToRad(180. - *it)));    
-      m_Theta4[0].push_back(KUtil::RadToDeg(ThetaLab));
-    }
+    ThetaLab = asin(sqrt(pow(m_E4CM, 2) - pow(m_M4, 2))/sqrt(pow(Part4.E(), 2.)-pow(m_M4,2.))
+		    * sin(KUtil::DegToRad(180. - *it)));
+    if(isnan(ThetaLab)) ThetaLab = M_PI/2.;
+    m_Theta4[0].push_back(KUtil::RadToDeg(ThetaLab));
   }
   return 0;
 }
@@ -474,4 +474,19 @@ void KCollision::Show()
 	      << " " << GetT4(iParticle) << " " <<  GetTheta4(iParticle) << " " <<  GetTheta4CM(iParticle)
 	      << " " << GetFac(iParticle) << std::endl;
   }
+}
+
+void KCollision::CheckNan(){
+  for(std::size_t idx = 0; idx != m_Theta3.size(); ++idx){
+    if(isnan(m_Theta3[idx])){
+      m_Theta3.erase(m_Theta3.begin() + idx); m_Theta3CM[0].erase(m_Theta3CM[0].begin() + idx);
+      m_Theta4CM[0].erase(m_Theta4CM[0].begin() + idx);
+      m_Theta4[0].erase(m_Theta4[0].begin() + idx);m_E3[0].erase(m_E3[0].begin() + idx);
+      m_E4[0].erase(m_E4[0].begin() + idx);
+      m_T3[0].erase(m_T3[0].begin() + idx);m_T4[0].erase(m_T4[0].begin() + idx);
+      m_LabToCM[0].erase(m_LabToCM[0].begin() + idx);
+      break;
+    }
+  }
+  return ;
 }

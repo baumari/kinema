@@ -29,6 +29,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_constraint = "";
   m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);
 }
@@ -43,6 +44,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_constraint = "";  
   m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);  
 }
@@ -57,6 +59,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
   m_OptWArg.m_Short = ShortOpt;
   m_OptWArg.m_val = ss.str();
   m_OptWArg.m_flag = false;
+  m_OptWArg.m_constraint = "";  
   m_OptWArg.m_Description = Description;
   m_OptListWithArg.push_back(m_OptWArg);  
 }
@@ -279,6 +282,17 @@ void KOptions::Description(){
     // print description
     std::cout << it->m_Description << std::endl;
   }
+  
+  return ;
+}
+
+void KOptions::Constraint(std::string OptName, std::string sConstraint){
+  if(Find(m_OptListWithArg, OptName) == m_OptListWithArg.end()){
+    fprintf(stderr, "No such option (%s)!!\n", OptName.c_str());
+    std::exit(EXIT_FAILURE);
+  }
+  std::vector<_OptWArg>::iterator it = Find(m_OptListWithArg, OptName);
+  it->m_constraint = sConstraint;
   
   return ;
 }

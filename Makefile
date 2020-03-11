@@ -13,8 +13,8 @@ LIB = $(LIBDIR)/libkinema.so
 #LIB = 
 SUFFIX = cxx
 
-#CXX = `root-config --cxx`
-CXX = g++
+CXX = `root-config --cxx`
+#CXX = g++
 #CXX = clang++
 
 #CC =
@@ -22,15 +22,15 @@ CXX = g++
 # You should edit above depending on your environment.
 ######################################################
 
-ifeq ($(CXX),root-config --cxx)
-	ROOTLIBS = 'root-config --libs'
+ifeq ($(CXX),`root-config --cxx`)
+	ROOTLIBS = `root-config --libs`
 	CXXFLAGS = `root-config --cflags` \
-	-O3 -W -Wall -Wextra -Wno-long-long \
+	-O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \
 	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP
 #-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP -std=c++11
 	LDFLAGS = `root-config --glibs` -lm
 else
-	CXXFLAGS = -O3 -W -Wall -Wextra -Wno-long-long \
+	CXXFLAGS = -O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \
 	-fno-common -I$(INCDIR) -fPIC -MMD -MP	
 #-fno-common -I$(INCDIR) -fPIC -MMD -MP -std=c++11
 	LDFLAGS = -lm	

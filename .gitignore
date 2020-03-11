@@ -2,3 +2,4 @@ src/obj/
 lib/
 bin/
 test/
+Makefile
