@@ -10,7 +10,7 @@ int main(){
   col.SetScattAngle(0.0);
   int NumOfScatt = col.Scatt();
   for(int i = 0; i != NumOfScatt; ++i){
-    std::cout << col.GetT3(i) << " " << col.GetT4(i) << std::endl;
+    std::cout << col.GetT3() << " " << col.GetT4(i) << std::endl;
   }
   return 0;
 }

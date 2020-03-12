@@ -124,10 +124,10 @@ int main(int argc, char* argv[]){
     TCanvas *c = new TCanvas();
     TVirtualPad *pad = c->cd();
     double xmin, xmax, ymin, ymax;
-    xmin = *std::min_element(vx.begin(), vx.end())-0.01*(*std::min_element(vx.begin(), vx.end()));
-    xmax = *std::max_element(vx.begin(), vx.end())+0.01*(*std::max_element(vx.begin(), vx.end()));
-    ymin = *std::min_element(vy.begin(), vy.end())-0.01*(*std::min_element(vy.begin(), vy.end()));
-    ymax = *std::max_element(vy.begin(), vy.end())+0.01*(*std::max_element(vy.begin(), vy.end()));    
+    xmin = *std::min_element(vx.begin(), vx.end())-1. < 0 ? 0 : *std::min_element(vx.begin(), vx.end())-1.;
+    xmax = *std::max_element(vx.begin(), vx.end())+1.;
+    ymin = *std::min_element(vy.begin(), vy.end())-1. < 0 ? 0 : *std::min_element(vy.begin(), vy.end())-1.;
+    ymax = *std::max_element(vy.begin(), vy.end())+1.;
     TH1F *frame = pad->DrawFrame(xmin, ymin, xmax, ymax);
     frame->GetXaxis()->SetTitle(sGraphMode[0].c_str());
     frame->GetYaxis()->SetTitle(sGraphMode[1].c_str());    
@@ -136,6 +136,10 @@ int main(int argc, char* argv[]){
     g->SetMarkerSize(1);
     g->Draw("l");
     c->Update();
+    std::cout << "The maximum " << sGraphMode[0] << " is " << *std::max_element(vx.begin(), vx.end())
+	      << ", the minimum is " << *std::min_element(vx.begin(), vx.end()) << std::endl;
+    std::cout << "The maximum " << sGraphMode[1] << " is " << *std::max_element(vy.begin(), vy.end())
+	      << ", the minimum is " << *std::min_element(vy.begin(), vy.end()) << std::endl;    
     app.Run();
   }
   col.SetScattAngle(0., 180., 0.1); // in CM frame
