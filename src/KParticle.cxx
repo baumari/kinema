@@ -322,6 +322,7 @@ void KParticle::Show()
 {
   printf("%lf: (%lf %lf %lf %lf)\n",
 	 m_mass, E(), X(), Y(), Z());
+  printf("Ex: %lf\n", Ex());
 }
 
 
