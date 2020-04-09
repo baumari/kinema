@@ -83,8 +83,8 @@ public:
   inline double GetTheta4(int iParticle = 0){return m_Theta4[iParticle].back();}
   inline std::vector<double> GetTheta4Vec(int iParticle = 0){return m_Theta4[iParticle];}
   inline std::vector<double> GetTheta3Vec(){return m_Theta3;}
-  inline double GetFac(int iParticle = 0){return m_LabToCM[iParticle].back();}
-  inline std::vector<double> GetFacVec(int iParticle = 0){return m_LabToCM[iParticle];}  
+  inline double GetGfactor(int iParticle = 0){return m_LabToCM[iParticle].back();}
+  inline std::vector<double> GetGfacVec(int iParticle = 0){return m_LabToCM[iParticle];}  
   void Show();
   int GetParticleNum();
   inline KParticle GetP3(){return m_Finp3;}  
