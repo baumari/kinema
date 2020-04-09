@@ -472,7 +472,7 @@ void KCollision::Show()
   for(int iParticle = 0; iParticle != GetParticleNum(); ++iParticle){
     std::cout << GetT3(iParticle) << " " <<  m_Theta3.back() << " " <<  GetTheta3CM(iParticle)
 	      << " " << GetT4(iParticle) << " " <<  GetTheta4(iParticle) << " " <<  GetTheta4CM(iParticle)
-	      << " " << GetFac(iParticle) << std::endl;
+	      << " " << GetGfactor(iParticle) << std::endl;
   }
 }
 
