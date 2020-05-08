@@ -4,6 +4,9 @@
 #include <KUtil.hh>
 #include <cstdlib>
 #include <stdarg.h>
+#include <cctype>
+#include <string>
+#include <algorithm>
 
 namespace KUtil {
   void Normalize(double norm,
@@ -52,5 +55,18 @@ namespace KUtil {
       return EXIT_FAILURE;
     }
     return sqrt(1.-1./pow(gamma,2));
+  }
+  
+  std::string str_tolower(std::string s){
+    std::transform(s.begin(), s.end(), s.begin(),
+		   [](unsigned char c){return std::tolower(c);}
+		   );
+    return s;
+  }
+  std::string str_toupper(std::string s){
+    std::transform(s.begin(), s.end(), s.begin(),
+		   [](unsigned char c){return std::toupper(c);}
+		   );
+    return s;
   }
 }

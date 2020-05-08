@@ -13,7 +13,7 @@ double KParticle::GetMass(std::string m_name)
   double mass=0;
   int f_find=0;
   for(unsigned int i=0;i<sizeof(ParticleData)/sizeof(_ParticleData);i++){
-    if(ParticleData[i].name==m_name){
+    if(ParticleData[i].name==KUtil::str_tolower(m_name)){
       mass=ParticleData[i].massex+(double)ParticleData[i].a*AMU;
       f_find++;
       break;

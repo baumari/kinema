@@ -4,6 +4,7 @@
 #include <K3Vector.hh>
 #include <limits>
 #include <cmath>
+#include <string>
 
 #define SIZEOF(ARRAY) sizeof(ARRAY)/sizeof((ARRAY)[0])
 namespace KUtil {
@@ -21,6 +22,8 @@ namespace KUtil {
   double GammaToBeta(double gamma);
   inline double RadToDeg(double radian){return 180./M_PI*radian;}
   inline double DegToRad(double degree){return M_PI/180.*degree;}
+  std::string str_tolower(std::string s);
+  std::string str_toupper(std::string s);  
 }
 
 
