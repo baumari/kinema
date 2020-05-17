@@ -11,6 +11,9 @@ private:
 public:
   KTF1Spline(const char *name, double(*func)(double *, double *), KTheodata &Theo, bool normalization = false);
   ~KTF1Spline();
+
+public:
+  TF1* Getf();
 };
 
 #endif

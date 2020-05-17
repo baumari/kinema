@@ -13,3 +13,7 @@ KTF1Spline::KTF1Spline(const char *name, double(*func)(double *, double *), KThe
 }
 
 KTF1Spline::~KTF1Spline(){delete f;}
+
+TF1* KTF1Spline::Getf(){
+  return f;
+}
