@@ -7,6 +7,8 @@
 #include <cctype>
 #include <string>
 #include <algorithm>
+#include <vector>
+#include <TSpline.h>
 
 namespace KUtil {
   void Normalize(double norm,
@@ -68,5 +70,17 @@ namespace KUtil {
 		   [](unsigned char c){return std::toupper(c);}
 		   );
     return s;
+  }  
+  double spline(double *x, double *par){
+    double xx = x[0];
+    int nData = par[0];
+    std::vector<double> xn, yn;
+    xn.resize(nData); yn.resize(nData);
+    for(int idx = 0; idx != nData; ++idx){
+      xn[idx] = par[idx+1];
+      yn[idx] = par[idx+1+nData];
+    }
+    TSpline3 sp3("sp3", &xn[0], &yn[0], nData);
+    return sp3.Eval(xx)*par[2*nData+1];
   }
 }
