@@ -276,7 +276,7 @@ SetEnergyDirection(double energy, K3Vector dir)
 
 KParticle& KParticle::operator=(const KParticle& rhs)
 {
-  m_name = rhs.Name();
+  m_name = rhs.GetName();
   m_mass = rhs.Mass();
   m_errno = rhs.ErrorNum();
   m_p = rhs.P();

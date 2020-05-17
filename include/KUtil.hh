@@ -12,6 +12,9 @@ namespace KUtil {
   const double LOOSE_EPSILON = 1e-5;
   const double MAX = std::numeric_limits<double>::max();
   const double LOOSE_MAX = 1e5;
+  const double C = 299792458; // m/s
+  const double HBAR = 6.582119569e-16;
+  const double CHBAR = C*HBAR*1e9;
 }
 namespace KUtil {
   void Normalize(double norm, double& x, double& y, double& z);

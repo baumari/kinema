@@ -9,7 +9,7 @@
 static const int BUFF_L = 256;
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   std::string Description){
+		   std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWOArg m_OptWOArg;
   m_OptWOArg.m_Long = LongOpt;
@@ -20,7 +20,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   int OptVal, std::string Description){
+		   int OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -35,7 +35,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   double OptVal, std::string Description){
+		   double OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -50,7 +50,7 @@ void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   std::string OptVal, std::string Description){
+		   std::string OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   _OptWArg m_OptWArg;  
   std::stringstream ss;
@@ -259,27 +259,21 @@ void KOptions::Description(){
   std::cout << "Options.." << std::endl;
   for(std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
       it != m_OptListWithoutArg.end(); ++it){
-    // print short option
     if(it->m_Short.size() == 0) std::cout << "    ";
     else std::cout <<  "-" << it->m_Short << ", ";
-    // print long option
     Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
     if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
     else std::cout << "--" << it->m_Long << Blank << ": ";
-    // print description
     std::cout << it->m_Description << std::endl;
   }
   /* print loutine (with arguments)*/  
   for(std::vector<_OptWArg>::iterator it = m_OptListWithArg.begin();
       it != m_OptListWithArg.end(); ++it){
-    // print short option
     if(it->m_Short.size() == 0) std::cout << "    ";
     else std::cout <<  "-" << it->m_Short << ", ";
-    // print long option
     Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
     if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
     else std::cout << "--" << it->m_Long << Blank << ": ";
-    // print description
     std::cout << it->m_Description << std::endl;
   }
   

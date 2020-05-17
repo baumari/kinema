@@ -96,7 +96,7 @@ public:
   inline double GetMass() const {return m_mass;} // stop mass
   inline double GetEx() const {return m_ex;}
   inline double Ex() const {return m_ex;}
-  inline std::string Name() const {return m_name;}
+  inline std::string GetName() const {return m_name;}
   /* Function SetDirection can define only direction of particle. */
   /* The amaount of momentum is defined by kinetic energy */
   void SetDirection(double dirx, double diry, double dirz);

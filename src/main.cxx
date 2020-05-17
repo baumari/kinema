@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
   KParticle p2(argv[opt.Lead() + 1]);
   KParticle p3(argv[opt.Lead() + 2], Erec);
   KParticle p4(argv[opt.Lead() + 3]);
-  p3.SetEx(Ex);
+  p4.SetEx(Ex);
 
   KCollision col(p1, p2, p3, p4);
 
@@ -130,8 +130,10 @@ int main(int argc, char* argv[]){
     ymax = *std::max_element(vy.begin(), vy.end())+1.;
     TH1F *frame = pad->DrawFrame(xmin, ymin, xmax, ymax);
     frame->GetXaxis()->SetTitle(sGraphMode[0].c_str());
-    frame->GetYaxis()->SetTitle(sGraphMode[1].c_str());    
-    TGraph *g = new TGraph(vx.size(), &vx[0], &vy[0]);    
+    frame->GetYaxis()->SetTitle(sGraphMode[1].c_str()); 
+    frame->SetTitle(Form("%s + %s -> %s + %s @ %.1lf MeV, Ex = %.1lf MeV",p1.GetName().c_str(), p2.GetName().c_str(), p3.GetName().c_str(),
+		     p4.GetName().c_str(), Ebeam, Ex ));   
+    TGraph *g = new TGraph(vx.size(), &vx[0], &vy[0]);
     g->SetMarkerStyle(8);
     g->SetMarkerSize(1);
     g->Draw("l");

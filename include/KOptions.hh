@@ -57,14 +57,14 @@ public:
 
 public:
   void Add(std::string LongOpt, std::string ShortOpt,
-	   std::string Description);
+	   std::string Description, int nVal = 1);
   // OptVal is set as a default value
   void Add(std::string LongOpt, std::string ShortOpt, int OptVal,
-	   std::string Description);
+	   std::string Description, int nVal = 1);
   void Add(std::string LongOpt, std::string ShortOpt, double OptVal,
-	   std::string Description);
+	   std::string Description, int nVal = 1);
   void Add(std::string LongOpt, std::string ShortOpt,
-	   std::string OptVal, std::string Description);
+	   std::string OptVal, std::string Description, int nVal = 1);
   std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);

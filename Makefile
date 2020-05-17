@@ -4,13 +4,16 @@
 # Other file or directory are made automatically.
 
 INCDIR = $(CURDIR)/include
-LIBDIR = $(CURDIR)/lib
+INCDIR_EXTRA1 = 
+INCDIR_EXTRA2 = 
+OUTLIBDIR = $(CURDIR)/lib
+INCLIBDIR = 
 SRCDIR = $(CURDIR)/src
 OBJDIR = $(SRCDIR)/obj
 BINDIR = $(CURDIR)/bin
-TARGET = $(BINDIR)/kinema 
-LIB = $(LIBDIR)/libkinema.so
-#LIB = 
+TARGET = $(BINDIR)/kinema
+LIB = $(OUTLIBDIR)/libkinema.so
+#LIB =
 SUFFIX = cxx
 
 CXX = `root-config --cxx`
@@ -26,14 +29,14 @@ ifeq ($(CXX),`root-config --cxx`)
 	ROOTLIBS = `root-config --libs`
 	CXXFLAGS = `root-config --cflags` \
 	-O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \
-	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP
-#-fno-common -I$(INCDIR) -I$(ROOTLIBS) -fPIC -MMD -MP -std=c++11
+	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -I$(INCDIR_EXTRA1) -I$(INCDIR_EXTRA2) -fPIC -MMD -MP
 	LDFLAGS = `root-config --glibs` -lm
+#	LDFLAGS = `root-config --glibs` -lm -lkinema 
 else
 	CXXFLAGS = -O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \
-	-fno-common -I$(INCDIR) -fPIC -MMD -MP	
-#-fno-common -I$(INCDIR) -fPIC -MMD -MP -std=c++11
-	LDFLAGS = -lm	
+	-fno-common -I$(INCDIR) -I$(INCDIR_EXTRA1) -I$(INCDIR_EXTRA2) -fPIC -MMD -MP
+	LDFLAGS = -lm
+#	LDFLAGS = -lm -lkinema
 endif
 
 SOURCES = $(wildcard $(SRCDIR)/*.$(SUFFIX))
@@ -52,14 +55,14 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.$(SUFFIX)
 
 $(LIB):
 	rm -f $(LIB)
-	-mkdir -p $(LIBDIR)
+	-mkdir -p $(OUTLIBDIR)
 	$(CXX) -shared $(OBJS) $(LDFLAGS) -o $(LIB)
 
 FORCE:
 	rm -f $(LIB)
 clean:
 	-rm -f $(OBJS) $(DEPS) $(TARGET) $(LIB)
-	-rm -rf $(BINDIR) $(OBJDIR) $(LIBDIR)
+	-rm -rf $(BINDIR) $(OBJDIR) $(OUTLIBDIR)
 
 ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
 -include $(DEPS)
