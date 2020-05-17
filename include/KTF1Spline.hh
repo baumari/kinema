@@ -9,7 +9,7 @@ private:
   TF1 *f;
 
 public:
-  KTF1Spline(const char *name, double(*func)(double *, double *), KTheodata &Theo);
+  KTF1Spline(const char *name, double(*func)(double *, double *), KTheodata &Theo, bool normalization = false);
   ~KTF1Spline();
 };
 
