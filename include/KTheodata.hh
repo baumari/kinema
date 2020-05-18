@@ -2,10 +2,11 @@
 #define _KTHEODATA_HH
 
 #include <vector>
+#include <fstream>
 
 class KTheodata{
 private:
-
+  std::ifstream ifs;
 public:
   typedef double (KTheodata::*SPLINE)(double *, double *);    
   std::vector<double> fx, fy;
@@ -15,6 +16,8 @@ public:
 
 public:
   KTheodata();
+  KTheodata(std::string& filename);
+  KTheodata(char *filename);    
   ~KTheodata();
   void Print();
   void PrintCorrect();

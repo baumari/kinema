@@ -2,12 +2,48 @@
 #include <TSpline.h>
 #include <stdio.h>
 #include <algorithm>
+#include <sstream>
+#include <cstdlib>
+#include <iostream>
 
 KTheodata::KTheodata() :
   fspline(nullptr) {}  
 
+KTheodata::KTheodata(std::string& filename) :
+  fspline(nullptr){
+  ifs.open(filename.c_str());
+  if(ifs.fail()){
+    std::cout << "Fail to open " << filename << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  std::string sLine;
+  double x, y;
+  while(std::getline(ifs, sLine)){
+    std::stringstream ssLine(sLine);
+    ssLine >> x >> y;
+    fx.push_back(x); fy.push_back(y);
+  }
+}
+
+KTheodata::KTheodata(char *filename) :
+  fspline(nullptr){
+  ifs.open(filename);
+  if(ifs.fail()){
+    std::cout << "Fail to open " << filename << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  std::string sLine;
+  double x, y;
+  while(std::getline(ifs, sLine)){
+    std::stringstream ssLine(sLine);
+    ssLine >> x >> y;
+    fx.push_back(x); fy.push_back(y);
+  }
+}
+
 KTheodata::~KTheodata(){
   //  if(fspline) delete fspline;
+  ifs.close();
 }
 
 void KTheodata::Print(){

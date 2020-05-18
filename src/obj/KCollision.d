@@ -1,23 +1,23 @@
-/Users/kento/work/physics/kinema/src/obj/KCollision.o: \
-  /Users/kento/work/physics/kinema/src/KCollision.cxx \
-  /Users/kento/work/physics/kinema/include/KCollision.hh \
-  /Users/kento/work/physics/kinema/include/KParticle.hh \
-  /Users/kento/work/physics/kinema/include/K4Momentum.hh \
-  /Users/kento/work/physics/kinema/include/K3Vector.hh \
-  /Users/kento/work/physics/kinema/include/KUtil.hh \
-  /Users/kento/work/physics/kinema/include/KFrame.hh \
-  /Users/kento/work/physics/kinema/include/KError.hh
+/home/kento/simulation/kinema/src/obj/KCollision.o: \
+ /home/kento/simulation/kinema/src/KCollision.cxx \
+ /home/kento/simulation/kinema/include/KCollision.hh \
+ /home/kento/simulation/kinema/include/KParticle.hh \
+ /home/kento/simulation/kinema/include/K4Momentum.hh \
+ /home/kento/simulation/kinema/include/K3Vector.hh \
+ /home/kento/simulation/kinema/include/KUtil.hh \
+ /home/kento/simulation/kinema/include/KFrame.hh \
+ /home/kento/simulation/kinema/include/KError.hh
 
-/Users/kento/work/physics/kinema/include/KCollision.hh:
+/home/kento/simulation/kinema/include/KCollision.hh:
 
-/Users/kento/work/physics/kinema/include/KParticle.hh:
+/home/kento/simulation/kinema/include/KParticle.hh:
 
-/Users/kento/work/physics/kinema/include/K4Momentum.hh:
+/home/kento/simulation/kinema/include/K4Momentum.hh:
 
-/Users/kento/work/physics/kinema/include/K3Vector.hh:
+/home/kento/simulation/kinema/include/K3Vector.hh:
 
-/Users/kento/work/physics/kinema/include/KUtil.hh:
+/home/kento/simulation/kinema/include/KUtil.hh:
 
-/Users/kento/work/physics/kinema/include/KFrame.hh:
+/home/kento/simulation/kinema/include/KFrame.hh:
 
-/Users/kento/work/physics/kinema/include/KError.hh:
+/home/kento/simulation/kinema/include/KError.hh:

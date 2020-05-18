@@ -60,18 +60,18 @@ namespace KUtil {
   }
   
   std::string str_tolower(std::string s){
-    std::transform(s.begin(), s.end(), s.begin(),
-		   [](unsigned char c){return std::tolower(c);}
-		   );
+//    std::transform(s.begin(), s.end(), s.begin(),
+//		   [](unsigned char c){return std::tolower(c);}
+//		   );
     return s;
   }
   std::string str_toupper(std::string s){
-    std::transform(s.begin(), s.end(), s.begin(),
-		   [](unsigned char c){return std::toupper(c);}
-		   );
+//    std::transform(s.begin(), s.end(), s.begin(),
+//		   [](unsigned char c){return std::toupper(c);}
+//		   );
     return s;
   }  
-  double spline(double *x, double *par){
+  double Spline(double *x, double *par){
     double xx = x[0];
     int nData = par[0];
     std::vector<double> xn, yn;
