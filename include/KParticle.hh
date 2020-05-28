@@ -1,5 +1,5 @@
-#ifndef _KPARTICLE_HH
-#define _KPARTICLE_HH
+#ifndef K_PARTICLE_HH
+#define K_PARTICLE_HH
 
 #include <K4Momentum.hh>
 #include <string>
@@ -42,6 +42,8 @@ const _ParticleData ParticleData[]={
   {"3he",14.93121,2,3},
   {"n",8.0713,0,1},
   {"16o",-4.7370, 8, 16},
+  {"14o",8.0077, 8, 14},
+  {"208pb",-21.7485, 82, 208},    
 };
 /************* table of particle **************/
 

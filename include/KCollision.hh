@@ -1,5 +1,5 @@
-#ifndef _KCOLLISION_HH
-#define _KCOLLISION_HH
+#ifndef K_COLLISION_HH
+#define K_COLLISION_HH
 
 #include <KParticle.hh>
 #include <K4Momentum.hh>

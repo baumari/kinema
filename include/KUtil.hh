@@ -1,5 +1,5 @@
-#ifndef _KUTIL_HH
-#define _KUTIL_HH
+#ifndef K_UTIL_HH
+#define K_UTIL_HH
 
 #include <K3Vector.hh>
 #include <limits>
@@ -13,8 +13,9 @@ namespace KUtil {
   const double MAX = std::numeric_limits<double>::max();
   const double LOOSE_MAX = 1e5;
   const double C = 299792458; // m/s
-  const double HBAR = 6.582119569e-16;
-  const double CHBAR = C*HBAR*1e9;
+  const double HBAR = 6.582119569e-16; //J*s
+  const double HBARC = C*HBAR*1e9;
+  const double NA = 6.022e23; //avogadro number  
 }
 namespace KUtil {
   void Normalize(double norm, double& x, double& y, double& z);

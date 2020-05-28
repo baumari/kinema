@@ -1,5 +1,5 @@
-#ifndef _KTF1SPLINE_HH
-#define _KTF1SPLINE_HH
+#ifndef K_TF1SPLINE_HH
+#define K_TF1SPLINE_HH
 
 #include <KTheodata.hh>
 #include <TF1.h>

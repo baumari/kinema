@@ -1,5 +1,5 @@
-#ifndef _KOPIONS_HH
-#define _KOPIONS_HH
+#ifndef K_OPIONS_HH
+#define K_OPIONS_HH
 
 #include <string>
 #include <vector>
@@ -20,15 +20,35 @@ private:
     bool m_flag;
     bool Find(const std::string&);
 
-    _OptBase(){}
-    ~_OptBase(){}
+  public:
+    _OptBase(std::string s, std::string l, std::string d) :
+      m_Short(s),
+      m_Long(l),
+      m_Description(d),
+      m_flag(false) {}
   };
-  class _OptWOArg : public _OptBase{};
+  class _OptWOArg : public _OptBase{
+  public:
+    _OptWOArg(std::string s, std::string l, std::string d) :
+      _OptBase(s, l, d) {}
+    ~_OptWOArg() {}
+  };
   class _OptWArg : public _OptBase{
   public:
-    // all option arguments are stored with type of std::string    
     std::string m_val;
     std::string m_constraint;
+    bool m_fString;
+    bool m_fInt;
+    bool m_fDouble;
+  public:
+    _OptWArg(std::string s, std::string l, std::string val, std::string d)
+      : _OptBase(s, l, d),
+	m_val(val),
+	m_constraint(""),	
+	m_fString(false),
+	m_fInt(false),
+	m_fDouble(false) {}
+    ~_OptWArg() {}
   };
 
 private:
@@ -57,7 +77,7 @@ public:
 
 public:
   void Add(std::string LongOpt, std::string ShortOpt,
-	   std::string Description, int nVal = 1);
+	   std::string Description);
   // OptVal is set as a default value
   void Add(std::string LongOpt, std::string ShortOpt, int OptVal,
 	   std::string Description, int nVal = 1);

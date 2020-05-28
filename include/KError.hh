@@ -1,5 +1,5 @@
-#ifndef _KERROR_HH
-#define _KERROR_HH
+#ifndef K_ERROR_HH
+#define K_ERROR_HH
 
 typedef struct {
   enum Error_Code

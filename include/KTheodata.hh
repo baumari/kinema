@@ -1,5 +1,5 @@
-#ifndef _KTHEODATA_HH
-#define _KTHEODATA_HH
+#ifndef K_THEODATA_HH
+#define K_THEODATA_HH
 
 #include <vector>
 #include <fstream>

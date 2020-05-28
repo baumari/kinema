@@ -1,5 +1,5 @@
-#ifndef _KFRAME_HH
-#define _KFRAME_HH
+#ifndef K_FRAME_HH
+#define K_FRAME_HH
 
 #include <KParticle.hh>
 #include <K3Vector.hh>

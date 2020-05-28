@@ -1,5 +1,5 @@
-#ifndef _K4MOMENTUM_HH
-#define _K4MOMENTUM_HH
+#ifndef K_4MOMENTUM_HH
+#define K_4MOMENTUM_HH
 
 #include <K3Vector.hh>
 

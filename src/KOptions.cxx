@@ -9,58 +9,39 @@
 static const int BUFF_L = 256;
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
-		   std::string Description, int nVal){
+		   std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
-  _OptWOArg m_OptWOArg;
-  m_OptWOArg.m_Long = LongOpt;
-  m_OptWOArg.m_Short = ShortOpt;
-  m_OptWOArg.m_flag = false;
-  m_OptWOArg.m_Description = Description;
+  _OptWOArg m_OptWOArg(LongOpt, ShortOpt, Description);
   m_OptListWithoutArg.push_back(m_OptWOArg);
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   int OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
-  _OptWArg m_OptWArg;  
   std::stringstream ss;
   ss << OptVal;
-  m_OptWArg.m_Long = LongOpt;
-  m_OptWArg.m_Short = ShortOpt;
-  m_OptWArg.m_val = ss.str();
-  m_OptWArg.m_flag = false;
-  m_OptWArg.m_constraint = "";
-  m_OptWArg.m_Description = Description;
+  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  m_OptWArg.m_fInt = true;
   m_OptListWithArg.push_back(m_OptWArg);
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   double OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
-  _OptWArg m_OptWArg;  
   std::stringstream ss;
-  ss << OptVal;
-  m_OptWArg.m_Long = LongOpt;
-  m_OptWArg.m_Short = ShortOpt;
-  m_OptWArg.m_val = ss.str();
-  m_OptWArg.m_flag = false;
-  m_OptWArg.m_constraint = "";  
-  m_OptWArg.m_Description = Description;
+  ss << OptVal;  
+  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  m_OptWArg.m_fDouble = true;  
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 
 void KOptions::Add(std::string LongOpt, std::string ShortOpt,
 		   std::string OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
-  _OptWArg m_OptWArg;  
   std::stringstream ss;
   ss << OptVal;
-  m_OptWArg.m_Long = LongOpt;
-  m_OptWArg.m_Short = ShortOpt;
-  m_OptWArg.m_val = ss.str();
-  m_OptWArg.m_flag = false;
-  m_OptWArg.m_constraint = "";  
-  m_OptWArg.m_Description = Description;
+  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  m_OptWArg.m_fString = true;    
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 

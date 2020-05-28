@@ -1,5 +1,5 @@
-#ifndef _KEXPDATA_HH
-#define _KEXPDATA_HH
+#ifndef K_EXPDATA_HH
+#define K_EXPDATA_HH
 
 #include <vector>
 #include <fstream>

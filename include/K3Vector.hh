@@ -1,5 +1,5 @@
-#ifndef _K3VECTOR_HH
-#define _K3VECTOR_HH
+#ifndef K_3VECTOR_HH
+#define K_3VECTOR_HH
 
 class K3Vector
 {
