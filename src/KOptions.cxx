@@ -8,39 +8,39 @@
 
 static const int BUFF_L = 256;
 
-void KOptions::Add(std::string LongOpt, std::string ShortOpt,
+void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   std::string Description){
   CheckOptInput(LongOpt, ShortOpt);
-  _OptWOArg m_OptWOArg(LongOpt, ShortOpt, Description);
+  _OptWOArg m_OptWOArg(ShortOpt, LongOpt, Description);
   m_OptListWithoutArg.push_back(m_OptWOArg);
 }
 
-void KOptions::Add(std::string LongOpt, std::string ShortOpt,
+void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   int OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   std::stringstream ss;
   ss << OptVal;
-  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
   m_OptWArg.m_fInt = true;
   m_OptListWithArg.push_back(m_OptWArg);
 }
 
-void KOptions::Add(std::string LongOpt, std::string ShortOpt,
+void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   double OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   std::stringstream ss;
   ss << OptVal;  
-  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
   m_OptWArg.m_fDouble = true;  
   m_OptListWithArg.push_back(m_OptWArg);  
 }
 
-void KOptions::Add(std::string LongOpt, std::string ShortOpt,
+void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   std::string OptVal, std::string Description, int nVal){
   CheckOptInput(LongOpt, ShortOpt);
   std::stringstream ss;
   ss << OptVal;
-  _OptWArg m_OptWArg(LongOpt, ShortOpt, ss.str(), Description);
+  _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
   m_OptWArg.m_fString = true;    
   m_OptListWithArg.push_back(m_OptWArg);  
 }
