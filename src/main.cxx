@@ -61,13 +61,13 @@ int main(int argc, char* argv[]){
     Usage();
     std::exit(EXIT_FAILURE);    
   }
-  double Ebeam = atof(argv[opt.Lead() + 4]);
-  double Ex = atof(argv[opt.Lead() + 5]);
+  double Ebeam = atof(argv[opt.LeadArg() + 4]);
+  double Ex = atof(argv[opt.LeadArg() + 5]);
   double Erec = atof(opt.Get("recoil").c_str());
-  KParticle p1(argv[opt.Lead()], Ebeam);
-  KParticle p2(argv[opt.Lead() + 1]);
-  KParticle p3(argv[opt.Lead() + 2], Erec);
-  KParticle p4(argv[opt.Lead() + 3]);
+  KParticle p1(argv[opt.LeadArg()], Ebeam);
+  KParticle p2(argv[opt.LeadArg() + 1]);
+  KParticle p3(argv[opt.LeadArg() + 2], Erec);
+  KParticle p4(argv[opt.LeadArg() + 3]);
   p4.SetEx(Ex);
 
   KCollision col(p1, p2, p3, p4);

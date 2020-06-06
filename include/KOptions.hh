@@ -59,8 +59,8 @@ private:
 private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
-  int LeadArg; // index of the first argument except for optarg
-  int nArg; // Number of arguments except for option 
+  int m_LeadArg; // index of the first argument except for optarg
+  int m_nArg; // Number of arguments except for option 
 
 private:
   bool IsLongOpt(char *argv);
@@ -79,7 +79,7 @@ private:
   std::size_t GetMaxOptLength();
 
 public:
-  KOptions() : LeadArg(1), nArg(0) {} 
+  KOptions() : m_LeadArg(1), m_nArg(0) {} 
   ~KOptions() {}
 
 public:
@@ -95,7 +95,8 @@ public:
   std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);
-  inline int Lead() {return LeadArg;}
+  inline int LeadArg() {return m_LeadArg;}
+  inline int nArg() {return m_nArg;}
   void Description();
   // add constraint to arguments on each option
   void Constraint(std::string OptName, std::string Condition);

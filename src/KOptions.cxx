@@ -79,17 +79,17 @@ bool KOptions::Check(int argc, char* argv[]){
   std::string opt;
   for(int iarg=1; iarg<argc; iarg++){
     if(!IsOpt(argv[iarg])){
-      nArg++;
+      m_nArg++;
       continue;
     }
     if(IsLongOpt(argv[iarg])){
       opt = argv[iarg];
       opt = opt.substr(2);
-      if(iarg <= LeadArg) LeadArg++;
+      if(iarg <= m_LeadArg) m_LeadArg++;
     }else if(IsShortOpt(argv[iarg])){
       opt = argv[iarg];
       opt = opt.substr(1);
-      LeadArg++;      
+      m_LeadArg++;      
     }
     if(opt.size() == 0){
       fprintf(stderr, "null-option is improbable!!\n");
@@ -101,7 +101,8 @@ bool KOptions::Check(int argc, char* argv[]){
 	if(iarg+1 < argc){
 	  if(!IsOpt(argv[iarg+1])){
 	    it->m_val = argv[iarg+1];
-	   if(iarg <= LeadArg) LeadArg++;
+	    m_nArg--;
+	   if(iarg <= m_LeadArg) m_LeadArg++;
 	  }else{
 	    fprintf(stderr, "%s should be an argument for %s!\n\n",
 		    argv[iarg+1], argv[iarg]);
