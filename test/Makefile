@@ -59,7 +59,7 @@ FORCE:
 #	rm -f $(LIB)
 clean:
 	-rm -f $(OBJS) $(DEPS) $(TARGET) $(LIB)
-	-rm -rf $(BINDIR) $(OBJDIR) $(LIBDIR)
+	-rm -rf $(BINDIR) $(OBJDIR) 
 
 ifneq ($(filter clean,$(MAKECMDGOALS)),clean)
 -include $(DEPS)

@@ -49,12 +49,18 @@ private:
 	m_fInt(false),
 	m_fDouble(false) {}
     ~_OptWArg() {}
+
+  public:
+    // return length of val type ex) string=6, int=3 etc..    
+    std::size_t TypeLength();
+    std::string Type(); // return "int" or "string" or "double"
   };
 
 private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
   int LeadArg; // index of the first argument except for optarg
+  int nArg; // Number of arguments except for option 
 
 private:
   bool IsLongOpt(char *argv);
@@ -62,28 +68,29 @@ private:
   bool IsOpt(char *argv);
   bool IsLong(const std::string& OptName);
   bool IsShort(const std::string& OptName);
-  void CheckOptInput(const std::string& LongOpt,
-		     const std::string& ShortOpt);
+  void CheckOptInput(const std::string& ShortOpt,
+		     const std::string& LongOpt);
   std::vector<_OptWOArg>::iterator Find(std::vector<_OptWOArg>&,
 					const std::string &);
   std::vector<_OptWArg>::iterator Find(std::vector<_OptWArg>&,
 				       const std::string &);
-  std::size_t GetMaxOptLength(std::vector<_OptWOArg>&);
-  std::size_t GetMaxOptLength(std::vector<_OptWArg>&);
+  std::size_t GetMaxOptLength(std::vector<_OptWOArg>&); // obsolete
+  std::size_t GetMaxOptLength(std::vector<_OptWArg>&); // obsolete
+  std::size_t GetMaxOptLength();
 
 public:
-  KOptions() : LeadArg(1) {} 
+  KOptions() : LeadArg(1), nArg(0) {} 
   ~KOptions() {}
 
 public:
-  void Add(std::string LongOpt, std::string ShortOpt,
+  void Add(std::string ShortOpt, std::string LongOpt,
 	   std::string Description);
   // OptVal is set as a default value
-  void Add(std::string LongOpt, std::string ShortOpt, int OptVal,
+  void Add(std::string ShortOpt, std::string LongOpt, int OptVal,
 	   std::string Description, int nVal = 1);
-  void Add(std::string LongOpt, std::string ShortOpt, double OptVal,
+  void Add(std::string ShortOpt, std::string LongOpt, double OptVal,
 	   std::string Description, int nVal = 1);
-  void Add(std::string LongOpt, std::string ShortOpt,
+  void Add(std::string ShortOpt, std::string LongOpt,
 	   std::string OptVal, std::string Description, int nVal = 1);
   std::string Get(std::string OptName);
   bool Check(int argc, char* argv[]);

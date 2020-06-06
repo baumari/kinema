@@ -5,19 +5,20 @@
 #include <sstream>
 #include <cstring>
 #include <iostream>
+#include <iomanip>
 
 static const int BUFF_L = 256;
 
 void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   std::string Description){
-  CheckOptInput(LongOpt, ShortOpt);
+  CheckOptInput(ShortOpt, LongOpt);
   _OptWOArg m_OptWOArg(ShortOpt, LongOpt, Description);
   m_OptListWithoutArg.push_back(m_OptWOArg);
 }
 
 void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   int OptVal, std::string Description, int nVal){
-  CheckOptInput(LongOpt, ShortOpt);
+  CheckOptInput(ShortOpt, LongOpt);
   std::stringstream ss;
   ss << OptVal;
   _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
@@ -27,7 +28,7 @@ void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 
 void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   double OptVal, std::string Description, int nVal){
-  CheckOptInput(LongOpt, ShortOpt);
+  CheckOptInput(ShortOpt, LongOpt);
   std::stringstream ss;
   ss << OptVal;  
   _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
@@ -37,7 +38,7 @@ void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 
 void KOptions::Add(std::string ShortOpt, std::string LongOpt,
 		   std::string OptVal, std::string Description, int nVal){
-  CheckOptInput(LongOpt, ShortOpt);
+  CheckOptInput(ShortOpt, LongOpt);
   std::stringstream ss;
   ss << OptVal;
   _OptWArg m_OptWArg(ShortOpt, LongOpt, ss.str(), Description);
@@ -77,7 +78,10 @@ bool KOptions::IsOpt(char *arg){
 bool KOptions::Check(int argc, char* argv[]){ 
   std::string opt;
   for(int iarg=1; iarg<argc; iarg++){
-    if(!IsOpt(argv[iarg])) continue;
+    if(!IsOpt(argv[iarg])){
+      nArg++;
+      continue;
+    }
     if(IsLongOpt(argv[iarg])){
       opt = argv[iarg];
       opt = opt.substr(2);
@@ -161,18 +165,24 @@ bool KOptions::_OptBase::Find(const std::string &OptName){
 }
 
 bool KOptions::IsLong(const std::string &OptName){
-  if(OptName.size() <= 1) return false;
+  if(OptName == "") return true;
+  else if(OptName.size() <= 1 ) return false;
   else return true;
 }
 
 bool KOptions::IsShort(const std::string &OptName){
-  if(OptName.size() <= 1) return true;
+  if(OptName == "") return true;
+  else if(OptName.size() <= 1) return true;
   else return false;
 }
 
-void KOptions::CheckOptInput(const std::string& LongOpt,
-			     const std::string& ShortOpt){
-  if(IsLong(LongOpt) && IsShort(ShortOpt));
+void KOptions::CheckOptInput(const std::string& ShortOpt,
+			     const std::string& LongOpt){
+  if(ShortOpt == "" && LongOpt == ""){
+    fprintf(stderr, "Either of long or short option should not be null!!\n");
+    std::exit(EXIT_FAILURE);
+  }
+  else if(IsLong(LongOpt) && IsShort(ShortOpt));
   else{
     fprintf(stderr, "Given option may be not properly assigned..\n");
     fprintf(stderr, "%s should be long option and %s should be short one!!\n",
@@ -194,6 +204,13 @@ std::string KOptions::Get(std::string OptName){
   }  
 }
 
+std::size_t KOptions::_OptWArg::TypeLength(){
+  if(m_fInt) return 5; // "int" + "[]" = 6
+  else if(m_fString) return 8;
+  else if(m_fDouble) return 8;
+  else return 0;
+}
+
 std::size_t KOptions::GetMaxOptLength(std::vector<_OptWOArg>& m_OptListWithoutArg){
   std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
   std::vector<_OptWOArg>::iterator it_end = m_OptListWithoutArg.end();
@@ -212,52 +229,97 @@ std::size_t KOptions::GetMaxOptLength(std::vector<_OptWArg>& m_OptListWithArg){
   std::size_t MaxLength = 0;
   std::size_t Eval;
   for(; it != it_end; ++it){
-    Eval = it->m_Long.size();
+    Eval = it->m_Long.size() + it->TypeLength();
     MaxLength = (MaxLength < Eval) ? Eval : MaxLength;
   }
   return MaxLength;
 }
 
+std::size_t KOptions::GetMaxOptLength(){
+  std::size_t MaxLength = 0;
+  std::size_t Eval;
+  for(auto x : m_OptListWithoutArg){
+    Eval = 0;
+    if(x.m_Short.size() != 0 && x.m_Long.size() != 0){
+      Eval += strlen("-") + x.m_Short.size() + strlen(", ")
+	+ strlen("--") + x.m_Long.size() + strlen(": ");
+    }else if(x.m_Short.size() == 0){
+      Eval += strlen("--") + x.m_Long.size() + strlen(": ");
+    }else if(x.m_Long.size() == 0){
+      Eval += strlen("-") + x.m_Short.size() + strlen(": ");
+    }
+    MaxLength = (MaxLength < Eval) ? Eval : MaxLength;
+  }
+  for(auto x : m_OptListWithArg){
+    Eval = 0;
+    if(x.m_Short.size() != 0 && x.m_Long.size() != 0){
+      Eval += strlen("-") + x.m_Short.size() + strlen(", ")
+	+ strlen("--") + x.m_Long.size() + strlen(":   ") + x.TypeLength();
+    }else if(x.m_Short.size() == 0){
+      Eval += strlen("--") + x.m_Long.size() + strlen(":   ")
+	+ x.TypeLength();
+    }else if(x.m_Long.size() == 0){
+      Eval += strlen("-") + x.m_Short.size() + strlen(":   ")
+	+ x.TypeLength();      
+    }
+    MaxLength = (MaxLength < Eval) ? Eval : MaxLength;    
+  }
+  return MaxLength;
+}
+
+std::string KOptions::_OptWArg::Type(){
+  if(m_fInt) return "[int]";
+  else if(m_fString) return "[string]";
+  else if(m_fDouble) return "[double]";
+  else return "";
+}
+
 // Print descriptions for registered options
 // Format -- Options..
-//        -- -h, --helpout: Show Help
-//        --     --hoge   : fugafuga
-//        -- -p           : piyo
+//        -- -h, --helpout [type of argument]: Show Help
+//        --     --hoge    [type of argument]: fugafuga
+//        -- -p            [type of argument]: piyo
 void KOptions::Description(){
   if(m_OptListWithoutArg.size() == 0 &&
      m_OptListWithArg.size() == 0){
     fprintf(stderr, "KOption::Description: No option registered!!!\n");
     std::exit(EXIT_FAILURE);
   }
-  /* get maximum option length */
-  std::size_t MaxOptLengthWOArg = GetMaxOptLength(m_OptListWithoutArg);
-  std::size_t MaxOptLengthWArg = GetMaxOptLength(m_OptListWithArg);
-  std::size_t MaxOptLength
-    = (MaxOptLengthWArg > MaxOptLengthWOArg) ? MaxOptLengthWArg : MaxOptLengthWOArg;
-  std::string Blank;
+  /* get maximum of (short+long) option length */
+  std::size_t MaxOptLength = GetMaxOptLength();
 
-  /* print loutine (without arguments)*/
+  /* print routine (without arguments)*/
   std::cout << "Options.." << std::endl;
-  for(std::vector<_OptWOArg>::iterator it = m_OptListWithoutArg.begin();
-      it != m_OptListWithoutArg.end(); ++it){
-    if(it->m_Short.size() == 0) std::cout << "    ";
-    else std::cout <<  "-" << it->m_Short << ", ";
-    Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
-    if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
-    else std::cout << "--" << it->m_Long << Blank << ": ";
-    std::cout << it->m_Description << std::endl;
+  for(auto x : m_OptListWithoutArg){
+    if(x.m_Short.size() == 0){
+      std::string s = "--" + x.m_Long + ": ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;
+    }else if(x.m_Long.size() == 0){
+      std::string s = "-" + x.m_Short + ": ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;      
+    }else{
+      std::string s = "-" + x.m_Short + ", --" + x.m_Long + ": ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;            
+    }
   }
-  /* print loutine (with arguments)*/  
-  for(std::vector<_OptWArg>::iterator it = m_OptListWithArg.begin();
-      it != m_OptListWithArg.end(); ++it){
-    if(it->m_Short.size() == 0) std::cout << "    ";
-    else std::cout <<  "-" << it->m_Short << ", ";
-    Blank.assign(MaxOptLength - it->m_Long.size(), ' ');
-    if(it->m_Long.size() == 0) std::cout << "  " << Blank << ": ";
-    else std::cout << "--" << it->m_Long << Blank << ": ";
-    std::cout << it->m_Description << std::endl;
-  }
-  
+  for(auto x : m_OptListWithArg){
+    if(x.m_Short.size() == 0){
+      std::string s = "--" + x.m_Long + " " + x.Type() + " : ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;      
+    }else if(x.m_Long.size() == 0){
+      std::string s = "-" + x.m_Short + " " + x.Type() + " : ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;      
+    }else{
+      std::string s = "-" + x.m_Short + ", --" + x.m_Long + " " + x.Type() + " : ";
+      std::cout << std::right << std::setw(MaxOptLength) << s;
+      std::cout << x.m_Description << std::endl;            
+    }
+  }  
   return ;
 }
 
