@@ -79,6 +79,14 @@ void KCollision::SetFinParticle(KParticle p3, KParticle p4)
   m_M3 = p3.Mass(); m_M4 = p4.Mass();
 }
 
+void KCollision::SetParticle(KParticle p1, KParticle p2,
+			     KParticle p3, KParticle p4)
+{
+  SetInitParticle(p1, p2);
+  SetFinParticle(p3, p4);
+}
+  
+
 void KCollision::ResultDump()
 {
   m_ResultBuff = stdout;

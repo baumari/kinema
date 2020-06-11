@@ -65,7 +65,8 @@ public:
   void SetInitParticle(KParticle p1, KParticle p2);
   void SetInitParticle(KParticle* p1, KParticle* p2);//P1, P2 are converted into object
   void SetFinParticle(std::string p3, std::string p4);
-  void SetFinParticle(KParticle p3, KParticle p4);  
+  void SetFinParticle(KParticle p3, KParticle p4);
+  void SetParticle(KParticle p1, KParticle p2, KParticle p3, KParticle p4);
   void ResultDump();
   void Init();
   inline double GetE3(int iParticle = 0){return m_E3[iParticle].back();}
