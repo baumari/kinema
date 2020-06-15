@@ -135,6 +135,8 @@ void KParticle::SetParticle(std::string name)
 {
   m_name = name;
   m_mass = GetMass(m_name);
+  m_p.Set(m_mass, 0, 0, 0);
+  m_errno = 0;      
 }
 
 void KParticle::SetDirection(double dirx, double diry, double dirz)
