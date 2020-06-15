@@ -200,6 +200,9 @@ void KParticle::SetT(double kin_energy)
   double energy = m_mass + kin_energy;
   double px, py, pz;
   px = m_p.X(); py = m_p.Y(); pz = m_p.Z();
+  if(T() < KUtil::LOOSE_EPSILON){
+    pz = 1;
+  }
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)),
 		   px, py, pz);
   m_p.Set(energy, px, py, pz);
