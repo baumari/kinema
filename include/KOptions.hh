@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 class KOptions{
 private:
@@ -60,7 +61,8 @@ private:
   std::vector<_OptWOArg> m_OptListWithoutArg;
   std::vector<_OptWArg> m_OptListWithArg;
   int m_LeadArg; // index of the first argument except for optarg
-  int m_nArg; // Number of arguments except for option 
+  int m_nArg; // Number of arguments except for option
+  template<typename T> struct raise_error;
 
 private:
   bool IsLongOpt(char *argv);
@@ -77,6 +79,14 @@ private:
   std::size_t GetMaxOptLength(std::vector<_OptWOArg>&); // obsolete
   std::size_t GetMaxOptLength(std::vector<_OptWArg>&); // obsolete
   std::size_t GetMaxOptLength();
+  template<typename T>
+  inline T Convert(std::vector<_OptWArg>::iterator& it){return raise_error<T>();}
+  template<>
+  inline double Convert(std::vector<_OptWArg>::iterator& it){return atof(it->m_val.c_str());}
+  template<>
+  inline int Convert(std::vector<_OptWArg>::iterator& it){return atoi(it->m_val.c_str());}
+  template<>
+  inline std::string Convert(std::vector<_OptWArg>::iterator& it){return it->m_val;}
 
 public:
   KOptions() : m_LeadArg(1), m_nArg(0) {} 
@@ -92,7 +102,20 @@ public:
 	   std::string Description, int nVal = 1);
   void Add(std::string ShortOpt, std::string LongOpt,
 	   std::string OptVal, std::string Description, int nVal = 1);
-  std::string Get(std::string OptName);
+  template<typename T>
+  T Get(std::string OptName){
+    if(OptName.size() == 0){
+      fprintf(stderr, "Argument for KOptions::Get(std::string) should not be null-string!!\n");
+      std::exit(EXIT_FAILURE);
+    }else if(Find(m_OptListWithArg, OptName) != m_OptListWithArg.end()){
+      auto it = Find(m_OptListWithArg, OptName);
+      return Convert<T>(it);
+    }else{
+      fprintf(stderr, "No such option (%s)!!\n", OptName.c_str());
+      std::exit(EXIT_FAILURE);	
+    }      
+  }
+  
   bool Check(int argc, char* argv[]);
   bool Exist(const std::string &OptName);
   inline int LeadArg() {return m_LeadArg;}

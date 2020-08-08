@@ -17,6 +17,7 @@ public:
   KExpdata(char *filename);    
   ~KExpdata();
   void Print();
+  void Scale(double factor); // scale experimental value by factor
   inline int GetN() const {return (int)fx.size();}
 };
 

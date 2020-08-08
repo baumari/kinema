@@ -8,7 +8,7 @@ KTF1Spline::KTF1Spline(const char *name, double(*func)(double *, double *), KThe
     f->FixParameter(i+1, Theo.fx[i]);
     f->FixParameter(i+1+Theo.GetN(), Theo.fy[i]);
   }
-  if(flag) f->FixParameter(2*Theo.GetN()+1, 1);
+  if(!flag) f->FixParameter(2*Theo.GetN()+1, 1);
   else f->SetParameter(2*Theo.GetN()+1, 1);
 }
 

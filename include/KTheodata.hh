@@ -4,6 +4,9 @@
 #include <vector>
 #include <fstream>
 
+// KTheodata can make spline function of stored data
+// 
+
 class KTheodata{
 private:
   std::ifstream ifs;
@@ -20,13 +23,14 @@ public:
   KTheodata(char *filename);    
   ~KTheodata();
   void Print();
+  void Scale(double factor); // scale fy, fy_correct by factor
   void PrintCorrect();
   inline int GetN() const {return (int)fx.size();}
   inline int GetNCorrect() const {return (int)fx_correct.size();}
   double GetfxMin();
   double GetfxMax();
   SPLINE GetSpline();
-  double MakeSpline(double *, double *);  
+  double MakeSpline(double *, double *);  // do not call this function out of class
 };
 
 #endif

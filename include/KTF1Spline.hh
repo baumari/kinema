@@ -10,6 +10,7 @@ private:
 
 public:
   KTF1Spline(const char *name, double(*func)(double *, double *), KTheodata &Theo, bool normalization = false);
+  // if false, function cannot be normalized (magnitude is fixed)
   ~KTF1Spline();
 
 public:

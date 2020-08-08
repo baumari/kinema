@@ -90,3 +90,7 @@ void KExpdataCS::Print(){
   printf("\n\n");  
 }
 
+void KExpdata::Scale(double factor){
+  for(auto &x : fy) x*=factor;
+  for(auto &x : fy_err) x*=factor;
+}

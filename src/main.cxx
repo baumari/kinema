@@ -31,10 +31,10 @@ const char gopt[] = {"e3e4theta3theta4theta3cm"};
 int main(int argc, char* argv[]){
   
   KOptions opt;
-  opt.Add("help", "h", "Show help.");
-  opt.Add("recoil", "r", 0, "Recoil kinetic energy (double [=0])");
-  opt.Add("out", "o", "out.dat", "Output file (string [=out.dat])");
-  opt.Add("graph","g","theta3:e3", "Show graph. Choose graph mode. (string [=theta3:e3])");
+  opt.Add("h", "help", "Show help.");
+  opt.Add("r", "recoil", 0, "Recoil kinetic energy (double [=0])");
+  opt.Add("o", "out", "out.dat", "Output file (string [=out.dat])");
+  opt.Add("g","graph","theta3:e3", "Show graph. Choose graph mode. (string [=theta3:e3])");
   opt.Constraint("graph","theta3, theta4, e3 ,e4 ,theta3cm");
   
   if(!opt.Check(argc, argv)){
@@ -49,9 +49,9 @@ int main(int argc, char* argv[]){
 
   FILE *OutPutFile = stdout;
   if(opt.Exist("out")){
-    OutPutFile = fopen(opt.Get("out").c_str(), "w");
+    OutPutFile = fopen(opt.Get<std::string>("out").c_str(), "w");
     if(OutPutFile == NULL){
-      fprintf(stderr, "Fail to open %s\n", opt.Get("out").c_str());
+      fprintf(stderr, "Fail to open %s\n", opt.Get<std::string>("out").c_str());
       std::exit(EXIT_FAILURE);
     }
   }
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]){
   }
   double Ebeam = atof(argv[opt.LeadArg() + 4]);
   double Ex = atof(argv[opt.LeadArg() + 5]);
-  double Erec = atof(opt.Get("recoil").c_str());
+  double Erec = opt.Get<double>("recoil");
   KParticle p1(argv[opt.LeadArg()], Ebeam);
   KParticle p2(argv[opt.LeadArg() + 1]);
   KParticle p3(argv[opt.LeadArg() + 2], Erec);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]){
   if(opt.Exist("graph")){
     TApplication app("app", &argc, argv);
     std::string sGraphMode[2];
-    std::stringstream ssGraphMode(opt.Get("graph"));
+    std::stringstream ssGraphMode(opt.Get<std::string>("graph"));
     int icnt = 0;
     while(std::getline(ssGraphMode, sGraphMode[icnt], ':')) icnt++;
     if(icnt != 2){

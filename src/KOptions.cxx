@@ -192,21 +192,8 @@ void KOptions::CheckOptInput(const std::string& ShortOpt,
   }
 }
 
-std::string KOptions::Get(std::string OptName){
-  if(OptName.size() == 0){
-    fprintf(stderr, "Argument for KOptions::Get(std::string) should not be null-string!!\n");
-    std::exit(EXIT_FAILURE);
-  }else if(Find(m_OptListWithArg, OptName) != m_OptListWithArg.end()){
-    std::vector<_OptWArg>::iterator it = Find(m_OptListWithArg, OptName);
-    return it->m_val;
-  }else{
-    fprintf(stderr, "No such option (%s)!!\n", OptName.c_str());
-    std::exit(EXIT_FAILURE);	
-  }  
-}
-
 std::size_t KOptions::_OptWArg::TypeLength(){
-  if(m_fInt) return 5; // "int" + "[]" = 6
+  if(m_fInt) return 5; 
   else if(m_fString) return 8;
   else if(m_fDouble) return 8;
   else return 0;

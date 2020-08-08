@@ -81,3 +81,7 @@ double KTheodata::GetfxMax(){
   return *std::max_element(fx.begin(), fx.end());
 }
 
+void KTheodata::Scale(double factor){
+  for(auto &x : fy) x*=factor;
+  for(auto &x : fy_correct) x*=factor;
+}
