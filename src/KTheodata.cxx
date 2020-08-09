@@ -10,7 +10,17 @@ KTheodata::KTheodata() :
   fspline(nullptr) {}  
 
 KTheodata::KTheodata(std::string& filename) :
-  fspline(nullptr){
+  fspline(nullptr){Open(filename);}
+
+KTheodata::KTheodata(char *filename) :
+  fspline(nullptr){Open(filename);}
+
+KTheodata::~KTheodata(){
+  //  if(fspline) delete fspline;
+  ifs.close();
+}
+
+void KTheodata::Open(std::string &filename){
   ifs.open(filename.c_str());
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
@@ -22,11 +32,10 @@ KTheodata::KTheodata(std::string& filename) :
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
-  }
+  }  
 }
 
-KTheodata::KTheodata(char *filename) :
-  fspline(nullptr){
+void KTheodata::Open(char *filename){
   ifs.open(filename);
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
@@ -38,12 +47,7 @@ KTheodata::KTheodata(char *filename) :
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
-  }
-}
-
-KTheodata::~KTheodata(){
-  //  if(fspline) delete fspline;
-  ifs.close();
+  }    
 }
 
 void KTheodata::Print(){

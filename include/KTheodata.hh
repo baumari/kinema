@@ -22,6 +22,8 @@ public:
   KTheodata(std::string& filename);
   KTheodata(char *filename);    
   ~KTheodata();
+  void Open(std::string &filename);
+  void Open(char *filename);  
   void Print();
   void Scale(double factor); // scale fy, fy_correct by factor
   void PrintCorrect();

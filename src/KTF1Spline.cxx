@@ -1,8 +1,10 @@
 #include <KTF1Spline.hh>
+#include <vector>
+#include <TSpline.h>
 
-KTF1Spline::KTF1Spline(const char *name, double(*func)(double *, double *), KTheodata &Theo, bool flag)
+KTF1Spline::KTF1Spline(const char *name, KTheodata &Theo, bool flag)
 {
-  f = new TF1(name, func, Theo.GetfxMin(), Theo.GetfxMax(), Theo.GetN()*2+2);
+  f = new TF1(name, Spline, Theo.GetfxMin(), Theo.GetfxMax(), Theo.GetN()*2+2);
   f->FixParameter(0, Theo.GetN());
   for(int i = 0; i != Theo.GetN(); ++i){
     f->FixParameter(i+1, Theo.fx[i]);
@@ -14,6 +16,15 @@ KTF1Spline::KTF1Spline(const char *name, double(*func)(double *, double *), KThe
 
 KTF1Spline::~KTF1Spline(){delete f;}
 
-TF1* KTF1Spline::Getf(){
-  return f;
+double KTF1Spline::Spline(double *x, double *par){
+  double xx = x[0];
+  int nData = par[0];
+  std::vector<double> xn, yn;
+  xn.resize(nData); yn.resize(nData);
+  for(int idx = 0; idx != nData; ++idx){
+    xn[idx] = par[idx+1];
+    yn[idx] = par[idx+1+nData];
+  }
+  TSpline3 sp3("sp3", &xn[0], &yn[0], nData);
+  return sp3.Eval(xx)*par[2*nData+1];  
 }
