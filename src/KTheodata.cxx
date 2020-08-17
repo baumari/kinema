@@ -89,3 +89,38 @@ void KTheodata::Scale(double factor){
   for(auto &x : fy) x*=factor;
   for(auto &x : fy_correct) x*=factor;
 }
+
+void KTheodata::Correction(const KExpdataCS &exp){
+  const int nAveragePoint = 3;
+  int nExpData = exp.GetN();
+  std::vector<double> xtmp(nAveragePoint);
+  std::vector<double> csdw(nAveragePoint);
+  fx_correct = exp.fx;
+  fy_correct.resize(nExpData);
+  for(int i = 0; i != nExpData; ++i){
+    double sum = 0;
+    for(int j = 0; j != nAveragePoint; ++j){
+      xtmp[j] = (exp.fx[i]-exp.fx_width[i])
+	+(double)j*2.*exp.fx_width[i]/(nAveragePoint-1.0);
+      csdw[j] = Interpolate(xtmp[j]); // linear interpolation
+      sum += csdw[j];
+    }
+    fy_correct[i] = sum/(double)nAveragePoint;
+  }
+}
+
+double KTheodata::Interpolate(double x){ // linear interpolation
+  double val = 0;
+  if(x < GetfxMin() || x > GetfxMax()){
+    std::cerr << "Requested angle " << x << " is out of range." << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  for(int i = 1; i != GetN(); ++i){
+    if(x <= fx[i]){
+      val = (fy[i]-fy[i-1])/(fx[i]-fx[i-1])
+	*(x-fx[i-1])+fy[i-1];
+      break;
+    }
+  }
+  return val;
+}

@@ -14,8 +14,10 @@ public:
 public:
   KExpdata();
   KExpdata(std::string& filename);
-  KExpdata(char *filename);    
+  KExpdata(char *filename);
   ~KExpdata();
+
+public:
   void Print();
   void Scale(double factor); // scale experimental value by factor
   inline int GetN() const {return (int)fx.size();}

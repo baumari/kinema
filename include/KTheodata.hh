@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <fstream>
+#include <KExpdata.hh>
 
 // KTheodata can make spline function of stored data
 // 
@@ -23,16 +24,24 @@ public:
   KTheodata(char *filename);    
   ~KTheodata();
   void Open(std::string &filename);
-  void Open(char *filename);  
+  void Open(char *filename);
   void Print();
-  void Scale(double factor); // scale fy, fy_correct by factor
+  // scale fy, fy_correct by factor
+  void Scale(double factor); 
   void PrintCorrect();
   inline int GetN() const {return (int)fx.size();}
   inline int GetNCorrect() const {return (int)fx_correct.size();}
   double GetfxMin();
   double GetfxMax();
   SPLINE GetSpline();
-  double MakeSpline(double *, double *);  // do not call this function out of class
+  // do not call this function out of class
+  double MakeSpline(double *, double *);
+  // correction by experimental data, especially for experimental resolution  
+  void Correction(const KExpdataCS &);
+
+private:
+  // linear interpolation
+  double Interpolate(double x); 
 };
 
 #endif
