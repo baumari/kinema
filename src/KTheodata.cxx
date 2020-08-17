@@ -73,6 +73,13 @@ double KTheodata::MakeSpline(double *x, double *par){
   return sp3.Eval(xx)*par[0];
 }
 
+double KTheodata::MakeSplineCorrect(double *x, double *par){
+  double xx = x[0];
+  TSpline3 sp3("Spline Theoretical Data",
+	       &fx_correct[0], &fy_correct[0], GetNCorrect());
+  return sp3.Eval(xx)*par[0];
+}
+
 KTheodata::SPLINE KTheodata::GetSpline(){
   fspline = &KTheodata::MakeSpline;
   return fspline;
@@ -134,17 +141,17 @@ double KTheodata::Interpolate(double x){ // linear interpolation
   return val;
 }
 
-double KTheodata::Getf(double *x, double *par){
+double KTheodata::Getf(double *x, double *par) const{
   return par[0]*fy[FindIndex(fx, x[0])];
 }
 
-double KTheodata::GetfCorrected(double *x, double *par){
+double KTheodata::GetfCorrected(double *x, double *par) const{
   return par[0]*fy_correct[FindIndex(fx_correct, x[0])];
 }
 
-std::size_t KTheodata::FindIndex(std::vector<double>& v, double val){
+std::size_t KTheodata::FindIndex(const std::vector<double>& v, double val) const{
   for(auto x = v.begin(); x != v.end(); ++x){
-    if(val <= *x + KUtil::LOOSE_EPSILON || val >= *x - KUtil::LOOSE_EPSILON){
+    if(val <= *x + KUtil::LOOSE_EPSILON && val >= *x - KUtil::LOOSE_EPSILON){
       return std::distance(v.begin(), x);
     }
   }

@@ -36,20 +36,20 @@ public:
   double GetfxCorrectedMin() const;
   double GetfxCorrectedMax() const;  
   SPLINE GetSpline();
-  // do not call this function out of class
   double MakeSpline(double *, double *);
+  double MakeSplineCorrect(double *, double *);  
   // correction by experimental data, especially for experimental resolution  
   void Correction(const KExpdataCS &);
   // return a function fx->fy, par is scale factor
-  double Getf(double *x, double *par); 
+  double Getf(double *x, double *par) const;
   // return a function fx_correct->fy_correct, par is scale factor
-  double GetfCorrected(double *x, double *par); 
+  double GetfCorrected(double *x, double *par) const;
 
 private:
   // linear interpolation
   double Interpolate(double x);
   // return index for val (some TOL accepted)
-  std::size_t FindIndex(std::vector<double>& v, double val);
+  std::size_t FindIndex(const std::vector<double>& v, double val) const;
 };
 
 #endif
