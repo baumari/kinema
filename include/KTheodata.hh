@@ -16,9 +16,9 @@ public:
   std::vector<double> fx, fy;
   // corrected data for fitting  
   std::vector<double> fx_correct, fy_correct;
-  SPLINE fspline;  
+  SPLINE fspline;
 
-public:
+public:  
   KTheodata();
   KTheodata(std::string& filename);
   KTheodata(char *filename);    
@@ -33,15 +33,23 @@ public:
   inline int GetNCorrect() const {return (int)fx_correct.size();}
   double GetfxMin();
   double GetfxMax();
+  double GetfxCorrectedMin();
+  double GetfxCorrectedMax();  
   SPLINE GetSpline();
   // do not call this function out of class
   double MakeSpline(double *, double *);
   // correction by experimental data, especially for experimental resolution  
   void Correction(const KExpdataCS &);
+  // return a function fx->fy, par is scale factor
+  double Getf(double *x, double *par); 
+  // return a function fx_correct->fy_correct, par is scale factor
+  double GetfCorrected(double *x, double *par); 
 
 private:
   // linear interpolation
-  double Interpolate(double x); 
+  double Interpolate(double x);
+  // return index for val (some TOL accepted)
+  std::size_t FindIndex(std::vector<double>& v, double val);
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <KUtil.hh>
 
 KTheodata::KTheodata() :
   fspline(nullptr) {}  
@@ -85,6 +86,14 @@ double KTheodata::GetfxMax(){
   return *std::max_element(fx.begin(), fx.end());
 }
 
+double KTheodata::GetfxCorrectedMin(){
+  return *std::min_element(fx_correct.begin(), fx_correct.end());
+}
+
+double KTheodata::GetfxCorrectedMax(){
+  return *std::max_element(fx_correct.begin(), fx_correct.end());
+}
+
 void KTheodata::Scale(double factor){
   for(auto &x : fy) x*=factor;
   for(auto &x : fy_correct) x*=factor;
@@ -123,4 +132,22 @@ double KTheodata::Interpolate(double x){ // linear interpolation
     }
   }
   return val;
+}
+
+double KTheodata::Getf(double *x, double *par){
+  return par[0]*fy[FindIndex(fx, x[0])];
+}
+
+double KTheodata::GetfCorrected(double *x, double *par){
+  return par[0]*fy_correct[FindIndex(fx_correct, x[0])];
+}
+
+std::size_t KTheodata::FindIndex(std::vector<double>& v, double val){
+  for(auto x = v.begin(); x != v.end(); ++x){
+    if(val <= *x + KUtil::LOOSE_EPSILON || val >= *x - KUtil::LOOSE_EPSILON){
+      return std::distance(v.begin(), x);
+    }
+  }
+  std::cout << "FindIndex: No such value(" << val << ") !!!" << std::endl;
+  return 0;
 }
