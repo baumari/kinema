@@ -25,16 +25,16 @@ public:
   ~KTheodata();
   void Open(std::string &filename);
   void Open(char *filename);
-  void Print();
+  void Print() const;
   // scale fy, fy_correct by factor
   void Scale(double factor); 
-  void PrintCorrect();
+  void PrintCorrect() const;
   inline int GetN() const {return (int)fx.size();}
   inline int GetNCorrect() const {return (int)fx_correct.size();}
-  double GetfxMin();
-  double GetfxMax();
-  double GetfxCorrectedMin();
-  double GetfxCorrectedMax();  
+  double GetfxMin() const;
+  double GetfxMax() const;
+  double GetfxCorrectedMin() const;
+  double GetfxCorrectedMax() const;  
   SPLINE GetSpline();
   // do not call this function out of class
   double MakeSpline(double *, double *);

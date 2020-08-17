@@ -3,6 +3,7 @@
 
 #include <KTheodata.hh>
 #include <TF1.h>
+#include <vector>
 
 class KTF1Spline{
 private:
@@ -10,8 +11,13 @@ private:
   static double Spline(double *, double*); // spline function
 
 public:
-  KTF1Spline(const char *name, KTheodata &Theo, bool normalization = false);
+  KTF1Spline(const char *name, const KTheodata &Theo, bool normalization = false);
   // if false, function cannot be normalized (magnitude is fixed)
+  KTF1Spline(const char *name, const std::vector<double>& vx,
+	     const std::vector<double>& vy, bool normalization = false);
+  // elements in x and y must be ordered.
+  KTF1Spline(const char *name, const int n, const double *x, const double *y,
+	     bool normalization = false);    
   ~KTF1Spline();
 
 public:

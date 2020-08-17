@@ -51,7 +51,7 @@ void KTheodata::Open(char *filename){
   }    
 }
 
-void KTheodata::Print(){
+void KTheodata::Print() const{
   printf("theodata\n");  
   for(int i=0;i!=GetN();++i){
     printf("%lf %lf \n",fx[i],fy[i]);    
@@ -59,7 +59,7 @@ void KTheodata::Print(){
   printf("\n\n");  
 }
 
-void KTheodata::PrintCorrect(){
+void KTheodata::PrintCorrect() const{
   printf("theodata_corrected\n");  
   for(int i=0;i!=GetNCorrect();++i){
     printf("%lf %lf \n",fx_correct[i],fy_correct[i]);    
@@ -78,19 +78,19 @@ KTheodata::SPLINE KTheodata::GetSpline(){
   return fspline;
 }
 
-double KTheodata::GetfxMin(){
+double KTheodata::GetfxMin() const{
   return *std::min_element(fx.begin(), fx.end());
 }
 
-double KTheodata::GetfxMax(){
+double KTheodata::GetfxMax() const{
   return *std::max_element(fx.begin(), fx.end());
 }
 
-double KTheodata::GetfxCorrectedMin(){
+double KTheodata::GetfxCorrectedMin() const{
   return *std::min_element(fx_correct.begin(), fx_correct.end());
 }
 
-double KTheodata::GetfxCorrectedMax(){
+double KTheodata::GetfxCorrectedMax() const{
   return *std::max_element(fx_correct.begin(), fx_correct.end());
 }
 
