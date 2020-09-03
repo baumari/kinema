@@ -5,6 +5,7 @@
 #include <limits>
 #include <cmath>
 #include <string>
+#include <vector>
 
 #define SIZEOF(ARRAY) sizeof(ARRAY)/sizeof((ARRAY)[0])
 namespace KUtil {
@@ -29,6 +30,8 @@ namespace KUtil {
   std::string str_tolower(std::string s);
   std::string str_toupper(std::string s);
   double Spline(double *x, double *par);
+  // split("hoge.txt.fuga",'.') -> [0]: hoge, [1]: txt, [2]: fuga
+  std::vector<std::string> split(const std::string &s, char delim); 
 }
 
 

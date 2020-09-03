@@ -7,29 +7,15 @@
 #include <iostream>
 #include <KUtil.hh>
 
-KTheodata::KTheodata() :
-  fspline(nullptr) {}  
-
-KTheodata::KTheodata(std::string& filename) :
-  fspline(nullptr){Open(filename);}
-
-KTheodata::KTheodata(char *filename) :
-  fspline(nullptr){Open(filename);}
-
-KTheodata::~KTheodata(){
-  //  if(fspline) delete fspline;
-  ifs.close();
-}
-
 void KTheodata::Open(std::string &filename){
-  ifs.open(filename.c_str());
-  if(ifs.fail()){
+  ifs = new std::ifstream(filename.c_str());
+  if(ifs->fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
   }
   std::string sLine;
   double x, y;
-  while(std::getline(ifs, sLine)){
+  while(std::getline(*ifs, sLine)){
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
@@ -37,14 +23,14 @@ void KTheodata::Open(std::string &filename){
 }
 
 void KTheodata::Open(char *filename){
-  ifs.open(filename);
-  if(ifs.fail()){
+  ifs = new std::ifstream(filename);
+  if(ifs->fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
   }
   std::string sLine;
   double x, y;
-  while(std::getline(ifs, sLine)){
+  while(std::getline(*ifs, sLine)){
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
@@ -93,11 +79,11 @@ double KTheodata::GetfxMax() const{
   return *std::max_element(fx.begin(), fx.end());
 }
 
-double KTheodata::GetfxCorrectedMin() const{
+double KTheodata::GetfxCorrectMin() const{
   return *std::min_element(fx_correct.begin(), fx_correct.end());
 }
 
-double KTheodata::GetfxCorrectedMax() const{
+double KTheodata::GetfxCorrectMax() const{
   return *std::max_element(fx_correct.begin(), fx_correct.end());
 }
 
@@ -157,4 +143,35 @@ std::size_t KTheodata::FindIndex(const std::vector<double>& v, double val) const
   }
   std::cout << "FindIndex: No such value(" << val << ") !!!" << std::endl;
   return 0;
+}
+
+void KTheodata::Clear(){
+  ifs->close();
+  fx.clear(); fy.clear(); fx_correct.clear(); fy_correct.clear();
+}
+
+std::size_t KTheodata::SetDataX(int nData, double *xdata){
+  Clear();
+  fx.resize(nData);
+  for(std::size_t idx = 0; idx != nData; ++idx) fx.at(idx) = xdata[idx];
+  return nData;
+}
+
+std::size_t KTheodata::SetDataY(int nData, double *ydata){
+  Clear();
+  fy.resize(nData);
+  for(std::size_t idx = 0; idx != nData; ++idx) fy.at(idx) = ydata[idx];
+  return nData;
+}
+
+std::size_t KTheodata::SetDataX(std::vector<double> &xdata){
+  Clear();
+  fx = xdata;
+  return fx.size();;
+}
+
+std::size_t KTheodata::SetDataY(std::vector<double> &ydata){
+  Clear();
+  fy = ydata;
+  return fy.size();;
 }

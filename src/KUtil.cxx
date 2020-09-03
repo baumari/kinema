@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <vector>
 #include <TSpline.h>
+#include <sstream>
 
 namespace KUtil {
   void Normalize(double norm,
@@ -82,5 +83,16 @@ namespace KUtil {
     }
     TSpline3 sp3("sp3", &xn[0], &yn[0], nData);
     return sp3.Eval(xx)*par[2*nData+1];
+  }
+  std::vector<std::string> split(const std::string &s, char delim){
+    std::vector<std::string> elems;
+    std::stringstream ss(s);
+    std::string item;
+    while (getline(ss, item, delim)) {
+      if (!item.empty()) {
+	elems.push_back(item);
+      }
+    }
+    return elems;
   }
 }
