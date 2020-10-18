@@ -8,13 +8,13 @@
 #include <KError.hh>
 #include <iostream>
 
-double KParticle::GetMass(std::string m_name)
+void KParticle::GetParticleInfo(std::string m_name)
 {
-  double mass=0;
   int f_find=0;
   for(unsigned int i=0;i<sizeof(ParticleData)/sizeof(_ParticleData);i++){
     if(ParticleData[i].name==KUtil::str_tolower(m_name)){
-      mass=ParticleData[i].massex+(double)ParticleData[i].a*AMU;
+      m_mass=ParticleData[i].massex+(double)ParticleData[i].a*AMU;
+      m_A = ParticleData[i].a; m_Z = ParticleData[i].z; m_N = m_A - m_Z;
       f_find++;
       break;
     }
@@ -24,13 +24,13 @@ double KParticle::GetMass(std::string m_name)
     fprintf(stderr, "you should add particle info (KParticle.cxx) at first!!!\n");
     m_errno=KError::PARTICLE_DATA_NOT_FOUND;
   }
-  return mass;
+  return ;
 }
 
 KParticle::KParticle(std::string name)
 {
   m_name = name;
-  m_mass = GetMass(name);
+  GetParticleInfo(name);
   m_ex = 0;
   m_p.Set(m_mass, 0, 0, 0);
   m_errno = 0;
@@ -40,6 +40,7 @@ KParticle::KParticle(double energy, K3Vector p)
 {
   m_name = "unknown";
   m_mass = sqrt(pow(energy, 2)-pow(p.Norm(), 2));
+  m_A = 0; m_Z = 0; m_N = 0;
   m_ex = 0;  
   m_p.Set(energy, p);
   m_errno = 0;
@@ -49,6 +50,7 @@ KParticle::KParticle(double mass)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_A = 0; m_Z = 0; m_N = 0;  
   m_ex = 0;  
   m_p.Set(m_mass, 0, 0, 0);
   m_errno = 0;  
@@ -58,7 +60,7 @@ KParticle::KParticle(std::string name, double kin_energy,
 	   double dir_x, double dir_y, double dir_z)
 {
   m_name = name;
-  m_mass = GetMass(name);
+  GetParticleInfo(name);
   m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
@@ -72,6 +74,7 @@ KParticle::KParticle(double mass, double kin_energy,
 {
   m_name = "unknown";
   m_mass = mass;
+  m_A = 0; m_Z = 0; m_N = 0;  
   m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy,2)-pow(m_mass,2)),
@@ -83,7 +86,7 @@ KParticle::KParticle(double mass, double kin_energy,
 KParticle::KParticle(std::string name, double kin_energy, K3Vector p)
 {
   m_name = name;
-  m_mass = GetMass(name);
+  GetParticleInfo(name);
   m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
@@ -95,6 +98,7 @@ KParticle::KParticle(double mass, double kin_energy, K3Vector p)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_A = 0; m_Z = 0; m_N = 0;    
   m_ex = 0;  
   double energy = kin_energy+m_mass;
   KUtil::Normalize(sqrt(pow(energy, 2)-pow(m_mass, 2)), p);
@@ -105,7 +109,7 @@ KParticle::KParticle(double mass, double kin_energy, K3Vector p)
 KParticle::KParticle(std::string name, double kin_energy)
 {
   m_name = name;
-  m_mass = GetMass(name);
+  GetParticleInfo(name);
   m_ex = 0;  
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
@@ -116,6 +120,7 @@ KParticle::KParticle(double mass, double kin_energy)
 {
   m_name = "unknown";
   m_mass = mass;
+  m_A = 0; m_Z = 0; m_N = 0;    
   m_ex = 0;  
   double energy = kin_energy + m_mass;
   m_p.Set(energy, sqrt(pow(energy, 2)-pow(m_mass, 2)), 0, 0);
@@ -134,7 +139,7 @@ bool KParticle::IsErr()
 void KParticle::SetParticle(std::string name)
 {
   m_name = name;
-  m_mass = GetMass(m_name);
+  GetParticleInfo(name);
   m_p.Set(m_mass, 0, 0, 0);
   m_errno = 0;      
 }
@@ -283,6 +288,7 @@ KParticle& KParticle::operator=(const KParticle& rhs)
 {
   m_name = rhs.GetName();
   m_mass = rhs.Mass();
+  m_A = rhs.m_A; m_Z = rhs.m_Z; m_N = rhs.m_N; 
   m_errno = rhs.ErrorNum();
   m_p = rhs.P();
   return *this;

@@ -30,7 +30,7 @@ ifeq ($(CXX),`root-config --cxx`)
 	CXXFLAGS = `root-config --cflags` \
 	-O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \
 	-fno-common -I$(INCDIR) -I$(ROOTLIBS) -I$(INCDIR_EXTRA1) -I$(INCDIR_EXTRA2) -fPIC -MMD -MP
-	LDFLAGS = `root-config --glibs` -lm
+	LDFLAGS = `root-config --glibs` -lm -lgsl -lgslcblas
 #	LDFLAGS = `root-config --glibs` -lm -lkinema 
 else
 	CXXFLAGS = -O3 -Wall -Wextra -Wno-unused -Wno-long-long -Wno-unused-command-line-argument \

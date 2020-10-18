@@ -12,7 +12,7 @@
 /************* table of particle **************/
 /*** add information below if you necessary ***/
 
-const double AMU = 931.478;
+const double AMU = 931.478; // in MeV/c**2
 
 typedef struct {
   const std::string name;
@@ -37,13 +37,18 @@ const _ParticleData ParticleData[]={
   {"d",13.13572,1,2},
   {"12c",0,6,12},
   {"13c",3.1250, 6, 13},
+  {"13n",5.3454, 7, 13},  
   {"24mg",-13.93357,12,24},
   {"20ne",-7.04193,10,20},
   {"3he",14.93121,2,3},
   {"n",8.0713,0,1},
   {"16o",-4.7370, 8, 16},
   {"14o",8.0077, 8, 14},
-  {"208pb",-21.7485, 82, 208},    
+  {"206po",-18.1886, 84, 206},    
+  {"208pb",-21.7485, 82, 208},
+  {"210rn",-9.6047, 86, 210},  
+  {"232th",35.4467,90,232},
+  {"228ra",28.9402,88,228},  
 };
 /************* table of particle **************/
 
@@ -51,11 +56,14 @@ class KParticle
 {
 private:
   std::string m_name;
-  double m_mass;
+  double m_mass; // in MeV/c**2
   double m_ex; // excitation energy in MeV
   int m_errno;
+  int m_A; // mass number
+  int m_Z; // number of proton
+  int m_N; // number of neutron  
   K4Momentum m_p;
-  double GetMass(std::string m_name); // stop mass    
+  void GetParticleInfo(std::string m_name); 
 
 public:
   KParticle() {}
@@ -76,7 +84,10 @@ public:
     , m_mass(rhs.m_mass)
     , m_ex(rhs.m_ex)
     , m_errno(rhs.m_errno)
-    , m_p(rhs.m_p)
+    , m_A(rhs.m_A)
+    , m_Z(rhs.m_Z)
+    , m_N(rhs.m_N)
+    , m_p(rhs.m_p)      
   {}
   ~KParticle() {}
 
@@ -96,6 +107,9 @@ public:
   inline K4Momentum GetP() const {return m_p;}  
   inline double Mass() const {return m_mass;} // stop mass
   inline double GetMass() const {return m_mass;} // stop mass
+  inline int NumA() const {return m_A;}
+  inline int NumZ() const {return m_Z;}
+  inline int NumN() const {return m_N;}  
   inline double GetEx() const {return m_ex;}
   inline double Ex() const {return m_ex;}
   inline std::string GetName() const {return m_name;}
@@ -106,7 +120,7 @@ public:
   void SetDirection(const K3Vector& dir);
   /* Function SetMomentum can define both direction and amount. */
   /* The energy will be recalced. */
-  inline void SetMass(std::string name){m_mass = GetMass(name);}
+  inline void SetParticleInfo(std::string name){GetParticleInfo(name);}
   inline void SetMass(double mass){m_mass = mass;}  
   void SetMomentum(double px, double py, double pz);
   void SetMomentum(const K3Vector& p);

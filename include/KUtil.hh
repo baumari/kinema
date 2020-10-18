@@ -14,9 +14,11 @@ namespace KUtil {
   const double MAX = std::numeric_limits<double>::max();
   const double LOOSE_MAX = 1e5;
   const double C = 299792458; // m/s
-  const double HBAR = 6.582119569e-16; //J*s
-  const double HBARC = C*HBAR*1e9;
-  const double NA = 6.022e23; //avogadro number  
+  const double HBAR = 6.582119569e-16; //eV*s
+  const double HBARC = C*HBAR*1e9; //MeV*fm
+  const double ALPHA = 1./137.036; // fine structure constant
+  const double NA = 6.022e23; //avogadro number
+  const double AMU = 931.478; // in MeV/c**2
 }
 namespace KUtil {
   void Normalize(double norm, double& x, double& y, double& z);
@@ -33,6 +35,5 @@ namespace KUtil {
   // split("hoge.txt.fuga",'.') -> [0]: hoge, [1]: txt, [2]: fuga
   std::vector<std::string> split(const std::string &s, char delim); 
 }
-
 
 #endif
