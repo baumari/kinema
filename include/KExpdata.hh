@@ -2,12 +2,9 @@
 #define K_EXPDATA_HH
 
 #include <vector>
-#include <fstream>
 
 // normal expdata class
 class KExpdata{
-private:
-  std::ifstream ifs;
 public:
   std::vector<double> fx, fy, fx_err, fy_err;
 
@@ -15,7 +12,7 @@ public:
   KExpdata();
   KExpdata(std::string& filename);
   KExpdata(char *filename);
-  ~KExpdata();
+  ~KExpdata() {}
 
 public:
   void Print();
@@ -25,8 +22,6 @@ public:
 
   // for cross section containing angular width
 class KExpdataCS : public KExpdata{
-private:
-  std::ifstream ifs;
 public:
   std::vector<double> fx_width;
 
@@ -34,7 +29,7 @@ public:
   KExpdataCS();
   KExpdataCS(std::string& filename);
   KExpdataCS(char *filename);    
-  ~KExpdataCS();
+  ~KExpdataCS() {}
   void Print();
 };
 

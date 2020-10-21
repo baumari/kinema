@@ -6,16 +6,17 @@
 #include <cstdlib>
 #include <iostream>
 #include <KUtil.hh>
+#include <fstream>
 
 void KTheodata::Open(std::string &filename){
-  ifs = new std::ifstream(filename.c_str());
-  if(ifs->fail()){
+  std::ifstream ifs(filename.c_str());
+  if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
   }
   std::string sLine;
   double x, y;
-  while(std::getline(*ifs, sLine)){
+  while(std::getline(ifs, sLine)){
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
@@ -23,14 +24,14 @@ void KTheodata::Open(std::string &filename){
 }
 
 void KTheodata::Open(char *filename){
-  ifs = new std::ifstream(filename);
-  if(ifs->fail()){
+  std::ifstream ifs(filename);
+  if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
   }
   std::string sLine;
   double x, y;
-  while(std::getline(*ifs, sLine)){
+  while(std::getline(ifs, sLine)){
     std::stringstream ssLine(sLine);
     ssLine >> x >> y;
     fx.push_back(x); fy.push_back(y);
@@ -146,7 +147,6 @@ std::size_t KTheodata::FindIndex(const std::vector<double>& v, double val) const
 }
 
 void KTheodata::Clear(){
-  ifs->close();
   fx.clear(); fy.clear(); fx_correct.clear(); fy_correct.clear();
 }
 

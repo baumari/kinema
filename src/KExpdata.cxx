@@ -3,10 +3,11 @@
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 KExpdata::KExpdata() {}
 KExpdata::KExpdata(std::string& filename){
-  ifs.open(filename.c_str());
+  std::ifstream ifs(filename.c_str());  
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
@@ -22,7 +23,7 @@ KExpdata::KExpdata(std::string& filename){
 }
 
 KExpdata::KExpdata(char *filename){
-  ifs.open(filename);
+  std::ifstream ifs(filename);
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
@@ -37,7 +38,6 @@ KExpdata::KExpdata(char *filename){
   }
 }
 
-KExpdata::~KExpdata() {ifs.close();}
 void KExpdata::Print(){
   printf("expdata\n");
   for(int i=0;i!=GetN();++i){
@@ -46,9 +46,8 @@ void KExpdata::Print(){
   printf("\n\n");
 }
 
-KExpdataCS::KExpdataCS() {}
 KExpdataCS::KExpdataCS(std::string& filename) {
-  ifs.open(filename.c_str());
+  std::ifstream ifs(filename.c_str());
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
@@ -65,7 +64,7 @@ KExpdataCS::KExpdataCS(std::string& filename) {
 }
 
 KExpdataCS::KExpdataCS(char *filename){
-  ifs.open(filename);
+  std::ifstream ifs(filename);
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;
     std::exit(EXIT_FAILURE);
@@ -81,7 +80,6 @@ KExpdataCS::KExpdataCS(char *filename){
   }  
 }
 
-KExpdataCS::~KExpdataCS() {ifs.close();}
 void KExpdataCS::Print(){
   printf("expdataCS\n");  
   for(int i=0;i!=GetN();++i){

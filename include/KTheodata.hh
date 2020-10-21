@@ -2,7 +2,6 @@
 #define K_THEODATA_HH
 
 #include <vector>
-#include <fstream>
 #include <KExpdata.hh>
 #include <utility>
 
@@ -10,8 +9,6 @@
 // 
 
 class KTheodata{
-private:
-  std::ifstream *ifs;
 public:
   typedef double (KTheodata::*SPLINE)(double *, double *);    
   std::vector<double> fx, fy;
@@ -20,17 +17,16 @@ public:
   SPLINE fspline;
 
 public:  
-  KTheodata() : fspline(nullptr), ifs(nullptr) {}
+  KTheodata() : fspline(nullptr) {}
   KTheodata(std::string& filename) : fspline(nullptr) {Open(filename);}
   KTheodata(char *filename) : fspline(nullptr) {Open(filename);}
   KTheodata(const KTheodata &obj) :
     fx(obj.fx),
     fy(obj.fy),
     fx_correct(obj.fx_correct),
-    fy_correct(obj.fy_correct),
-    ifs(obj.ifs) {}
+    fy_correct(obj.fy_correct) {}
     
-  ~KTheodata() {delete ifs;}
+  ~KTheodata() {}
   void Open(std::string &filename);
   void Open(char *filename);
   void Print() const;
