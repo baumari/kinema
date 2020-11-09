@@ -310,7 +310,7 @@ int KCollision::ScattDumpCore()
     m_T4[0].push_back(Part4.T());    
     ThetaLab = asin(sqrt(pow(m_E4CM, 2) - pow(m_M4, 2))/sqrt(pow(Part4.E(), 2.)-pow(m_M4,2.))
 		    * sin(KUtil::DegToRad(180. - *it)));
-    if(isnan(ThetaLab)) ThetaLab = M_PI/2.;
+    if(std::isnan(ThetaLab)) ThetaLab = M_PI/2.;
     m_Theta4[0].push_back(KUtil::RadToDeg(ThetaLab));
   }
   return 0;
@@ -486,7 +486,7 @@ void KCollision::Show()
 
 void KCollision::CheckNan(){
   for(std::size_t idx = 0; idx != m_Theta3.size(); ++idx){
-    if(isnan(m_Theta3[idx])){
+    if(std::isnan(m_Theta3[idx])){
       m_Theta3.erase(m_Theta3.begin() + idx); m_Theta3CM[0].erase(m_Theta3CM[0].begin() + idx);
       m_Theta4CM[0].erase(m_Theta4CM[0].begin() + idx);
       m_Theta4[0].erase(m_Theta4[0].begin() + idx);m_E3[0].erase(m_E3[0].begin() + idx);
