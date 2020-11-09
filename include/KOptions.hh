@@ -81,13 +81,7 @@ private:
   std::size_t GetMaxOptLength();
   template<typename T>
   inline T Convert(std::vector<_OptWArg>::iterator& it){return raise_error<T>();}
-  template<>
-  inline double Convert(std::vector<_OptWArg>::iterator& it){return atof(it->m_val.c_str());}
-  template<>
-  inline int Convert(std::vector<_OptWArg>::iterator& it){return atoi(it->m_val.c_str());}
-  template<>
-  inline std::string Convert(std::vector<_OptWArg>::iterator& it){return it->m_val;}
-
+  
 public:
   KOptions() : m_LeadArg(1), m_nArg(0) {} 
   ~KOptions() {}
@@ -124,6 +118,14 @@ public:
   // add constraint to arguments on each option
   void Constraint(std::string OptName, std::string Condition);
 };
+
+template<>
+inline double KOptions::Convert(std::vector<_OptWArg>::iterator& it){return atof(it->m_val.c_str());}
+template<>
+inline int KOptions::Convert(std::vector<_OptWArg>::iterator& it){return atoi(it->m_val.c_str());}
+template<>
+inline std::string KOptions::Convert(std::vector<_OptWArg>::iterator& it){return it->m_val;}
+
 
 #endif
 
