@@ -1,6 +1,7 @@
 #ifndef K_EXPDATA_HH
 #define K_EXPDATA_HH
 
+#include <string>
 #include <vector>
 
 // normal expdata class

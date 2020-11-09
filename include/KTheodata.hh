@@ -1,6 +1,7 @@
 #ifndef K_THEODATA_HH
 #define K_THEODATA_HH
 
+#include <string>
 #include <vector>
 #include <KExpdata.hh>
 #include <utility>
