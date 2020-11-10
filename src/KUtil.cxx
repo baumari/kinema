@@ -10,6 +10,7 @@
 #include <vector>
 #include <TSpline.h>
 #include <sstream>
+#include <cmath>
 
 namespace KUtil {
   void Normalize(double norm,
@@ -95,4 +96,13 @@ namespace KUtil {
     }
     return elems;
   }
+
+  double Intersection(TF1 *f1, TF1 *f2, double xmin, double xmax){    
+    TF1 fint("fint",
+	     [&](double *x, double *par){return par[0]*fabs(f1->Eval(x[0]) - f2->Eval(x[0]));}, xmin, xmax, 1);
+    fint.FixParameter(0, 1);
+    return fint.GetMinimumX();
+  }
 }
+
+
