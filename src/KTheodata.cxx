@@ -151,27 +151,94 @@ void KTheodata::Clear(){
 }
 
 std::size_t KTheodata::SetDataX(int nData, double *xdata){
-  Clear();
+  fx.clear();
   fx.resize(nData);
   for(std::size_t idx = 0; idx != nData; ++idx) fx.at(idx) = xdata[idx];
   return nData;
 }
 
 std::size_t KTheodata::SetDataY(int nData, double *ydata){
-  Clear();
+  fy.clear();
   fy.resize(nData);
   for(std::size_t idx = 0; idx != nData; ++idx) fy.at(idx) = ydata[idx];
   return nData;
 }
 
-std::size_t KTheodata::SetDataX(std::vector<double> &xdata){
-  Clear();
+std::size_t KTheodata::SetDataXCorrect(int nData, double *xdata){
+  fx_correct.clear();
+  fx_correct.resize(nData);
+  for(std::size_t idx = 0; idx != nData; ++idx) fx_correct.at(idx) = xdata[idx];
+  return nData;
+}
+
+std::size_t KTheodata::SetDataYCorrect(int nData, double *ydata){
+  fy_correct.clear();
+  fy_correct.resize(nData);
+  for(std::size_t idx = 0; idx != nData; ++idx) fy_correct.at(idx) = ydata[idx];
+  return nData;
+}
+
+std::size_t KTheodata::SetDataX(const std::vector<double> &xdata){
+  fx.clear();
   fx = xdata;
   return fx.size();;
 }
 
-std::size_t KTheodata::SetDataY(std::vector<double> &ydata){
-  Clear();
+std::size_t KTheodata::SetDataY(const std::vector<double> &ydata){
+  fy.clear();
   fy = ydata;
   return fy.size();;
+}
+
+std::size_t KTheodata::SetDataXCorrect(const std::vector<double> &xdata){
+  fx_correct.clear();
+  fx_correct = xdata;
+  return fx_correct.size();;
+}
+
+std::size_t KTheodata::SetDataYCorrect(const std::vector<double> &ydata){
+  fy_correct.clear();
+  fy_correct = ydata;
+  return fy_correct.size();;
+}
+
+KTheodata KTheodata::operator+(const KTheodata& rhs) const {
+  KTheodata tmp;
+  if(fx.size() != rhs.fx.size()){
+    std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+    std::cerr << "Check the format of operands." << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  for(std::size_t idx = 0; idx != fx.size(); ++idx){
+    if(abs(fx[idx] - rhs.fx[idx]) > KUtil::LOOSE_EPSILON){
+      std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+      std::cerr << "Check the format of operands." << std::endl;
+      std::exit(EXIT_FAILURE);    
+    }
+  }
+  if(fx_correct.size() != rhs.fx_correct.size()){
+    std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+    std::cerr << "Check the format of operands." << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  for(std::size_t idx = 0; idx != fx_correct.size(); ++idx){
+    if(abs(fx_correct[idx] - rhs.fx_correct[idx]) > KUtil::LOOSE_EPSILON){
+      std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+      std::cerr << "Check the format of operands." << std::endl;
+      std::exit(EXIT_FAILURE);    
+    }
+  }
+  std::vector<double> vsum(fy.size(),0);
+  std::vector<double> vsum_cor(fy_correct.size(),0);  
+  for(std::size_t idx = 0; idx != fy.size(); ++idx){
+    vsum[idx] += (fy[idx] + rhs.fy[idx]);
+  }
+  for(std::size_t idx = 0; idx != fy_correct.size(); ++idx){
+    vsum_cor[idx] += (fy_correct[idx] + rhs.fy_correct[idx]);
+  }
+  tmp.SetDataX(fx);
+  tmp.SetDataY(vsum);
+  tmp.SetDataXCorrect(fx_correct);
+  tmp.SetDataYCorrect(vsum_cor);  
+  return tmp;
 }

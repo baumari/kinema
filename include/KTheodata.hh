@@ -6,9 +6,6 @@
 #include <KExpdata.hh>
 #include <utility>
 
-// KTheodata can make spline function of stored data
-// 
-
 class KTheodata{
 public:
   typedef double (KTheodata::*SPLINE)(double *, double *);    
@@ -36,10 +33,14 @@ public:
   void PrintCorrect() const;
   inline int GetN() const {return (int)fx.size();}
   inline int GetNCorrect() const {return (int)fx_correct.size();}
-  std::size_t SetDataX(int nData, double *xdata); // return number of data points
+  std::size_t SetDataX(int nData, double *xdata);// return number of data points
   std::size_t SetDataY(int nData, double *ydata);
-  std::size_t SetDataX(std::vector<double>& xdata); // return number of data points
-  std::size_t SetDataY(std::vector<double>& ydata);  
+  std::size_t SetDataX(const std::vector<double>& xdata); 
+  std::size_t SetDataY(const std::vector<double>& ydata);
+  std::size_t SetDataXCorrect(int nData, double *xdata);
+  std::size_t SetDataYCorrect(int nData, double *ydata);
+  std::size_t SetDataXCorrect(const std::vector<double>& xdata); 
+  std::size_t SetDataYCorrect(const std::vector<double>& ydata);    
   double GetfxMin() const;
   double GetfxMax() const;
   double GetfxCorrectMin() const;
@@ -54,6 +55,7 @@ public:
   // return a function fx_correct->fy_correct, par is scale factor
   double GetfCorrected(double *x, double *par) const;
   void Clear(); // clear all stored data
+  KTheodata operator+(const KTheodata&) const;
 
 private:
   // linear interpolation
