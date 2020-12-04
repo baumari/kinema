@@ -32,6 +32,8 @@ public:
   KExpdataCS(char *filename);    
   ~KExpdataCS() {}
   void Print();
+
+  //  ClassDef(KExpdata,1);
 };
 
 #endif

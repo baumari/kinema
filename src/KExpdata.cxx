@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 
+//ClassImp(KExpdata);
+
 KExpdata::KExpdata() {}
 KExpdata::KExpdata(std::string& filename){
   std::ifstream ifs(filename.c_str());  

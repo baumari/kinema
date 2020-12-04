@@ -55,6 +55,11 @@ public:
   // return a function fx_correct->fy_correct, par is scale factor
   double GetfCorrected(double *x, double *par) const;
   void Clear(); // clear all stored data
+  inline std::vector<double> GetX() {return fx;}
+  inline std::vector<double> GetY() {return fy;}
+  inline std::vector<double> GetXCorrect() {return fx_correct;}
+  inline std::vector<double> GetYCorrect() {return fy_correct;}    
+  
   KTheodata operator+(const KTheodata&) const;
 
 private:
