@@ -11,6 +11,7 @@ private:
   static double Spline(double *, double*); // spline function
 
 public:
+  KTF1Spline();
   KTF1Spline(const char *name, const KTheodata &Theo, bool normalization = false);
   // if false, function cannot be normalized (magnitude is fixed)
   KTF1Spline(const char *name, const std::vector<double>& vx,
@@ -19,6 +20,12 @@ public:
   KTF1Spline(const char *name, const int n, const double *x, const double *y,
 	     bool normalization = false);    
   ~KTF1Spline();
+
+  void SetData(const char *name, const KTheodata &Theo, bool normalization = false);
+  void SetData(const char *name, const std::vector<double>& vx,
+	       const std::vector<double>& vy, bool normalization = false);  
+  void SetData(const char *name, const int n, const double *x, const double *y,
+	       bool normalization = false);
 
 public:
   inline TF1* Getf(){return f;}

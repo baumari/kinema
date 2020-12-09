@@ -32,9 +32,9 @@ int main(int argc, char* argv[]){
   
   KOptions opt;
   opt.Add("h", "help", "Show help.");
-  opt.Add("r", "recoil", 0, "Recoil kinetic energy (double [=0])");
-  opt.Add("o", "out", "out.dat", "Output file (string [=out.dat])");
-  opt.Add("g","graph","theta3:e3", "Show graph. Choose graph mode. (string [=theta3:e3])");
+  opt.Add("r", "recoil", 0., "Recoil kinetic energy");
+  opt.Add("o", "out", "out.dat", "Output file");
+  opt.Add("g","graph","theta3:e3", "Show graph. Choose graph mode.");
   opt.Constraint("graph","theta3, theta4, e3 ,e4 ,theta3cm");
   
   if(!opt.Check(argc, argv)){

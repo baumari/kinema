@@ -297,15 +297,18 @@ void KOptions::Description(){
     if(x.m_Short.size() == 0){
       std::string s = "--" + x.m_Long + " " + x.Type() + " : ";
       std::cout << std::right << std::setw(MaxOptLength) << s;
-      std::cout << x.m_Description << std::endl;      
+      std::cout << x.m_Description
+		<< " (=" << x.m_val << ")" << std::endl;
     }else if(x.m_Long.size() == 0){
       std::string s = "-" + x.m_Short + " " + x.Type() + " : ";
       std::cout << std::right << std::setw(MaxOptLength) << s;
-      std::cout << x.m_Description << std::endl;      
+      std::cout << x.m_Description
+		<< " (=" << x.m_val << ")" << std::endl;	
     }else{
       std::string s = "-" + x.m_Short + ", --" + x.m_Long + " " + x.Type() + " : ";
       std::cout << std::right << std::setw(MaxOptLength) << s;
-      std::cout << x.m_Description << std::endl;            
+      std::cout << x.m_Description
+		<< " (=" << x.m_val << ")" << std::endl;	
     }
   }  
   return ;
