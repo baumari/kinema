@@ -46,7 +46,7 @@ void KNrutil::svdvar(std::vector<std::vector<double> >& v,
 void KNrutil::svbksb(std::vector<std::vector<double> >& u,
 		     std::vector<double>& w,
 		     std::vector<std::vector<double> >& v, int m, int n,
-	    double b[], double x[]){
+		     double b[], double x[]){
   int jj,j,i;
   double s;
   std::vector<double> tmp(n);
