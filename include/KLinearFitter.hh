@@ -14,7 +14,10 @@ private:
   double *m_DataX, *m_DataY, *m_DataErr;
   std::vector<double> m_Coeff;
   std::vector<double> m_CoeffMin, m_CoeffMax; // limitation of parameters
+  std::vector<double> m_CoeffErrMin, m_CoeffErrMax;
+  // error of coefficient estimated by chisq-contour
   bool m_Svd;
+  bool m_Error; 
   bool m_IsConditionChange;
   std::vector<bool> m_SetParLimits;
   std::vector<std::vector<double> > m_u, m_v;
@@ -41,11 +44,13 @@ public:
   void SetData(int nData, double *x, double *y, double *err); // experimental data
   void SetParLimits(int ipar, double min, double max);
   inline double GetChisquare() {return m_Chisquare;}
-  inline double GetCoeff(int ipar) {return m_Coeff.at(ipar);}
-  inline std::vector<double> GetCoeff() {return m_Coeff;}
+  inline double GetParameter(int ipar) {return m_Coeff.at(ipar);}
+  inline std::vector<double> GetParameters() {return m_Coeff;}
   inline std::vector<std::vector<double> > GetCVM() {return m_cvm;}
   inline std::vector<double> GetDev() {return m_dev;}
   inline double GetDev(int ipar) {return m_dev[ipar];}
+  inline double GetParError(int ipar) {return sqrt(m_dev.at(ipar));}
+  std::vector<double> GetParErrors();
   inline int GetNDF() {return m_nData-m_Coeff.size()+1;}
   inline double GetReducedChisquare()
   {return m_Chisquare/((double)m_nData-(double)m_Coeff.size()+1.);}
@@ -53,7 +58,8 @@ public:
   void AddFunction(TF1*); // add base function
   void AddFunction(std::vector<TF1*>&); // add list of base function
   void SetFuncList(std::vector<TF1*>&); // set list of base function  
-  void ReleaseParameter(int ipar); 
+  void ReleaseParameter(int ipar);
+  void ErrorEstimationByChisquare(); // error estimation by chisq-contour
 
 private:
   bool CheckParRange();

@@ -69,10 +69,6 @@ void KLinearFitter::Fit(const char *method)
 		      &m_Coeff[0], (int)m_Coeff.size(), m_u, m_v,
 		      m_w, m_Fitfunc, &m_Chisquare, function);
       MakeCoefficient(ifit);
-      std::cout << ifit << " " << m_Chisquare << " ";
-      for(int ipar = 0; ipar != (int)m_Coeff.size(); ++ipar)
- 	std::cout << m_Coeff[ipar] << " ";
-      std::cout << std::endl;
       if(!CheckParRange()) continue;      
       if(ifit == 1) tmpchisq = m_Chisquare;
       else{
@@ -88,8 +84,6 @@ void KLinearFitter::Fit(const char *method)
     KNrutil::svdvar(m_v, (int)m_Coeff.size(), m_w, m_cvm); 
     MakeCoefficient(m_iMinChisq);
     MakeDeviation(m_iMinChisq);
-
-    std::cout << m_iMinChisq << std::endl;
   }
 }
 
@@ -171,4 +165,21 @@ void KLinearFitter::MakeDeviation(int ifit)
   m_dev.clear();
   m_dev.resize(m_Func.size(), 0);
   for(int i = 0; i != m_Func.size(); ++i) m_dev[i] = m_cvm[i][i];
+}
+
+std::vector<double> KLinearFitter::GetParErrors()
+{
+  std::vector<double> tmp;
+  for(const auto& x : m_dev) tmp.push_back(sqrt(x));
+  return tmp;
+}
+
+void KLinearFitter::ErrorEstimationByChisquare()
+{
+  if(m_dev.size() == 0){
+    std::cout << "KLinearFitter: "
+      "Default fitting must be perfomed before this routine is called." << std::endl;
+    return ;
+  }
+  
 }
