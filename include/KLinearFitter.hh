@@ -12,6 +12,8 @@ private:
   int m_nTotalFit;
   int  m_iMinChisq; // index of minimum chisqaure combination
   double *m_DataX, *m_DataY, *m_DataErr;
+  std::vector<std::vector<double> > m_TheoY;
+  std::vector<double> m_DataYOrg; // original data for experimental values
   std::vector<double> m_Coeff;
   std::vector<double> m_CoeffMin, m_CoeffMax; // limitation of parameters
   std::vector<double> m_CoeffErrMin, m_CoeffErrMax;
@@ -20,23 +22,26 @@ private:
   bool m_Error; 
   bool m_IsConditionChange;
   std::vector<bool> m_SetParLimits;
+  int m_FixParameter; // bit mask 
   std::vector<std::vector<double> > m_u, m_v;
   std::vector<double> m_w;
   std::vector<std::vector<double> > m_cvm;
   std::vector<double> m_dev;
+  std::vector<double> m_a;
   std::vector<TF1*> m_Func; // list of input function
-  std::vector<TF1*> m_Fitfunc; // list of function actually used in fitting
+  std::vector<std::vector<double> > m_Fitfunc; // list of function actually used in fitting
 
-  static void function(double, double *, std::vector<TF1*>&); //used by svdfit
+  static void function(int, double *,
+		       std::vector<std::vector<double> >&); //used by svdfit
 
 public:
   KLinearFitter()
     : m_Chisquare(0), m_nData(0), m_nTotalFit(1), m_iMinChisq(1), 
-      m_DataX(nullptr), m_DataY(nullptr), m_DataErr(nullptr),
+      m_DataX(nullptr), m_DataY(nullptr), m_DataErr(nullptr), m_FixParameter(0), 
       m_Svd(false), m_IsConditionChange(false) {}
   KLinearFitter(int nData, double *x, double *y, double *err)
     : m_Chisquare(0), m_nData(nData), m_nTotalFit(1), m_iMinChisq(1),
-      m_DataX(x), m_DataY(y), m_DataErr(err),
+      m_DataX(x), m_DataY(y), m_DataErr(err), m_FixParameter(0), 
       m_Svd(false), m_IsConditionChange(false) {}
   ~KLinearFitter() {}
 
@@ -59,13 +64,16 @@ public:
   void AddFunction(std::vector<TF1*>&); // add list of base function
   void SetFuncList(std::vector<TF1*>&); // set list of base function  
   void ReleaseParameter(int ipar);
+  void FixParameter(int ipar, double val);
   void ErrorEstimationByChisquare(); // error estimation by chisq-contour
 
 private:
   bool CheckParRange();
   void ChooseFitfunc(int ipar); // select function actually used in fitting
   void MakeCoefficient(int ifit); // make coefficent vector
-  void MakeDeviation(int ifit); 
+  void MakeDeviation(int ifit);
+  void MakeTheoData(); // make theoretical Y used in fittig routine
+  void MakeExpData(); // correction for exp data (fixed, release parameter)
 };
 
 #endif

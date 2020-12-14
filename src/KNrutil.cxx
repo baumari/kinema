@@ -285,18 +285,19 @@ double KNrutil::pythag(double a,double b)
 /* x and store the results into the vector afunc[0:ma-1].            */
 /*********************************************************************/
 
-void KNrutil::svdfit(double x[], double y[], double sig[], int ndata,
+void KNrutil::svdfit(double y[], double sig[], int ndata,
 		     double a[], int ma, std::vector<std::vector<double> >& u,
 		     std::vector<std::vector<double> >& v,
-		     std::vector<double>& w, std::vector<TF1*>& funclist, 
-		     double *chisq, void(*funcs)(double, double[], std::vector<TF1*>&)){
+		     std::vector<double>& w, std::vector<std::vector<double> >& funclist, 
+		     double *chisq,
+		     void(*funcs)(int, double[], std::vector<std::vector<double> >&)){
   
   int j,i;
   double wmax,tmp,thresh,sum;
   std::vector<double> b(ndata), afunc(ma);
 
   for(i=0;i<ndata;i++){
-    (*funcs)(x[i],&afunc[0], funclist);
+    (*funcs)(i,&afunc[0], funclist);
     tmp=1.0/sig[i];    
     for(j=0;j<ma;j++)u[i][j]=afunc[j]*tmp;
     b[i]=y[i]*tmp;
@@ -311,7 +312,7 @@ void KNrutil::svdfit(double x[], double y[], double sig[], int ndata,
   KNrutil::svbksb(u,w,v,ndata,ma,&b[0],a);
   *chisq=0.0;
   for(i=0;i<ndata;i++){
-    (*funcs)(x[i],&afunc[0], funclist);
+    (*funcs)(i,&afunc[0], funclist);
     for(sum=0.0,j=0;j<ma;j++) sum+=a[j]*afunc[j];
     *chisq+=(tmp=(y[i]-sum)/sig[i],tmp*tmp);
   }

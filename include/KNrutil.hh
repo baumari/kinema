@@ -59,12 +59,13 @@ namespace KNrutil{
 	      std::vector<std::vector<double> >& v);
   void svdvar(std::vector<std::vector<double> >& v,int ma, std::vector<double>& w,
 	      std::vector<std::vector<double> >& cvm);
-  void svdfit(double x[], double y[], double sig[], int ndata,
+  void svdfit(double y[], double sig[], int ndata,
 	      double a[], int ma,
 	      std::vector<std::vector<double> >& u,
 	      std::vector<std::vector<double> >& v,
-	      std::vector<double>& w, std::vector<TF1*>& funclist, 
-	      double *chisq, void(*funcs)(double, double [], std::vector<TF1*>&));
+	      std::vector<double>& w, std::vector<std::vector<double> >& funclist, 
+	      double *chisq,
+	      void(*funcs)(int, double [], std::vector<std::vector<double> >&));
   double pythag(double, double);
 
   
