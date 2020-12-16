@@ -394,3 +394,29 @@ int KLinearFitter::GetNParFixed()
     if((m_FixParameter>>ipar)&1) npar++;
   return npar;
 }
+
+void KLinearFitter::Clear()
+{
+  m_nData = 0;
+  m_Chisquare = 0;
+  m_nTotalFit = 1;
+  m_iMinChisq = 1;
+  m_DataX = nullptr; m_DataY = nullptr; m_DataErr = nullptr;
+  m_TheoY.clear();
+  m_DataYOrg.clear();
+  m_Coeff.clear();
+  m_CoeffMin.clear(); m_CoeffMax.clear();
+  m_CoeffErrMin.clear(); m_CoeffErrMax.clear();
+  m_Svd = false;
+  m_Error = false;
+  m_IsConditionChange = false;
+  m_SetParLimits.clear();
+  m_FixParameter = 0;
+  m_u.clear(); m_v.clear();
+  m_w.clear(); m_cvm.clear();
+  m_dev.clear();
+  m_a.clear();
+  m_Func.clear();
+  m_Fitfunc.clear();
+  m_ChisqLog.clear();  m_CoeffLog.clear();
+}

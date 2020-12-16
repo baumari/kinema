@@ -70,7 +70,8 @@ public:
   inline double GetParErrorMax(int ipar) {return m_CoeffErrMax[ipar];}  
   void ErrorEstimationByChisquare(); // error estimation by chisq-contour
   inline std::vector<double> GetChisqLog(int ipar) {return m_ChisqLog[ipar];}
-  inline std::vector<double> GetCoeffLog(int ipar) {return m_CoeffLog[ipar];}  
+  inline std::vector<double> GetCoeffLog(int ipar) {return m_CoeffLog[ipar];}
+  void Clear(); // forget all data
  
 private:
   bool CheckParRange();
