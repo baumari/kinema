@@ -1,203 +1,188 @@
-/home/kento/simulation/kinema/src/obj/KParticle.o: \
- /home/kento/simulation/kinema/src/KParticle.cxx \
- /home/kento/simulation/kinema/include/KParticle.hh \
- /home/kento/simulation/kinema/include/K4Momentum.hh \
- /home/kento/simulation/kinema/include/K3Vector.hh \
- /home/kento/simulation/kinema/include/KUtil.hh \
- /usr/local/root/6.20.06/include/TF1.h \
- /usr/local/root/6.20.06/include/RConfigure.h \
- /usr/local/root/6.20.06/include/TFormula.h \
- /usr/local/root/6.20.06/include/TNamed.h \
- /usr/local/root/6.20.06/include/TObject.h \
- /usr/local/root/6.20.06/include/Rtypes.h \
- /usr/local/root/6.20.06/include/RtypesCore.h \
- /usr/local/root/6.20.06/include/ROOT/RConfig.hxx \
- /usr/local/root/6.20.06/include/ROOT/../RVersion.h \
- /usr/local/root/6.20.06/include/RConfigure.h \
- /usr/local/root/6.20.06/include/DllImport.h \
- /usr/local/root/6.20.06/include/snprintf.h \
- /usr/local/root/6.20.06/include/strlcpy.h \
- /usr/local/root/6.20.06/include/TGenericClassInfo.h \
- /usr/local/root/6.20.06/include/TSchemaHelper.h \
- /usr/local/root/6.20.06/include/TIsAProxy.h \
- /usr/local/root/6.20.06/include/TVirtualIsAProxy.h \
- /usr/local/root/6.20.06/include/TStorage.h \
- /usr/local/root/6.20.06/include/TVersionCheck.h \
- /usr/local/root/6.20.06/include/RVersion.h \
- /usr/local/root/6.20.06/include/TString.h \
- /usr/local/root/6.20.06/include/TMathBase.h \
- /usr/local/root/6.20.06/include/ROOT/RStringView.hxx \
- /usr/local/root/6.20.06/include/ROOT/RWrap_libcpp_string_view.h \
- /usr/local/root/6.20.06/include/ROOT/libcpp_string_view.h \
- /usr/local/root/6.20.06/include/ROOT/TypeTraits.hxx \
- /usr/local/root/6.20.06/include/ROOT/RSpan.hxx \
- /usr/local/root/6.20.06/include/ROOT/span.hxx \
- /usr/local/root/6.20.06/include/TBits.h \
- /usr/local/root/6.20.06/include/TObjArray.h \
- /usr/local/root/6.20.06/include/TSeqCollection.h \
- /usr/local/root/6.20.06/include/TCollection.h \
- /usr/local/root/6.20.06/include/TIterator.h \
- /usr/local/root/6.20.06/include/TVirtualRWMutex.h \
- /usr/local/root/6.20.06/include/TVirtualMutex.h \
- /usr/local/root/6.20.06/include/TMethodCall.h \
- /usr/local/root/6.20.06/include/TDictionary.h \
- /usr/local/root/6.20.06/include/ESTLType.h \
- /usr/local/root/6.20.06/include/TInterpreter.h \
- /usr/local/root/6.20.06/include/TDataType.h \
- /usr/local/root/6.20.06/include/TInterpreterValue.h \
- /usr/local/root/6.20.06/include/Math/Types.h \
- /usr/local/root/6.20.06/include/Rtypes.h \
- /usr/local/root/6.20.06/include/TAttLine.h \
- /usr/local/root/6.20.06/include/TAttFill.h \
- /usr/local/root/6.20.06/include/TAttMarker.h \
- /usr/local/root/6.20.06/include/TROOT.h \
- /usr/local/root/6.20.06/include/TDirectory.h \
- /usr/local/root/6.20.06/include/TBuffer.h \
- /usr/local/root/6.20.06/include/TClass.h \
- /usr/local/root/6.20.06/include/TObjString.h \
- /usr/local/root/6.20.06/include/ThreadLocalStorage.h \
- /usr/local/root/6.20.06/include/Bytes.h \
- /usr/local/root/6.20.06/include/Byteswap.h \
- /usr/local/root/6.20.06/include/TList.h \
- /usr/local/root/6.20.06/include/TDatime.h \
- /usr/local/root/6.20.06/include/TUUID.h \
- /usr/local/root/6.20.06/include/TF1AbsComposition.h \
- /usr/local/root/6.20.06/include/TMath.h \
- /usr/local/root/6.20.06/include/TError.h \
- /usr/local/root/6.20.06/include/Math/Types.h \
- /usr/local/root/6.20.06/include/Math/ParamFunctor.h \
- /home/kento/simulation/kinema/include/KError.hh
+/Users/kento/work/physics/kinema/src/obj/KParticle.o: \
+  /Users/kento/work/physics/kinema/src/KParticle.cxx \
+  /Users/kento/work/physics/kinema/include/KParticle.hh \
+  /Users/kento/work/physics/kinema/include/K4Momentum.hh \
+  /Users/kento/work/physics/kinema/include/K3Vector.hh \
+  /Users/kento/work/physics/kinema/include/KUtil.hh \
+  /opt/root/build/v6.18.02/include/TF1.h \
+  /opt/root/build/v6.18.02/include/RConfigure.h \
+  /opt/root/build/v6.18.02/include/TFormula.h \
+  /opt/root/build/v6.18.02/include/TNamed.h \
+  /opt/root/build/v6.18.02/include/TObject.h \
+  /opt/root/build/v6.18.02/include/Rtypes.h \
+  /opt/root/build/v6.18.02/include/RtypesCore.h \
+  /opt/root/build/v6.18.02/include/ROOT/RConfig.hxx \
+  /opt/root/build/v6.18.02/include/ROOT/../RVersion.h \
+  /opt/root/build/v6.18.02/include/DllImport.h \
+  /opt/root/build/v6.18.02/include/snprintf.h \
+  /opt/root/build/v6.18.02/include/strlcpy.h \
+  /opt/root/build/v6.18.02/include/TGenericClassInfo.h \
+  /opt/root/build/v6.18.02/include/TSchemaHelper.h \
+  /opt/root/build/v6.18.02/include/TIsAProxy.h \
+  /opt/root/build/v6.18.02/include/TVirtualIsAProxy.h \
+  /opt/root/build/v6.18.02/include/TStorage.h \
+  /opt/root/build/v6.18.02/include/TVersionCheck.h \
+  /opt/root/build/v6.18.02/include/RVersion.h \
+  /opt/root/build/v6.18.02/include/TString.h \
+  /opt/root/build/v6.18.02/include/TMathBase.h \
+  /opt/root/build/v6.18.02/include/ROOT/RStringView.hxx \
+  /opt/root/build/v6.18.02/include/ROOT/TypeTraits.hxx \
+  /opt/root/build/v6.18.02/include/ROOT/RSpan.hxx \
+  /opt/root/build/v6.18.02/include/ROOT/span.hxx \
+  /opt/root/build/v6.18.02/include/TBits.h \
+  /opt/root/build/v6.18.02/include/TObjArray.h \
+  /opt/root/build/v6.18.02/include/TSeqCollection.h \
+  /opt/root/build/v6.18.02/include/TCollection.h \
+  /opt/root/build/v6.18.02/include/TIterator.h \
+  /opt/root/build/v6.18.02/include/TVirtualRWMutex.h \
+  /opt/root/build/v6.18.02/include/TVirtualMutex.h \
+  /opt/root/build/v6.18.02/include/TMethodCall.h \
+  /opt/root/build/v6.18.02/include/TDictionary.h \
+  /opt/root/build/v6.18.02/include/ESTLType.h \
+  /opt/root/build/v6.18.02/include/TInterpreter.h \
+  /opt/root/build/v6.18.02/include/TDataType.h \
+  /opt/root/build/v6.18.02/include/TInterpreterValue.h \
+  /opt/root/build/v6.18.02/include/Math/Types.h \
+  /opt/root/build/v6.18.02/include/TAttLine.h \
+  /opt/root/build/v6.18.02/include/TAttFill.h \
+  /opt/root/build/v6.18.02/include/TAttMarker.h \
+  /opt/root/build/v6.18.02/include/TROOT.h \
+  /opt/root/build/v6.18.02/include/TDirectory.h \
+  /opt/root/build/v6.18.02/include/TBuffer.h \
+  /opt/root/build/v6.18.02/include/TClass.h \
+  /opt/root/build/v6.18.02/include/TObjString.h \
+  /opt/root/build/v6.18.02/include/ThreadLocalStorage.h \
+  /opt/root/build/v6.18.02/include/Bytes.h \
+  /opt/root/build/v6.18.02/include/Byteswap.h \
+  /opt/root/build/v6.18.02/include/TList.h \
+  /opt/root/build/v6.18.02/include/TDatime.h \
+  /opt/root/build/v6.18.02/include/TUUID.h \
+  /opt/root/build/v6.18.02/include/TF1AbsComposition.h \
+  /opt/root/build/v6.18.02/include/TMath.h \
+  /opt/root/build/v6.18.02/include/TError.h \
+  /opt/root/build/v6.18.02/include/Math/ParamFunctor.h \
+  /Users/kento/work/physics/kinema/include/KError.hh
 
-/home/kento/simulation/kinema/include/KParticle.hh:
+/Users/kento/work/physics/kinema/include/KParticle.hh:
 
-/home/kento/simulation/kinema/include/K4Momentum.hh:
+/Users/kento/work/physics/kinema/include/K4Momentum.hh:
 
-/home/kento/simulation/kinema/include/K3Vector.hh:
+/Users/kento/work/physics/kinema/include/K3Vector.hh:
 
-/home/kento/simulation/kinema/include/KUtil.hh:
+/Users/kento/work/physics/kinema/include/KUtil.hh:
 
-/usr/local/root/6.20.06/include/TF1.h:
+/opt/root/build/v6.18.02/include/TF1.h:
 
-/usr/local/root/6.20.06/include/RConfigure.h:
+/opt/root/build/v6.18.02/include/RConfigure.h:
 
-/usr/local/root/6.20.06/include/TFormula.h:
+/opt/root/build/v6.18.02/include/TFormula.h:
 
-/usr/local/root/6.20.06/include/TNamed.h:
+/opt/root/build/v6.18.02/include/TNamed.h:
 
-/usr/local/root/6.20.06/include/TObject.h:
+/opt/root/build/v6.18.02/include/TObject.h:
 
-/usr/local/root/6.20.06/include/Rtypes.h:
+/opt/root/build/v6.18.02/include/Rtypes.h:
 
-/usr/local/root/6.20.06/include/RtypesCore.h:
+/opt/root/build/v6.18.02/include/RtypesCore.h:
 
-/usr/local/root/6.20.06/include/ROOT/RConfig.hxx:
+/opt/root/build/v6.18.02/include/ROOT/RConfig.hxx:
 
-/usr/local/root/6.20.06/include/ROOT/../RVersion.h:
+/opt/root/build/v6.18.02/include/ROOT/../RVersion.h:
 
-/usr/local/root/6.20.06/include/RConfigure.h:
+/opt/root/build/v6.18.02/include/DllImport.h:
 
-/usr/local/root/6.20.06/include/DllImport.h:
+/opt/root/build/v6.18.02/include/snprintf.h:
 
-/usr/local/root/6.20.06/include/snprintf.h:
+/opt/root/build/v6.18.02/include/strlcpy.h:
 
-/usr/local/root/6.20.06/include/strlcpy.h:
+/opt/root/build/v6.18.02/include/TGenericClassInfo.h:
 
-/usr/local/root/6.20.06/include/TGenericClassInfo.h:
+/opt/root/build/v6.18.02/include/TSchemaHelper.h:
 
-/usr/local/root/6.20.06/include/TSchemaHelper.h:
+/opt/root/build/v6.18.02/include/TIsAProxy.h:
 
-/usr/local/root/6.20.06/include/TIsAProxy.h:
+/opt/root/build/v6.18.02/include/TVirtualIsAProxy.h:
 
-/usr/local/root/6.20.06/include/TVirtualIsAProxy.h:
+/opt/root/build/v6.18.02/include/TStorage.h:
 
-/usr/local/root/6.20.06/include/TStorage.h:
+/opt/root/build/v6.18.02/include/TVersionCheck.h:
 
-/usr/local/root/6.20.06/include/TVersionCheck.h:
+/opt/root/build/v6.18.02/include/RVersion.h:
 
-/usr/local/root/6.20.06/include/RVersion.h:
+/opt/root/build/v6.18.02/include/TString.h:
 
-/usr/local/root/6.20.06/include/TString.h:
+/opt/root/build/v6.18.02/include/TMathBase.h:
 
-/usr/local/root/6.20.06/include/TMathBase.h:
+/opt/root/build/v6.18.02/include/ROOT/RStringView.hxx:
 
-/usr/local/root/6.20.06/include/ROOT/RStringView.hxx:
+/opt/root/build/v6.18.02/include/ROOT/TypeTraits.hxx:
 
-/usr/local/root/6.20.06/include/ROOT/RWrap_libcpp_string_view.h:
+/opt/root/build/v6.18.02/include/ROOT/RSpan.hxx:
 
-/usr/local/root/6.20.06/include/ROOT/libcpp_string_view.h:
+/opt/root/build/v6.18.02/include/ROOT/span.hxx:
 
-/usr/local/root/6.20.06/include/ROOT/TypeTraits.hxx:
+/opt/root/build/v6.18.02/include/TBits.h:
 
-/usr/local/root/6.20.06/include/ROOT/RSpan.hxx:
+/opt/root/build/v6.18.02/include/TObjArray.h:
 
-/usr/local/root/6.20.06/include/ROOT/span.hxx:
+/opt/root/build/v6.18.02/include/TSeqCollection.h:
 
-/usr/local/root/6.20.06/include/TBits.h:
+/opt/root/build/v6.18.02/include/TCollection.h:
 
-/usr/local/root/6.20.06/include/TObjArray.h:
+/opt/root/build/v6.18.02/include/TIterator.h:
 
-/usr/local/root/6.20.06/include/TSeqCollection.h:
+/opt/root/build/v6.18.02/include/TVirtualRWMutex.h:
 
-/usr/local/root/6.20.06/include/TCollection.h:
+/opt/root/build/v6.18.02/include/TVirtualMutex.h:
 
-/usr/local/root/6.20.06/include/TIterator.h:
+/opt/root/build/v6.18.02/include/TMethodCall.h:
 
-/usr/local/root/6.20.06/include/TVirtualRWMutex.h:
+/opt/root/build/v6.18.02/include/TDictionary.h:
 
-/usr/local/root/6.20.06/include/TVirtualMutex.h:
+/opt/root/build/v6.18.02/include/ESTLType.h:
 
-/usr/local/root/6.20.06/include/TMethodCall.h:
+/opt/root/build/v6.18.02/include/TInterpreter.h:
 
-/usr/local/root/6.20.06/include/TDictionary.h:
+/opt/root/build/v6.18.02/include/TDataType.h:
 
-/usr/local/root/6.20.06/include/ESTLType.h:
+/opt/root/build/v6.18.02/include/TInterpreterValue.h:
 
-/usr/local/root/6.20.06/include/TInterpreter.h:
+/opt/root/build/v6.18.02/include/Math/Types.h:
 
-/usr/local/root/6.20.06/include/TDataType.h:
+/opt/root/build/v6.18.02/include/TAttLine.h:
 
-/usr/local/root/6.20.06/include/TInterpreterValue.h:
+/opt/root/build/v6.18.02/include/TAttFill.h:
 
-/usr/local/root/6.20.06/include/Math/Types.h:
+/opt/root/build/v6.18.02/include/TAttMarker.h:
 
-/usr/local/root/6.20.06/include/Rtypes.h:
+/opt/root/build/v6.18.02/include/TROOT.h:
 
-/usr/local/root/6.20.06/include/TAttLine.h:
+/opt/root/build/v6.18.02/include/TDirectory.h:
 
-/usr/local/root/6.20.06/include/TAttFill.h:
+/opt/root/build/v6.18.02/include/TBuffer.h:
 
-/usr/local/root/6.20.06/include/TAttMarker.h:
+/opt/root/build/v6.18.02/include/TClass.h:
 
-/usr/local/root/6.20.06/include/TROOT.h:
+/opt/root/build/v6.18.02/include/TObjString.h:
 
-/usr/local/root/6.20.06/include/TDirectory.h:
+/opt/root/build/v6.18.02/include/ThreadLocalStorage.h:
 
-/usr/local/root/6.20.06/include/TBuffer.h:
+/opt/root/build/v6.18.02/include/Bytes.h:
 
-/usr/local/root/6.20.06/include/TClass.h:
+/opt/root/build/v6.18.02/include/Byteswap.h:
 
-/usr/local/root/6.20.06/include/TObjString.h:
+/opt/root/build/v6.18.02/include/TList.h:
 
-/usr/local/root/6.20.06/include/ThreadLocalStorage.h:
+/opt/root/build/v6.18.02/include/TDatime.h:
 
-/usr/local/root/6.20.06/include/Bytes.h:
+/opt/root/build/v6.18.02/include/TUUID.h:
 
-/usr/local/root/6.20.06/include/Byteswap.h:
+/opt/root/build/v6.18.02/include/TF1AbsComposition.h:
 
-/usr/local/root/6.20.06/include/TList.h:
+/opt/root/build/v6.18.02/include/TMath.h:
 
-/usr/local/root/6.20.06/include/TDatime.h:
+/opt/root/build/v6.18.02/include/TError.h:
 
-/usr/local/root/6.20.06/include/TUUID.h:
+/opt/root/build/v6.18.02/include/Math/ParamFunctor.h:
 
-/usr/local/root/6.20.06/include/TF1AbsComposition.h:
-
-/usr/local/root/6.20.06/include/TMath.h:
-
-/usr/local/root/6.20.06/include/TError.h:
-
-/usr/local/root/6.20.06/include/Math/Types.h:
-
-/usr/local/root/6.20.06/include/Math/ParamFunctor.h:
-
-/home/kento/simulation/kinema/include/KError.hh:
+/Users/kento/work/physics/kinema/include/KError.hh:

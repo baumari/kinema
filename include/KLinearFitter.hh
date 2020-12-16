@@ -39,14 +39,32 @@ public:
     : m_Chisquare(0), m_nData(0), m_nTotalFit(1), m_iMinChisq(1), 
       m_DataX(nullptr), m_DataY(nullptr), m_DataErr(nullptr), m_FixParameter(0), 
       m_Svd(false), m_IsConditionChange(false) {}
-  KLinearFitter(int nData, double *x, double *y, double *err)
-    : m_Chisquare(0), m_nData(nData), m_nTotalFit(1), m_iMinChisq(1),
-      m_DataX(x), m_DataY(y), m_DataErr(err), m_FixParameter(0), 
-      m_Svd(false), m_IsConditionChange(false) {}
-  ~KLinearFitter() {}
+  KLinearFitter(int nData, const double *x, const double *y, const double *err)
+    : m_Chisquare(0), m_nTotalFit(1), m_iMinChisq(1),
+      m_FixParameter(0), 
+      m_Svd(false), m_IsConditionChange(false)
+  {
+    if(!x || !y || !err){
+      m_nData = 0;
+    }else m_nData = nData;
+    m_DataX = new double[nData];
+    m_DataY = new double[nData];
+    m_DataErr = new double[nData];
+    for(int i = 0; i != nData; ++i){
+      m_DataX[i] = x[i];
+      m_DataY[i] = y[i];
+      m_DataErr[i] = err[i];
+    }
+  }
+  ~KLinearFitter()
+  {
+    if(m_DataX) delete[] m_DataX;
+    if(m_DataY) delete[] m_DataY;
+    if(m_DataErr) delete[] m_DataErr;
+  }
 
 public:
-  void SetData(int nData, double *x, double *y, double *err); // experimental data
+  void SetData(int nData, const double *x, const double *y, const double *err); // experimental data
   void SetParLimits(int ipar, double min, double max);
   inline double GetChisquare() {return m_Chisquare;}
   inline double GetParameter(int ipar) {return m_Coeff.at(ipar);}

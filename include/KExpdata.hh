@@ -17,6 +17,10 @@ public:
 public:
   void Print();
   void Scale(double factor); // scale experimental value by factor
+  std::vector<double> GetX() {return fx;}
+  std::vector<double> GetY() {return fy;}
+  std::vector<double> GetXErr() {return fx_err;}
+  std::vector<double> GetYErr() {return fy_err;}
   inline int GetN() const {return (int)fx.size();}
 };
 
@@ -30,6 +34,7 @@ public:
   KExpdataCS(const char *filename);    
   ~KExpdataCS() {}
   void Print();
+  std::vector<double> GetXWidth() {return fx_width;}
 
   //  ClassDef(KExpdata,1);
 };

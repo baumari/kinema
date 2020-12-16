@@ -8,11 +8,30 @@
 
 //#define DEBUG
 
-void KLinearFitter::SetData(int nData, double *x, double *y, double *err)
+void KLinearFitter::SetData(int nData, const double *x, const double *y, const double *err)
 {
+  if(m_DataX){
+    delete[] m_DataX;
+    m_DataX = nullptr;
+  }
+  if(m_DataY){
+    delete[] m_DataY;
+    m_DataY = nullptr;
+  }
+  if(m_DataErr){
+    delete[] m_DataErr;
+    m_DataErr = nullptr;
+  }    
   m_nData = nData;
-  m_DataX = x; m_DataY = y; m_DataErr = err;
-  m_DataYOrg.clear(); 
+  m_DataX = new double[nData];
+  m_DataY = new double[nData];
+  m_DataErr = new double[nData];
+  for(int i = 0; i != nData; ++i){
+    m_DataX[i] = x[i];
+    m_DataY[i] = y[i];
+    m_DataErr[i] = err[i];
+  }    
+  m_DataYOrg.clear();
   for(std::size_t idx = 0; idx != nData; ++idx){
     m_DataYOrg.push_back(y[idx]);
   }
@@ -401,7 +420,18 @@ void KLinearFitter::Clear()
   m_Chisquare = 0;
   m_nTotalFit = 1;
   m_iMinChisq = 1;
-  m_DataX = nullptr; m_DataY = nullptr; m_DataErr = nullptr;
+  if(m_DataX){
+    delete[] m_DataX;
+    m_DataX = nullptr;
+  }
+  if(m_DataY){
+    delete[] m_DataY;
+    m_DataY = nullptr;
+  }
+  if(m_DataErr){
+    delete[] m_DataErr;
+    m_DataErr = nullptr;
+  }    
   m_TheoY.clear();
   m_DataYOrg.clear();
   m_Coeff.clear();
