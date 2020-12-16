@@ -18,7 +18,8 @@ public:
 	     const std::vector<double>& vy, bool normalization = false);
   // elements in x and y must be ordered.
   KTF1Spline(const char *name, const int n, const double *x, const double *y,
-	     bool normalization = false);    
+	     bool normalization = false);
+  KTF1Spline(const KTF1Spline&); // copy ctr
   ~KTF1Spline();
 
   void SetData(const char *name, const KTheodata &Theo, bool normalization = false);
@@ -29,7 +30,7 @@ public:
   void Clear();
 
 public:
-  inline TF1* Getf(){return f;}
+  TF1* Getf() const; // return copy of function
 };
 
 #endif
