@@ -116,3 +116,11 @@ double KTF1Spline::Spline(double *x, double *par){
   TSpline3 sp3("sp3", &xn[0], &yn[0], nData);
   return sp3.Eval(xx)*par[2*nData+1];  
 }
+
+void KTF1Spline::Clear()
+{
+  if(f){
+    delete f;
+    f = nullptr;
+  }
+}

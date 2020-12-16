@@ -26,6 +26,7 @@ public:
 	       const std::vector<double>& vy, bool normalization = false);  
   void SetData(const char *name, const int n, const double *x, const double *y,
 	       bool normalization = false);
+  void Clear();
 
 public:
   inline TF1* Getf(){return f;}
