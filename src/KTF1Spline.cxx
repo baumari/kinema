@@ -7,10 +7,6 @@ KTF1Spline::KTF1Spline() : f(nullptr) {}
 
 KTF1Spline::KTF1Spline(const char *name, const KTheodata &Theo, bool flag)
 {
-  if(f){
-    delete f;
-    f = nullptr;
-  }
   f = new TF1(name, Spline, Theo.GetfxMin(), Theo.GetfxMax(), Theo.GetN()*2+2);
   f->FixParameter(0, Theo.GetN());
   for(int i = 0; i != Theo.GetN(); ++i){
@@ -24,10 +20,6 @@ KTF1Spline::KTF1Spline(const char *name, const KTheodata &Theo, bool flag)
 KTF1Spline::KTF1Spline(const char *name, const std::vector<double>& vx,
 		       const std::vector<double>& vy, bool flag)
 {
-  if(f){
-    delete f;
-    f = nullptr;
-  }
   f = new TF1(name, Spline,
 	      *std::min_element(vx.begin(), vx.end()),
 	      *std::max_element(vx.begin(), vx.end()), vx.size()*2+2);
@@ -45,10 +37,6 @@ KTF1Spline::KTF1Spline(const char *name, const int n,
 		       const double *y,
 		       bool flag)
 {
-  if(f){
-    delete f;
-    f = nullptr;
-  }
   f = new TF1(name, Spline, x[0], x[n-1], n*2+2);
   f->FixParameter(0, n);
   for(int i = 0; i != n; ++i){
