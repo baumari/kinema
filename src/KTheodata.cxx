@@ -8,22 +8,7 @@
 #include <KUtil.hh>
 #include <fstream>
 
-void KTheodata::Open(std::string &filename){
-  std::ifstream ifs(filename.c_str());
-  if(ifs.fail()){
-    std::cout << "Fail to open " << filename << std::endl;
-    std::exit(EXIT_FAILURE);
-  }
-  std::string sLine;
-  double x, y;
-  while(std::getline(ifs, sLine)){
-    std::stringstream ssLine(sLine);
-    ssLine >> x >> y;
-    fx.push_back(x); fy.push_back(y);
-  }  
-}
-
-void KTheodata::Open(char *filename){
+void KTheodata::Open(const char *filename){
   std::ifstream ifs(filename);
   if(ifs.fail()){
     std::cout << "Fail to open " << filename << std::endl;

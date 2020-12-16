@@ -11,8 +11,7 @@ public:
 
 public:
   KExpdata();
-  KExpdata(std::string& filename);
-  KExpdata(char *filename);
+  KExpdata(const char *filename);
   ~KExpdata() {}
 
 public:
@@ -28,8 +27,7 @@ public:
 
 public:
   KExpdataCS();
-  KExpdataCS(std::string& filename);
-  KExpdataCS(char *filename);    
+  KExpdataCS(const char *filename);    
   ~KExpdataCS() {}
   void Print();
 

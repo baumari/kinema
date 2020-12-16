@@ -16,8 +16,7 @@ public:
 
 public:  
   KTheodata() : fspline(nullptr) {}
-  KTheodata(std::string& filename) : fspline(nullptr) {Open(filename);}
-  KTheodata(char *filename) : fspline(nullptr) {Open(filename);}
+  KTheodata(const char *filename) : fspline(nullptr) {Open(filename);}
   KTheodata(const KTheodata &obj) :
     fx(obj.fx),
     fy(obj.fy),
@@ -25,8 +24,7 @@ public:
     fy_correct(obj.fy_correct) {}
     
   ~KTheodata() {}
-  void Open(std::string &filename);
-  void Open(char *filename);
+  void Open(const char *filename);
   void Print() const;
   // scale fy, fy_correct by factor
   void Scale(double factor); 
