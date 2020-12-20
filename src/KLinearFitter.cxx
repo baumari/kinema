@@ -316,7 +316,13 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	  break;
 	}
 	Fit();
-	if(NonSolution()) continue;
+	if(NonSolution()){
+	  std::cout << "Nonsolution min: " << ifunc << std::endl;
+	  tmpchisq = GetChisquareForce();
+	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log
+	  continue;
+	}
 	tmpchisq = GetChisquare();
 	m_ChisqLog[ifunc].push_back(tmpchisq); // log
 	m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log      
@@ -342,7 +348,11 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	  FixParameter(ifunc, (bin_max+bin_min)/2.);
 	  Fit();
 	  if(NonSolution()){
-	    bin_max = (bin_min+bin_max)/2.;
+	    tmpchisq = GetChisquareForce();
+	    if(tmpchisq > MinChisq+1) bin_min = (bin_min+bin_max)/2.;
+	    else bin_max = (bin_min+bin_max)/2.;
+	    m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	    m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log	    
 	    continue;
 	  }
 	  tmpchisq = GetChisquare();
@@ -378,7 +388,13 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	  break;
 	}
 	Fit();
-	if(NonSolution()) continue;
+	if(NonSolution()){
+	  std::cout << "Nonsolution max: " << ifunc << std::endl;
+	  tmpchisq = GetChisquareForce();
+	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log	  
+	  continue;
+	}
 	tmpchisq = GetChisquare();
 	m_ChisqLog[ifunc].push_back(tmpchisq); // log
 	m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log      
@@ -404,7 +420,11 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	  FixParameter(ifunc, (bin_max+bin_min)/2.);
 	  Fit();
 	  if(NonSolution()){
-	    bin_min = (bin_min+bin_max)/2.;
+	    tmpchisq = GetChisquareForce();
+	    if(tmpchisq > MinChisq+1) bin_max = (bin_min+bin_max)/2.;
+	    else bin_min = (bin_min+bin_max)/2.;
+	    m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	    m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log	  
 	    continue;
 	  }
 	  tmpchisq = GetChisquare();
@@ -426,6 +446,15 @@ void KLinearFitter::ErrorEstimationByChisquare()
     SetParLimits(ifunc, m_CoeffMin[ifunc], m_CoeffMax[ifunc]);
   }
   for(int ifunc = 0; ifunc != m_Coeff.size(); ++ifunc) m_Coeff[ifunc] = MinCoeff[ifunc];  
+}
+
+double KLinearFitter::GetChisquareForce()
+{
+  double chisq = 0;
+  for(int idx = 0; idx != m_nData; ++idx){
+    chisq += (m_DataY[idx]/m_DataErr[idx])*(m_DataY[idx]/m_DataErr[idx]);
+  }
+  return chisq;
 }
 
 void KLinearFitter::MakeTheoData()

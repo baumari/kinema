@@ -100,6 +100,7 @@ private:
   void MakeDeviation(int ifit);
   void MakeTheoData(); // make theoretical Y used in fittig routine
   void MakeExpData(); // correction for exp data (fixed, release parameter)
+  double GetChisquareForce();
 };
 
 #endif
