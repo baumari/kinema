@@ -106,7 +106,7 @@ void KLinearFitter::Fit(const char *method)
       for(const auto &x : m_Coeff) std::cout << x << " ";
       std::cout << std::endl;
 #endif
-      if(!CheckParRange()) continue;      
+      if(!CheckParRange()) continue;
       if(First){
 	tmpchisq = m_Chisquare;
 	m_iMinChisq = ifit;
@@ -119,8 +119,13 @@ void KLinearFitter::Fit(const char *method)
       }      
     }
 #ifdef DEBUG
-    std::cout << m_iMinChisq << std::endl;
+    std::cout << "m_iMinChisq: " << m_iMinChisq
+	      << "m_FixParameter: " << m_FixParameter << std::endl;
 #endif
+    if(First){ // no solution found in the ParRange
+      m_NoSolution = true;      
+      return ;
+    }      
     ChooseFitfunc(m_iMinChisq);
     KNrutil::svdfit(m_DataY, m_DataErr, m_nData,
 		    &m_a[0], (int)m_a.size(), m_u, m_v,
@@ -282,7 +287,7 @@ void KLinearFitter::ErrorEstimationByChisquare()
   bool limit_low = false;
   bool limit_high = false;
   m_ChisqLog.resize(m_Coeff.size()); m_CoeffLog.resize(m_Coeff.size());
-  m_CoeffErrMin.resize(m_Coeff.size()); m_CoeffErrMax.resize(m_Coeff.size()); 
+  m_CoeffErrMin.resize(m_Coeff.size()); m_CoeffErrMax.resize(m_Coeff.size());
   for(std::size_t ifunc = 0; ifunc != m_Func.size(); ++ifunc){ // binary search
     if(MinCoeff[ifunc] - m_CoeffMin[ifunc] < KUtil::EPSILON){
       m_CoeffErrMin[ifunc] = m_CoeffMin[ifunc];
@@ -416,8 +421,8 @@ int KLinearFitter::GetNParFixed()
 
 void KLinearFitter::Clear()
 {
-  m_nData = 0;
   m_Chisquare = 0;
+  m_nData = 0;
   m_nTotalFit = 1;
   m_iMinChisq = 1;
   if(m_DataX){
@@ -440,6 +445,7 @@ void KLinearFitter::Clear()
   m_Svd = false;
   m_Error = false;
   m_IsConditionChange = false;
+  m_NoSolution = false;
   m_SetParLimits.clear();
   m_FixParameter = 0;
   m_u.clear(); m_v.clear();

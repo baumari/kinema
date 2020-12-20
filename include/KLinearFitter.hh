@@ -21,6 +21,7 @@ private:
   bool m_Svd;
   bool m_Error; 
   bool m_IsConditionChange;
+  bool m_NoSolution;
   std::vector<bool> m_SetParLimits;
   int m_FixParameter; // bit mask 
   std::vector<std::vector<double> > m_u, m_v;
@@ -38,11 +39,11 @@ public:
   KLinearFitter()
     : m_Chisquare(0), m_nData(0), m_nTotalFit(1), m_iMinChisq(1), 
       m_DataX(nullptr), m_DataY(nullptr), m_DataErr(nullptr), m_FixParameter(0), 
-      m_Svd(false), m_IsConditionChange(false) {}
+      m_Svd(false), m_IsConditionChange(false), m_NoSolution(false) {}
   KLinearFitter(int nData, const double *x, const double *y, const double *err)
     : m_Chisquare(0), m_nTotalFit(1), m_iMinChisq(1),
       m_FixParameter(0), 
-      m_Svd(false), m_IsConditionChange(false)
+      m_Svd(false), m_IsConditionChange(false), m_NoSolution(false)
   {
     if(!x || !y || !err){
       m_nData = 0;
