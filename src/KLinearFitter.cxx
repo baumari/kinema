@@ -315,9 +315,10 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	  zero = 1;
 	  break;
 	}
+
 	Fit();
 	if(NonSolution()){
-	  std::cout << "Nonsolution min: " << ifunc << std::endl;
+	  //	  std::cout << "Nonsolution min: " << ifunc << std::endl;
 	  tmpchisq = GetChisquareForce();
 	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
 	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log
@@ -389,7 +390,7 @@ void KLinearFitter::ErrorEstimationByChisquare()
 	}
 	Fit();
 	if(NonSolution()){
-	  std::cout << "Nonsolution max: " << ifunc << std::endl;
+	  //	  std::cout << "Nonsolution max: " << ifunc << std::endl;
 	  tmpchisq = GetChisquareForce();
 	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
 	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log	  
@@ -441,6 +442,7 @@ void KLinearFitter::ErrorEstimationByChisquare()
   
     count = 0; zero = 0;
     ReleaseParameter(ifunc);
+    tmpchisq = MinChisq;
     lower_limit = false;
     higher_limit = false;
     SetParLimits(ifunc, m_CoeffMin[ifunc], m_CoeffMax[ifunc]);
