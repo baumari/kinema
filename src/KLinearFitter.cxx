@@ -91,6 +91,7 @@ void KLinearFitter::Fit(const char *method)
     MakeExpData(); // correction for exp data (fix, release)
     m_IsConditionChange = false;
   }
+  m_NoSolution = false;        
   if(m_Svd){
     double tmpchisq;
     bool First = true;
@@ -308,6 +309,10 @@ void KLinearFitter::ErrorEstimationByChisquare()
 		     MinCoeff[ifunc]
 		     -(MinCoeff[ifunc] - m_CoeffMin[ifunc])*(double)count*delta);
 	Fit();
+	if(NonSolution()){
+	  count += 1;
+	  continue;
+	}
 	m_ChisqLog[ifunc].push_back(GetChisquare()); // log
 	m_CoeffLog[ifunc].push_back(MinCoeff[ifunc]
 				    -(MinCoeff[ifunc] - m_CoeffMin[ifunc])
@@ -361,6 +366,10 @@ void KLinearFitter::ErrorEstimationByChisquare()
 		     MinCoeff[ifunc]
 		     +(m_CoeffMax[ifunc]-MinCoeff[ifunc])*delta*(double)count); 
 	Fit();
+	if(NonSolution()){
+	  count += 1;
+	  continue;
+	}	
 	m_ChisqLog[ifunc].push_back(GetChisquare()); // log
 	m_CoeffLog[ifunc].push_back(MinCoeff[ifunc]
 				    +(m_CoeffMax[ifunc]-MinCoeff[ifunc])

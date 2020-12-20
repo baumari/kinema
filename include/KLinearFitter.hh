@@ -67,17 +67,18 @@ public:
 public:
   void SetData(int nData, const double *x, const double *y, const double *err); // experimental data
   void SetParLimits(int ipar, double min, double max);
-  inline double GetChisquare() {return m_Chisquare;}
-  inline double GetParameter(int ipar) {return m_Coeff.at(ipar);}
-  inline std::vector<double> GetParameters() {return m_Coeff;}
-  inline std::vector<std::vector<double> > GetCVM() {return m_cvm;}
-  inline std::vector<double> GetDev() {return m_dev;}
-  inline double GetDev(int ipar) {return m_dev[ipar];}
-  inline double GetParError(int ipar) {return sqrt(m_dev.at(ipar));} // cvm error
-  inline std::size_t GetNPar() {return m_Func.size();}
+  inline double GetChisquare() const {return m_Chisquare;}
+  inline double GetParameter(int ipar) const {return m_Coeff.at(ipar);}
+  inline std::vector<double> GetParameters() const {return m_Coeff;}
+  inline std::vector<std::vector<double> > GetCVM() const {return m_cvm;}
+  inline std::vector<double> GetDev() const {return m_dev;}
+  inline double GetDev(int ipar) const {return m_dev[ipar];}
+  inline double GetParError(int ipar) const {return sqrt(m_dev.at(ipar));} // cvm error
+  inline std::size_t GetNPar() const {return m_Func.size();}
   std::vector<double> GetParErrors(); // cvm error
-  inline int GetNDF() {return m_nData - m_Fitfunc.size() - 1;} // return actual ndof related to minimum chisquare
-  inline double GetReducedChisquare() {return GetChisquare()/GetNDF();}
+  inline int GetNDF() const {return m_nData - m_Fitfunc.size() - 1;} // return actual ndof related to minimum chisquare
+  inline double GetReducedChisquare() const {return GetChisquare()/GetNDF();}
+  inline bool NonSolution() const {return m_NoSolution;}
   void Fit(const char *method = "svd");
   void AddFunction(TF1*); // add base function
   void AddFunction(std::vector<TF1*>&); // add list of base function
@@ -85,11 +86,11 @@ public:
   void ReleaseParameter(int ipar);
   void FixParameter(int ipar, double val);
   int GetNParFixed();
-  inline double GetParErrorMin(int ipar) {return m_CoeffErrMin[ipar];}
-  inline double GetParErrorMax(int ipar) {return m_CoeffErrMax[ipar];}  
+  inline double GetParErrorMin(int ipar) const {return m_CoeffErrMin[ipar];}
+  inline double GetParErrorMax(int ipar) const {return m_CoeffErrMax[ipar];}  
   void ErrorEstimationByChisquare(); // error estimation by chisq-contour
-  inline std::vector<double> GetChisqLog(int ipar) {return m_ChisqLog[ipar];}
-  inline std::vector<double> GetCoeffLog(int ipar) {return m_CoeffLog[ipar];}
+  inline std::vector<double> GetChisqLog(int ipar) const {return m_ChisqLog[ipar];}
+  inline std::vector<double> GetCoeffLog(int ipar) const {return m_CoeffLog[ipar];}
   void Clear(); // forget all data
  
 private:
