@@ -78,21 +78,21 @@ void KLinearFitter::Fit(const char *method)
     return ;        
   }
   if(strcmp(method,"svd") == 0) m_Svd = true;
-  else if(strcmp(method,"normeqn") == 0) m_Svd = false;
+  else if(strcmp(method,"root") == 0) m_Svd = false;
   else{
     std::cout << "KLinearFitter: Unknown fitting method." << std::endl;
     std::cout << "Abort." << std::endl;
     return ;
   }  
-  if(m_IsConditionChange){
-    m_nTotalFit = (1 << m_Func.size()); // the maximum number of times for fitting
-    m_nTotalFit--;
-    MakeTheoData();
-    MakeExpData(); // correction for exp data (fix, release)
-    m_IsConditionChange = false;
-  }
   m_NoSolution = false;        
   if(m_Svd){
+    if(m_IsConditionChange){
+      m_nTotalFit = (1 << m_Func.size()); // the maximum number of times for fitting
+      m_nTotalFit--;
+      MakeTheoData();
+      MakeExpData(); // correction for exp data (fix, release)
+      m_IsConditionChange = false;
+    }    
     double tmpchisq;
     bool First = true;
     for(int ifit = 1; ifit != m_nTotalFit + 1; ++ifit){
@@ -134,6 +134,7 @@ void KLinearFitter::Fit(const char *method)
     KNrutil::svdvar(m_v, (int)m_a.size(), m_w, m_cvm); 
     MakeCoefficient(m_iMinChisq);
     MakeDeviation(m_iMinChisq);
+  }else{ // ROOT method (minuit)
   }
 }
 
@@ -282,128 +283,147 @@ void KLinearFitter::ErrorEstimationByChisquare()
   int count = 0; // counter for binary search
   double bin_min, bin_max;
   int zero = 0;
-  double delta = 0.2;
+  double delta = 0.05;
   auto MinCoeff = m_Coeff;
   auto MinChisq = GetChisquare();
-  bool limit_low = false;
-  bool limit_high = false;
+  auto tmpchisq = MinChisq;
   m_ChisqLog.resize(m_Coeff.size()); m_CoeffLog.resize(m_Coeff.size());
   m_CoeffErrMin.resize(m_Coeff.size()); m_CoeffErrMax.resize(m_Coeff.size());
+  bool lower_limit = false;
+  bool higher_limit = false;
+  // init parameters
+  for(int ipar = 0; ipar != m_Func.size(); ++ipar){
+    ReleaseParameter(ipar);
+    SetParLimits(ipar, m_CoeffMin[ipar], m_CoeffMax[ipar]);
+  }    
   for(std::size_t ifunc = 0; ifunc != m_Func.size(); ++ifunc){ // binary search
-    if(MinCoeff[ifunc] - m_CoeffMin[ifunc] < KUtil::EPSILON){
-      m_CoeffErrMin[ifunc] = m_CoeffMin[ifunc];
-      limit_low = true;
+    if(fabs(MinCoeff[ifunc]-m_CoeffMin[ifunc]) < KUtil::EPSILON){
+      lower_limit = true;
     }
-    if(!limit_low){
-      do{ // low
-	if(count > (int)(1/delta)){
+    if(!lower_limit){
+      while(tmpchisq < MinChisq + 1){ // determination of lower range
+	ReleaseParameter(ifunc);
+	if(count == 0){ // guarantee at least one calculated point
+	  FixParameter(ifunc, MinCoeff[ifunc]+1e-10);
+	}
+	else{
+	  FixParameter(ifunc, MinCoeff[ifunc]
+		       -delta*(MinCoeff[ifunc]+1e-10)*pow(2.,count-1));
+	}
+	count++;
+	if(GetParameter(ifunc) < m_CoeffMin[ifunc]){
 	  zero = 1;
 	  break;
 	}
-	// init parameters
-	for(int ipar = 0; ipar != m_Func.size(); ++ipar){
-	  ReleaseParameter(ipar);
-	  SetParLimits(ipar, 0, 1);
-	}
-	FixParameter(ifunc,
-		     MinCoeff[ifunc]
-		     -(MinCoeff[ifunc] - m_CoeffMin[ifunc])*(double)count*delta);
 	Fit();
-	if(NonSolution()){
-	  count += 1;
-	  continue;
-	}
-	m_ChisqLog[ifunc].push_back(GetChisquare()); // log
-	m_CoeffLog[ifunc].push_back(MinCoeff[ifunc]
-				    -(MinCoeff[ifunc] - m_CoeffMin[ifunc])
-				    *(double)count*delta); // log
-	count += 1;
-      }while(GetChisquare() < MinChisq + 1); // fit range determined here
-      if(zero) m_CoeffErrMin[ifunc] = m_CoeffMin[ifunc];
-      else{
-	bin_min = MinCoeff[ifunc]-(MinCoeff[ifunc] - m_CoeffMin[ifunc])
-	  *(double)(count-1)*delta;
-	bin_max = MinCoeff[ifunc];
-	while(1){
-	  // init parameters
-	  for(int ipar = 0; ipar != m_Func.size(); ++ipar){
-	    ReleaseParameter(ipar);
-	    SetParLimits(ipar, 0, 1);
+	if(NonSolution()) continue;
+	tmpchisq = GetChisquare();
+	m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log      
+      }
+      if(zero){
+	bin_min = m_CoeffMin[ifunc]; // initialization of binary search 
+	bin_max = MinCoeff[ifunc];	
+      }else{
+	bin_min = GetParameter(ifunc); // initialization of binary search 
+	bin_max = MinCoeff[ifunc];	
+      }
+      if(fabs(bin_min - bin_max) < KUtil::LOOSE_EPSILON){ 
+	m_CoeffErrMin[ifunc] = bin_min;
+      }else{
+	while(fabs(tmpchisq-(MinChisq+1)) > 1e-03){
+	  if(fabs(bin_min - bin_max) < KUtil::EPSILON){
+	    std::cout << "May not be converged.. Check Log vector."
+		      << " (ifunc = " << ifunc << "), min" << std::endl;
+	    m_CoeffErrMin[ifunc] = bin_min;
+	    break;
 	  }
+	  ReleaseParameter(ifunc);
 	  FixParameter(ifunc, (bin_max+bin_min)/2.);
 	  Fit();
-	  m_ChisqLog[ifunc].push_back(GetChisquare()); // log
-	  m_CoeffLog[ifunc].push_back((bin_max+bin_min)/2.); // log      
-	  if(fabs(GetChisquare()-(MinChisq+1)) < 0.001*MinChisq) break; // conversion
-	  if(GetChisquare()-(MinChisq+1) > 0) bin_min = (bin_min+bin_max)/2.;
+	  if(NonSolution()){
+	    bin_max = (bin_min+bin_max)/2.;
+	    continue;
+	  }
+	  tmpchisq = GetChisquare();
+	  if(tmpchisq > MinChisq+1) bin_min = (bin_min+bin_max)/2.;
 	  else bin_max = (bin_min+bin_max)/2.;
+	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log
 	}
-	m_CoeffErrMin[ifunc]
-	  = (bin_min+bin_max)/2. < m_CoeffMin[ifunc]
-				   ? m_CoeffMin[ifunc]
-				   : (bin_min+bin_max)/2.;
+	m_CoeffErrMin[ifunc] = GetParameter(ifunc);	
       }
-    } // !limit_low
+    }else{ // if(lower_limit)
+      m_CoeffErrMin[ifunc] = MinCoeff[ifunc];
+    }// determination of lower range here  
     ReleaseParameter(ifunc);
     count = 0; zero = 0;
-    limit_low = false;
-    if(m_CoeffMax[ifunc] - MinCoeff[ifunc] < KUtil::EPSILON){
-      m_CoeffErrMax[ifunc] = m_CoeffMax[ifunc];
-      limit_high = true;
+    tmpchisq = MinChisq;
+    if(fabs(MinCoeff[ifunc]-m_CoeffMax[ifunc]) < KUtil::EPSILON){
+      higher_limit = true;
     }
-    if(!limit_high){
-      do{ //high
-	if(count > (int)(1/delta)){
+    if(!higher_limit){
+      while(tmpchisq < MinChisq + 1){ // determination of lower range
+	ReleaseParameter(ifunc);
+	if(count == 0){ // guarantee at least one calculated point
+	  FixParameter(ifunc, MinCoeff[ifunc]+1e-10);
+	}
+	else{
+	  FixParameter(ifunc, MinCoeff[ifunc]
+		       +delta*(MinCoeff[ifunc]+1e-10)*pow(2.,count-1));
+	}
+	count++;
+	if(GetParameter(ifunc) > m_CoeffMax[ifunc]){
 	  zero = 1;
 	  break;
 	}
-	//init parameters
-	for(int ipar = 0; ipar != m_Func.size(); ++ipar){
-	  ReleaseParameter(ipar);
-	  SetParLimits(ipar, 0, 1);
-	}
-	FixParameter(ifunc,
-		     MinCoeff[ifunc]
-		     +(m_CoeffMax[ifunc]-MinCoeff[ifunc])*delta*(double)count); 
 	Fit();
-	if(NonSolution()){
-	  count += 1;
-	  continue;
-	}	
-	m_ChisqLog[ifunc].push_back(GetChisquare()); // log
-	m_CoeffLog[ifunc].push_back(MinCoeff[ifunc]
-				    +(m_CoeffMax[ifunc]-MinCoeff[ifunc])
-				    *delta*(double)count); // log      	
-	count += 1;      
-      }while(GetChisquare() < MinChisq + 1); // fit range determined here
-      if(zero) m_CoeffErrMax[ifunc] = m_CoeffMax[ifunc];
-      else{
-	bin_min = MinCoeff[ifunc];
-	bin_max = MinCoeff[ifunc]+(m_CoeffMax[ifunc]-MinCoeff[ifunc])
-	  *delta*(double)(count-1);
-	while(1){
-	  //init parameters
-	  for(int ipar = 0; ipar != m_Func.size(); ++ipar){
-	    ReleaseParameter(ipar);
-	    SetParLimits(ipar, 0, 1);
-	  }
-	  FixParameter(ifunc, (bin_min+bin_max)/2.);
-	  Fit();
-	  m_ChisqLog[ifunc].push_back(GetChisquare()); // log
-	  m_CoeffLog[ifunc].push_back((bin_min+bin_max)/2.); // log
-	  if(fabs(GetChisquare()-(MinChisq+1)) < 0.001*MinChisq) break;
-	  if(GetChisquare()-(MinChisq+1) > 0) bin_max = (bin_min+bin_max)/2.;
-	  else bin_min = (bin_min+bin_max)/2.;
-	}
-	m_CoeffErrMax[ifunc]
-	  = (bin_min+bin_max)/2. > m_CoeffMax[ifunc]
-	  ? m_CoeffMax[ifunc]
-	  : (bin_min+bin_max)/2.;
+	if(NonSolution()) continue;
+	tmpchisq = GetChisquare();
+	m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log      
       }
-    }
+      if(zero){
+	bin_min = MinCoeff[ifunc];	
+	bin_max = m_CoeffMax[ifunc]; // initialization of binary search
+      }else{
+	bin_min = MinCoeff[ifunc];	
+	bin_max = GetParameter(ifunc); // initialization of binary search 
+      }
+      if(fabs(bin_min - bin_max) < KUtil::LOOSE_EPSILON){ 
+	m_CoeffErrMax[ifunc] = bin_max;
+      }else{
+	while(fabs(tmpchisq-(MinChisq+1)) > 1e-03){
+	  if(fabs(bin_min - bin_max) < KUtil::EPSILON){
+	    std::cout << "May not be converged.. Check Log vector."
+		      << " (ifunc = " << ifunc << "), max" << std::endl;
+	    m_CoeffErrMax[ifunc] = bin_max;
+	    break;
+	  }
+	  ReleaseParameter(ifunc);
+	  FixParameter(ifunc, (bin_max+bin_min)/2.);
+	  Fit();
+	  if(NonSolution()){
+	    bin_min = (bin_min+bin_max)/2.;
+	    continue;
+	  }
+	  tmpchisq = GetChisquare();
+	  if(tmpchisq > MinChisq+1) bin_max = (bin_min+bin_max)/2.;
+	  else bin_min = (bin_min+bin_max)/2.;
+	  m_ChisqLog[ifunc].push_back(tmpchisq); // log
+	  m_CoeffLog[ifunc].push_back(GetParameter(ifunc)); // log
+	}
+	m_CoeffErrMax[ifunc] = GetParameter(ifunc);	
+      }
+    }else{ // if(higher_limit)
+      m_CoeffErrMax[ifunc] = MinCoeff[ifunc];
+    }// determination of higher range here
+  
     count = 0; zero = 0;
     ReleaseParameter(ifunc);
-    limit_high = false;
+    lower_limit = false;
+    higher_limit = false;
+    SetParLimits(ifunc, m_CoeffMin[ifunc], m_CoeffMax[ifunc]);
   }
   for(int ifunc = 0; ifunc != m_Coeff.size(); ++ifunc) m_Coeff[ifunc] = MinCoeff[ifunc];  
 }
