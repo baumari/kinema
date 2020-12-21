@@ -22,6 +22,8 @@ public:
     fy(obj.fy),
     fx_correct(obj.fx_correct),
     fy_correct(obj.fy_correct) {}
+  KTheodata(int nData); // only the number of data will be set
+    
     
   ~KTheodata() {}
   void Open(const char *filename);
@@ -59,6 +61,7 @@ public:
   inline std::vector<double> GetYCorrect() {return fy_correct;}    
   
   KTheodata operator+(const KTheodata&) const;
+  KTheodata& operator+=(const KTheodata&);
 
 private:
   // linear interpolation

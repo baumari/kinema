@@ -8,6 +8,12 @@
 #include <KUtil.hh>
 #include <fstream>
 
+KTheodata::KTheodata(int nData)
+{
+  fx.resize(nData, 0); fy.resize(nData, 0);
+  fx_correct.resize(nData, 0); fy_correct.resize(nData, 0);
+}
+
 void KTheodata::Open(const char *filename){
   std::ifstream ifs(filename);
   if(ifs.fail()){
@@ -195,7 +201,7 @@ KTheodata KTheodata::operator+(const KTheodata& rhs) const {
     std::exit(EXIT_FAILURE);
   }
   for(std::size_t idx = 0; idx != fx.size(); ++idx){
-    if(abs(fx[idx] - rhs.fx[idx]) > KUtil::LOOSE_EPSILON){
+    if(fabs(fx[idx] - rhs.fx[idx]) > KUtil::LOOSE_EPSILON){
       std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
       std::cerr << "Check the format of operands." << std::endl;
       std::exit(EXIT_FAILURE);    
@@ -207,7 +213,7 @@ KTheodata KTheodata::operator+(const KTheodata& rhs) const {
     std::exit(EXIT_FAILURE);
   }
   for(std::size_t idx = 0; idx != fx_correct.size(); ++idx){
-    if(abs(fx_correct[idx] - rhs.fx_correct[idx]) > KUtil::LOOSE_EPSILON){
+    if(fabs(fx_correct[idx] - rhs.fx_correct[idx]) > KUtil::LOOSE_EPSILON){
       std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
       std::cerr << "Check the format of operands." << std::endl;
       std::exit(EXIT_FAILURE);    
@@ -226,4 +232,37 @@ KTheodata KTheodata::operator+(const KTheodata& rhs) const {
   tmp.SetDataXCorrect(fx_correct);
   tmp.SetDataYCorrect(vsum_cor);  
   return tmp;
+}
+
+KTheodata& KTheodata::operator+=(const KTheodata& rhs)
+{
+  if(fx.size() != rhs.fx.size()){
+    std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+    std::cerr << "Check the format of operands." << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  for(std::size_t idx = 0; idx != fx.size(); ++idx){
+    if(fabs(fx[idx] - rhs.fx[idx]) > KUtil::LOOSE_EPSILON){
+      std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+      std::cerr << "Check the format of operands." << std::endl;
+      std::exit(EXIT_FAILURE);    
+    }
+  }
+  if(fx_correct.size() != rhs.fx_correct.size()){
+    std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+    std::cerr << "Check the format of operands." << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+  for(std::size_t idx = 0; idx != fx_correct.size(); ++idx){
+    if(fabs(fx_correct[idx] - rhs.fx_correct[idx]) > KUtil::LOOSE_EPSILON){
+      std::cerr << "KTheodata::operation '+' prohibited!!" << std::endl;
+      std::cerr << "Check the format of operands." << std::endl;
+      std::exit(EXIT_FAILURE);    
+    }
+  }
+  for(std::size_t idx = 0; idx != GetN(); ++idx){
+    fy[idx] += rhs.fy[idx];
+    fy_correct[idx] += rhs.fy_correct[idx];
+  }
+  return *this;  
 }
