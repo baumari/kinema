@@ -260,9 +260,9 @@ KTheodata& KTheodata::operator+=(const KTheodata& rhs)
       std::exit(EXIT_FAILURE);    
     }
   }
-  for(std::size_t idx = 0; idx != GetN(); ++idx){
+  for(std::size_t idx = 0; idx != fy.size(); ++idx)
     fy[idx] += rhs.fy[idx];
+  for(std::size_t idx = 0; idx != fy_correct.size(); ++idx)
     fy_correct[idx] += rhs.fy_correct[idx];
-  }
   return *this;  
 }
