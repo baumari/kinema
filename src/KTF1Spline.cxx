@@ -7,7 +7,8 @@ KTF1Spline::KTF1Spline() : f(nullptr) {}
 
 KTF1Spline::KTF1Spline(const KTF1Spline&obj)
 {
-  f = (TF1*)(obj.Getf()->Clone());
+  if(!obj.Getf()) f = nullptr;
+  else f = (TF1*)(obj.Getf()->Clone());
 }
 
 KTF1Spline::KTF1Spline(const char *name, const KTheodata &Theo, bool flag)
