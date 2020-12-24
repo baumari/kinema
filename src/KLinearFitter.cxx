@@ -107,7 +107,7 @@ void KLinearFitter::Fit(const char *method)
       for(const auto &x : m_Coeff) std::cout << x << " ";
       std::cout << std::endl;
 #endif
-      if(!CheckParRange()) continue;
+      if(!CheckParRange(ifit)) continue;
       if(First){
 	tmpchisq = m_Chisquare;
 	m_iMinChisq = ifit;
@@ -158,11 +158,16 @@ void KLinearFitter::SetParLimits(int ipar, double min, double max)
 }
 
 
-bool KLinearFitter::CheckParRange()
+bool KLinearFitter::CheckParRange(int ifit)
 {
-  for(std::size_t ipar = 0; ipar != m_Coeff.size(); ++ipar)
-    if(m_SetParLimits[ipar])
-      if(m_Coeff[ipar] <  m_CoeffMin[ipar] || m_Coeff[ipar] > m_CoeffMax[ipar]) return false;
+  for(std::size_t ipar = 0; ipar != m_Coeff.size(); ++ipar){
+    if((ifit>>ipar)&1){
+      if(m_SetParLimits[ipar]){
+	if(m_Coeff[ipar] <  m_CoeffMin[ipar] || m_Coeff[ipar] > m_CoeffMax[ipar])
+	  return false;	
+      }
+    }
+  }
   return true;
 }
 

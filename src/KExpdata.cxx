@@ -33,6 +33,14 @@ void KExpdata::Print(){
   printf("\n\n");
 }
 
+void KExpdata::SetData(const std::vector<double>& x,
+		       const std::vector<double>& y,
+		       const std::vector<double>& x_err,
+		       const std::vector<double>& y_err)
+{
+  fx = x; fy = y; fx_err = x_err; fy_err = y_err;  
+}
+
 KExpdataCS::KExpdataCS(const char *filename){
   std::ifstream ifs(filename);
   if(ifs.fail()){
@@ -61,4 +69,14 @@ void KExpdataCS::Print(){
 void KExpdata::Scale(double factor){
   for(auto &x : fy) x*=factor;
   for(auto &x : fy_err) x*=factor;
+}
+
+void KExpdataCS::SetData(const std::vector<double>& x,
+			 const std::vector<double>& y,
+			 const std::vector<double>& x_err,
+			 const std::vector<double>& y_err,
+			 const std::vector<double>& x_width)
+{
+  fx = x; fy = y; fx_err = x_err; fy_err = y_err;
+  fx_width = x_width;
 }

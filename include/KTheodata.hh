@@ -59,7 +59,7 @@ public:
   inline std::vector<double> GetY() {return fy;}
   inline std::vector<double> GetXCorrect() {return fx_correct;}
   inline std::vector<double> GetYCorrect() {return fy_correct;}    
-  
+
   KTheodata operator+(const KTheodata&) const;
   KTheodata& operator+=(const KTheodata&);
 

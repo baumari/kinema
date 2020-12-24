@@ -94,7 +94,7 @@ public:
   void Clear(); // forget all data
  
 private:
-  bool CheckParRange();
+  bool CheckParRange(int ifit);
   void ChooseFitfunc(int ipar); // select function actually used in fitting
   void MakeCoefficient(int ifit); // make coefficent vector
   void MakeDeviation(int ifit);
