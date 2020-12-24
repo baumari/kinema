@@ -76,7 +76,7 @@ public:
   inline double GetParError(int ipar) const {return sqrt(m_dev.at(ipar));} // cvm error
   inline std::size_t GetNPar() const {return m_Func.size();}
   std::vector<double> GetParErrors(); // cvm error
-  inline int GetNDF() const {return m_nData - m_Fitfunc.size() - 1;} // return actual ndof related to minimum chisquare
+  inline int GetNDF() const {return m_nData - m_Func.size() - 1;} // return actual ndof related to minimum chisquare
   inline double GetReducedChisquare() const {return GetChisquare()/GetNDF();}
   inline bool NonSolution() const {return m_NoSolution;}
   void Fit(const char *method = "svd");
