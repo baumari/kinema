@@ -6,7 +6,7 @@
 #include <cmath>
 #include <KUtil.hh>
 
-//#define DEBUG
+#define DEBUG
 
 void KLinearFitter::SetData(int nData, const double *x, const double *y, const double *err)
 {
@@ -103,8 +103,8 @@ void KLinearFitter::Fit(const char *method)
 		      m_w, m_Fitfunc, &m_Chisquare, function);
       MakeCoefficient(ifit);
 #ifdef DEBUG
-      std::cout << ifit << " " << m_Chisquare << " ";
-      for(const auto &x : m_Coeff) std::cout << x << " ";
+      std::cout << "ifit: " << ifit << ", chisq: " << m_Chisquare << " ";
+      //      for(const auto &x : m_Coeff) std::cout << x << " ";
       std::cout << std::endl;
 #endif
       if(!CheckParRange(ifit)) continue;
@@ -121,7 +121,7 @@ void KLinearFitter::Fit(const char *method)
     }
 #ifdef DEBUG
     std::cout << "m_iMinChisq: " << m_iMinChisq
-	      << "m_FixParameter: " << m_FixParameter << std::endl;
+	      << " m_FixParameter: " << m_FixParameter << std::endl;
 #endif
     if(First){ // no solution found in the ParRange
       m_NoSolution = true;      
