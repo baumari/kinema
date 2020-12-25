@@ -33,7 +33,7 @@ public:
   std::vector<double> fx_width;
 
 public:
-  KExpdataCS();
+  KExpdataCS() {}
   KExpdataCS(const char *filename);    
   ~KExpdataCS() {}
   void Print();
