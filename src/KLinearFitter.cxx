@@ -6,8 +6,6 @@
 #include <cmath>
 #include <KUtil.hh>
 
-#define DEBUG
-
 void KLinearFitter::SetData(int nData, const double *x, const double *y, const double *err)
 {
   if(m_DataX){
@@ -102,7 +100,7 @@ void KLinearFitter::Fit(const char *method)
 		      &m_a[0], (int)m_a.size(), m_u, m_v,
 		      m_w, m_Fitfunc, &m_Chisquare, function);
       MakeCoefficient(ifit);
-#ifdef DEBUG
+#if 0
       std::cout << "ifit: " << ifit << ", chisq: " << m_Chisquare << " ";
       //      for(const auto &x : m_Coeff) std::cout << x << " ";
       std::cout << std::endl;
@@ -119,7 +117,7 @@ void KLinearFitter::Fit(const char *method)
 	m_iMinChisq = ifit;
       }      
     }
-#ifdef DEBUG
+#if 0
     std::cout << "m_iMinChisq: " << m_iMinChisq
 	      << " m_FixParameter: " << m_FixParameter << std::endl;
 #endif
@@ -134,6 +132,14 @@ void KLinearFitter::Fit(const char *method)
     KNrutil::svdvar(m_v, (int)m_a.size(), m_w, m_cvm); 
     MakeCoefficient(m_iMinChisq);
     MakeDeviation(m_iMinChisq);
+#if 1
+    for(std::size_t idata = 0; idata != m_nData; ++idata){
+      printf("%6.3lf  %8.3lf  %7.3lf",m_DataX[idata],m_DataY[idata],m_DataErr[idata]);
+      for(std::size_t iL = 0; iL != m_TheoY.size(); ++iL)
+	printf("  %10.3e",m_TheoY[iL][idata]);
+      printf("\n");
+    }
+#endif    
   }else{ // ROOT method (minuit)
   }
 }
