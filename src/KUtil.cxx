@@ -104,7 +104,7 @@ namespace KUtil {
     return fint.GetMinimumX();
   }
 
-  double GetMin(double *array, int N, int &idx){
+  double GetMin(const double *array, int N, int &idx){
     double tmp = array[0];
     for(int i = 1; i != N; ++i){
       if(array[i] < tmp){
@@ -115,7 +115,7 @@ namespace KUtil {
     return tmp;
   }
 
-  double GetMax(double *array, int N, int &idx){
+  double GetMax(const double *array, int N, int &idx){
     double tmp = array[0];
     for(int i = 1; i != N; ++i){
       if(array[i] > tmp){
@@ -126,7 +126,7 @@ namespace KUtil {
     return tmp;
   }
 
-  int GetMin(int *array, int N, int &idx){
+  int GetMin(const int *array, int N, int &idx){
     int tmp = array[0];
     for(int i = 1; i != N; ++i){
       if(array[i] < tmp){
@@ -137,7 +137,7 @@ namespace KUtil {
     return tmp;
   }
 
-  int GetMax(int *array, int N, int &idx){
+  int GetMax(const int *array, int N, int &idx){
     int tmp = array[0];
     for(int i = 1; i != N; ++i){
       if(array[i] > tmp){
