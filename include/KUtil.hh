@@ -36,7 +36,10 @@ namespace KUtil {
   // split("hoge.txt.fuga",'.') -> [0]: hoge, [1]: txt, [2]: fuga
   std::vector<std::string> split(const std::string &s, char delim);
   double Intersection(TF1*, TF1*, double xmin, double xmax); // return x-value of the intersection
-  
+  double GetMin(double *array, int N, int &idx); // return min value of array and index
+  double GetMax(double *array, int N, int &idx);
+  int GetMin(int *array, int N, int &idx);
+  int GetMax(int *array, int N, int &idx);
 }
 
 #endif

@@ -103,6 +103,52 @@ namespace KUtil {
     fint.FixParameter(0, 1);
     return fint.GetMinimumX();
   }
-}
+
+  double GetMin(double *array, int N, int &idx){
+    double tmp = array[0];
+    for(int i = 1; i != N; ++i){
+      if(array[i] < tmp){
+	idx = i;
+	tmp = array[i];
+      }
+    }
+    return tmp;
+  }
+
+  double GetMax(double *array, int N, int &idx){
+    double tmp = array[0];
+    for(int i = 1; i != N; ++i){
+      if(array[i] > tmp){
+	idx = i;
+	tmp = array[i];
+      }
+    }
+    return tmp;
+  }
+
+  int GetMin(int *array, int N, int &idx){
+    int tmp = array[0];
+    for(int i = 1; i != N; ++i){
+      if(array[i] < tmp){
+	idx = i;
+	tmp = array[i];
+      }
+    }
+    return tmp;
+  }
+
+  int GetMax(int *array, int N, int &idx){
+    int tmp = array[0];
+    for(int i = 1; i != N; ++i){
+      if(array[i] > tmp){
+	idx = i;
+	tmp = array[i];
+      }
+    }
+    return tmp;
+  }
+  
+  
+} // namespace KUtil
 
 
